@@ -1,0 +1,8 @@
+.vs/
+ipch/
+documentation/
+*.VC.db
+*.VC.VC.opendb
+*.sdf
+bin/
+obj/
