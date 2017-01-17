@@ -70,12 +70,17 @@ namespace FieaGameEngine
             assert(mBack != nullptr);
         }
 #endif
-
         return (mSize == 0);
     }
 
     template<typename T>
     T& SList<T>::Front()
+    {
+        return const_cast<T&>(static_cast<const T&>(*this).Front());
+    }
+
+    template<typename T>
+    const T& SList<T>::Front() const
     {
         if (IsEmpty())
         {
@@ -86,8 +91,6 @@ namespace FieaGameEngine
             return mFront->mItem;
         }
     }
-
-
 
     template<typename T>
     SList<T>::Node::Node() :
