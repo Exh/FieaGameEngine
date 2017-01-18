@@ -34,10 +34,30 @@ namespace LibraryDesktopTest
 
         TEST_METHOD(SListConstructors)
         {
-            //std::int32_t data = 10;
-            //SList list(data);
+            SList<int> list;
+            list.PushFront(2);
+            list.PopFront();
+            list.PushBack(3);
+            list.IsEmpty();
+            list.Front();
+            const int& front = list.Front();
+            list.Back();
+            const int& back = list.Back();
+            list.Size();
 
-            //Assert::AreEqual(data, list.Data());
+            SList<int> list2;
+            list2.PushBack(10);
+            list2.PushBack(20);
+            list2 = list;
+
+            SList<int> list3(list2);
+
+
+
+            // Remove warnings
+            (front);
+            (back);
+            Assert::AreEqual(0, 0);
         }
 
     private:
