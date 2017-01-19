@@ -29,7 +29,14 @@ namespace FieaGameEngine
     template<typename T>
     void SList<T>::PushFront(const T& item)
     {
-        mFront = new Node(item, mFront);
+        Node* newNode = new Node(item, mFront);
+
+        if (IsEmpty())
+        {
+            mBack = newNode;
+        }
+
+        mFront = newNode;
 
         mSize++;
     }
@@ -59,7 +66,7 @@ namespace FieaGameEngine
     template<typename T>
     void SList<T>::PushBack(const T& item)
     {
-        if (IsEmpty())
+        if (!IsEmpty())
         {
             // The list is not empty, so make the last node's 
             // next pointer point to the new node, and update the 

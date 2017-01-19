@@ -45,3 +45,76 @@
 // Don't document unit tests.
 
 // Front() and Back() should have const and nonconst versions 
+
+// Test with at least 3 data types.
+// primitive
+// pointer
+// Foo (custom class)
+// Divide each test into 3 sections (ie int/int*/Foo)
+
+
+// Rule of 3
+// If you should provide a constructor, then you should supply destructor, copy constructor, and operator=
+
+//***************
+// Assignment 01
+//***************
+
+// foreach loops expect a lowercase begin() and end().
+// 
+// for (SList<int>::Iterator it = list.begin(); it != list.end(); it++)
+//
+// Composition: my class is composed of other data. It owns this other data.
+//  has-a relationship.
+
+// Aggregation: form of composition where container does not own contained data.
+
+
+/**
+class Iterator
+{
+
+    Iterator();
+
+    Iterator(const SList& owner, Node* node);
+
+    // when the iterator is equivalent to end() and this is called again, then 
+    // either (1) an exception can be thrown or (2) do nothing.
+    operator++();
+
+    // These operators will need to check if the iterators are made from the same SList
+    // so like this.mOwner == rhs.mOwner.
+    operator==();
+    operator!=();
+
+    Iterator(&Iterator rhs);
+    operator=();
+    operator*();
+
+    // You could have a destructor that just nulls out the data members
+    ~Iterator();
+
+private:
+    Node* mNode;
+    SList* mOwner;
+};
+*/
+
+// InsertAfter should be O(1) but Find() should be O(n)
+// Could you envision a way of letting the user offer their own equality function if 
+// there is no operator== for the class that they are working with.
+
+// operator* should have const and const*
+// dont have to do decrement or pointer arithmetic.
+
+// Remove could possibly return a bool
+// Find should not fire an exception, but rather it should return an iterator to end().
+
+// do not use the keyword default.
+
+// Unit test 
+// increment()
+// decrement()
+// insert()
+// after()
+
