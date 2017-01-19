@@ -19,7 +19,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Notes.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Notes.h">
+      <FileType>Text</FileType>
+    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)SList.h" />
   </ItemGroup>

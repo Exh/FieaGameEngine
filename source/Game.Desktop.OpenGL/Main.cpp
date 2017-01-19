@@ -188,8 +188,8 @@ BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscree
 
     UNREFERENCED_PARAMETER(title);
 
-    FieaGameEngine::SList list;
-    list.Data();
+    FieaGameEngine::SList<int> list;
+    list.PushFront(5);
 
 	fullscreen=fullscreenflag;			// Set The Global Fullscreen Flag
 
