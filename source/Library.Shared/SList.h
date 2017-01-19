@@ -24,7 +24,7 @@ namespace FieaGameEngine
         /** Copy constructor that performs a deep copy of the list.             */
         /** @param rhs The SList that this will be copied from.                 */
         /************************************************************************/
-        SList(const SList<T>& rhs);
+        SList(const SList& rhs);
 
         /************************************************************************/
         /** Inserts the given item before the front of the list.                */
@@ -89,12 +89,37 @@ namespace FieaGameEngine
         /** @param rhs The list to copy from.                                   */
         /** @return A reference to the this newly assigned list.                */
         /************************************************************************/
-        SList<T>& operator=(const SList<T>& rhs); 
+        SList& operator=(const SList& rhs); 
 
         /************************************************************************/
         /** Removes all items in the list.                                      */
         /************************************************************************/
         void Clear();
+
+        class Iterator
+        {
+        public:
+            Iterator();
+            Iterator(const SList& owner,
+                     class Node* node);
+            ~Iterator();
+            Iterator(const Iterator& rhs);
+
+            bool operator==(const Iterator& rhs) const;
+            bool operator!=(const Iterator& rhs) const;
+
+            Iterator& operator=(const Iterator& rhs);
+
+            Iterator& operator++();
+            Iterator operator++(int post);
+
+            T& operator*();
+            const T& operator*() const;
+
+        private:
+            class Node* mNode;
+            const SList* mOwner;
+        };
 
     private:
 

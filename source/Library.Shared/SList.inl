@@ -106,7 +106,7 @@ namespace FieaGameEngine
     template<typename T>
     T& SList<T>::Front()
     {
-        return const_cast<T&>(static_cast<const SList<T>*>(this)->Front());
+        return const_cast<T&>(const_cast<const SList<T>*>(this)->Front());
     }
 
     template<typename T>
@@ -125,7 +125,7 @@ namespace FieaGameEngine
     template<typename T>
     T& SList<T>::Back()
     {
-        return const_cast<T&>(static_cast<const SList<T>*>(this)->Back());
+        return const_cast<T&>(const_cast<const SList<T>*>(this)->Back());
     }
 
     template<typename T>
@@ -185,6 +185,91 @@ namespace FieaGameEngine
             PushBack(current->mItem);
             current = current->mNext;
         }
+    }
+
+    template<typename T>
+    SList<T>::Iterator::Iterator() :
+        mNode(nullptr),
+        mOwner(nullptr)
+    {
+    
+    }
+
+    template<typename T>
+    SList<T>::Iterator::Iterator(const SList& owner,
+                                 class Node* node) :
+        mNode(node),
+        mOwner(owner)
+    {
+    
+    }
+
+    template<typename T>
+    SList<T>::Iterator::~Iterator()
+    {
+
+    }
+
+    template<typename T>
+    SList<T>::Iterator::Iterator(const Iterator& rhs) :
+        mNode(rhs.mNode),
+        mOwner(rhs.mOwner)
+    {
+
+    }
+
+    bool SList<T>::Iterator::operator==(const Iterator& rhs)
+    {
+        return mOwner == rhs.mOwner &&
+            mNode == rhs.mNode;
+    }
+
+    bool SList<T>::Iterator::operator!=(const Iterator& rhs)
+    {
+        return !operator==(rhs);
+    }
+
+    SList<T>::Iterator& SList<T>::Iterator::operator=(const Iterator& rhs)
+    {
+        if (this != &rhs)
+        {
+            mNode = rhs.mNode;
+            mOwner = rhs.mOwner;
+        }
+
+        return *this;
+    }
+
+    SList<T>::Iterator& SList<T>::Iterator::operator++()
+    {
+        if (mNode != nullptr)
+        {
+            mNode = mNode->mNext;
+        }
+
+        return *this;
+    }
+
+    SList<T>::Iterator SList<T>::Iterator::operator++(int post)
+    {
+        Iterator previous = *this;
+        operator++();
+        return previous;
+    }
+
+    T& SList<T>::Iterator::operator*()
+    {
+        return const_cast<T&>(static_cast<const Iterator*>(this)->operator*());
+    }
+
+    const T& SList<T>::Iterator::operator*() const
+    {
+        if (mNode == nullptr)
+        {
+            throw std::exception("Cannot dereference end iterator.");
+        }
+
+        return mNode->mItem;
     }
 
     template<typename T>
