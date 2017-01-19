@@ -3,74 +3,78 @@
 //***************
 // Assignment 01
 //***************
-//When passing pointers into list. do not "delete" the node data of type T
 
-// Use std::uint32 for size
+/*
+When passing pointers into list. do not "delete" the node data of type T
 
-// operator=
-// Make sure that this != &rhs, first line
-// last statement should be a return *this;
+Use std::uint32 for size
 
-// Copy contructor 
-// Initialize in constructor list, the data members.
-// Walk through the rhs nodes and push back them onto the lhs list.
+operator=
+Make sure that this != &rhs, first line
+last statement should be a return *this;
 
-// Maybe make a node constructor that can take a Data and nextpointer.
+Copy contructor
+Initialize in constructor list, the data members.
+Walk through the rhs nodes and push back them onto the lhs list.
 
-// Destructor should go through the list and delete all of the of the nodes.
+Maybe make a node constructor that can take a Data and nextpointer.
 
-// Make helper code that shares the same code between copy constructor and operator=
+Destructor should go through the list and delete all of the of the nodes.
 
-// operator= should delete the nodes it already has before copying the new nodes.
-// you should check in the unit tests to make sure that the copies are exactly equivalent.
-// you can use the destructive popfront/popback for testing in this case because the current SList is crappy.
+Make helper code that shares the same code between copy constructor and operator=
 
-// Write unit test for each method.
+operator= should delete the nodes it already has before copying the new nodes.
+you should check in the unit tests to make sure that the copies are exactly equivalent.
+you can use the destructive popfront / popback for testing in this case because the current SList is crappy.
 
-// Front() should throw an exception if there is nothing in the list.
+Write unit test for each method.
 
-// Paul is okay with PopFront() returning void. Using Front() to get the data before using PopFront().
+Front() should throw an exception if there is nothing in the list.
 
-// #include <excpetion> for exceptions
+Paul is okay with PopFront() returning void.Using Front() to get the data before using PopFront().
 
-// Assert::ExpectException for testing exceptions like on Front();
+#include <excpetion> for exceptions
 
-// auto expression = [&intList] {intList.Front(); };
-// ^ use expression as a function pointer?
+Assert::ExpectException for testing exceptions like on Front();
 
-// Do a unit test for each method, but you dont have to test methods thoroughly that 
-// you have already tested in another method.
+auto expression = [&intList] {intList.Front(); };
+^ use expression as a function pointer ?
 
-// Only required doxygen comments on public interface / members.
-// Don't document unit tests.
+Do a unit test for each method, but you dont have to test methods thoroughly that
+you have already tested in another method.
 
-// Front() and Back() should have const and nonconst versions 
+Only required doxygen comments on public interface / members.
+Don't document unit tests.
 
-// Test with at least 3 data types.
-// primitive
-// pointer
-// Foo (custom class)
-// Divide each test into 3 sections (ie int/int*/Foo)
+Front() and Back() should have const and nonconst versions
+
+Test with at least 3 data types.
+primitive
+pointer
+Foo(custom class)
+Divide each test into 3 sections(ie int / int* / Foo)
 
 
-// Rule of 3
-// If you should provide a constructor, then you should supply destructor, copy constructor, and operator=
+Rule of 3
+If you should provide a constructor, then you should supply destructor, copy constructor, and operator=
+
+*/
 
 //***************
-// Assignment 01
+// Assignment 02
 //***************
 
-// foreach loops expect a lowercase begin() and end().
-// 
-// for (SList<int>::Iterator it = list.begin(); it != list.end(); it++)
-//
-// Composition: my class is composed of other data. It owns this other data.
-//  has-a relationship.
+/*
+foreach loops expect a lowercase begin() and end().
 
-// Aggregation: form of composition where container does not own contained data.
+for (SList<int>::Iterator it = list.begin(); it != list.end(); it++)
 
+Composition: my class is composed of other data.It owns this other data.
+    has - a relationship.
 
-/**
+    Aggregation : form of composition where container does not own contained data.
+*/
+
 class Iterator
 {
 
@@ -98,23 +102,89 @@ private:
     Node* mNode;
     SList* mOwner;
 };
+
+/*
+InsertAfter should be O(1) but Find() should be O(n)
+Could you envision a way of letting the user offer their own equality function if
+there is no operator== for the class that they are working with.
+
+operator* should have const and const*
+dont have to do decrement or pointer arithmetic.
+
+Remove could possibly return a bool
+Find should not fire an exception, but rather it should return an iterator to end().
+
+do not use the keyword default.
+
+Unit test
+increment()
+decrement()
+insert()
+after()
+
+refactor the copy contructor to use iterator
 */
 
-// InsertAfter should be O(1) but Find() should be O(n)
-// Could you envision a way of letting the user offer their own equality function if 
-// there is no operator== for the class that they are working with.
 
-// operator* should have const and const*
-// dont have to do decrement or pointer arithmetic.
+//***************
+// Assignment 03
+//***************
 
-// Remove could possibly return a bool
-// Find should not fire an exception, but rather it should return an iterator to end().
+/*
+    Vector, could implement end() as an index one past the last element of the list. so size of the list.
+    Don't use -1 to represent end()
 
-// do not use the keyword default.
+    Best fit and first fit - algorithms for allocating heap data. 
+    Size member for tracking count of items currently in the list.
+    Capacity for tracking the current amount of items the list can hold before a realloc is necessary.
 
-// Unit test 
-// increment()
-// decrement()
-// insert()
-// after()
+    When removing items from a vector, there is no need to clear the values at the last index.
+*/
 
+    // Vector should behave in the same way that SList does in the fact that:
+    int a = 10;
+    vector<int> v; 
+    v.PushBack(a);
+    a = 20; 
+    // v's data should not change
+
+/*
+    Placement new: constructs an object on a pre-allocated buffer.
+    Can work against heap + stack allocated memory.
+*/
+
+    const int MaxPixels = 100;
+    Pixel* buffer = malloc(MaxPixels * sizeof(Pixel));
+
+    Pixel* pixel = new (buffer) Pixel();
+    // new in this case, does not call malloc. It just calls the constructor 
+    // any consturctor can be invoked with placement new
+/*
+    You cannot call the constructor explicitly outside of new, but you can call the 
+    destructor explicitly, and you will have to. Why default construct an object that will only be 
+    replaced anyway? It is a waste of time. Expensive.
+
+    Resize() or Reserve()
+    C++ Standard:
+    Reserve() does one big alloc. Assigned capacity but not size. (so just malloc)
+    Resize() does both a regular new? Assigns capacity AND size.
+
+
+    Shrink() reduces size. ShrinkToFit() would shrink capacity to size.
+
+    When calling Remove()...
+
+    When resizing vectors capacity and you need to move all of the Foos into another contiguous memory array,
+    Then loop through the original array and invoke the destructor on it.
+    Q: Why can't we memcpy the data into new array when reserving?
+
+    Throw an exception when accessing an out of bounds index. (best idea. C++  standard lets you access out of bounds stuff).
+
+    For operator== on vector, it doesn't really matter if the capacity is different if they are logically the same.
+    This is a design decision... do vectors need to have the same capacity to be considered equivalent.
+
+    operator[] for copying.
+
+    functors are objects that contain an operator() and be called like a function.
+    can use std::function 
+*/
