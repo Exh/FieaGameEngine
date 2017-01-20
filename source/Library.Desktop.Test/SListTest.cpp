@@ -522,9 +522,9 @@ namespace LibraryDesktopTest
         {
             SList<Foo> list;
             SList<Foo>::Iterator it = list.begin();
-
-            auto emptyListInsertAfter = [&list, &it](){ list.InsertAfter(Foo(1,2), it); };
-            Assert::ExpectException<std::exception>(emptyListInsertAfter, L"InsertAfter used on end iterator should throw exception.");
+            list.InsertAfter(Foo(0, 0), it);
+            Assert::IsFalse(list.IsEmpty());
+            list.PopFront();
 
             list.PushFront(Foo(1, 2));
             list.PushBack(Foo(2, 3));

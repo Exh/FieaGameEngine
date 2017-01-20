@@ -99,23 +99,74 @@ namespace FieaGameEngine
         /************************************************************************/
         void Clear();
 
+        /************************************************************************/
+        /** Returns an iterator that points to the first element in the list.   */
+        /** Will return the same value as end() if the list is empty.           */
+        /** @return iterator at the first element in the list.                  */
+        /************************************************************************/
         Iterator begin();
 
+        /************************************************************************/
+        /** Returns an iterator that points to the first element in the list.   */
+        /** Will return the same value as end() if the list is empty.           */
+        /** @return iterator at the first element in the list.                  */
+        /************************************************************************/
         const Iterator begin() const;
 
+        /************************************************************************/
+        /** Returns an iterator past the end of the list. This iterator should  */
+        /** not be dereferenced.                                                */
+        /** @return iterator past the last element in the list.                 */
+        /************************************************************************/
         Iterator end();
 
+        /************************************************************************/
+        /** Returns an iterator past the end of the list. This iterator should  */
+        /** not be dereferenced.                                                */
+        /** @return iterator past the last element in the list.                 */
+        /************************************************************************/
         const Iterator end() const;
 
+        /************************************************************************/
+        /** Places an element into the list at the position one past the given  */
+        /** iterator. If an iterator equivalent to SList::end() is passed, the  */
+        /** element will be added to the back of the list.                      */
+        /** @param item element to place into the list.                         */
+        /** @param iterator position in list to insert new element after        */
+        /************************************************************************/
         void InsertAfter(const T& item,
                          const Iterator& iterator);
 
+        /************************************************************************/
+        /** Returns an iterator that references the first element found in the  */
+        /** list that is equivalent to the given value. Returns SList::end() if */
+        /** there is no element that is equivalent to the given value.          */
+        /** @param value element to match                                       */
+        /************************************************************************/
         Iterator Find(const T& value);
 
+        /************************************************************************/
+        /** Returns an iterator that references the first element found in the  */
+        /** list that is equivalent to the given value. Returns SList::end() if */
+        /** there is no element that is equivalent to the given value.          */
+        /** @param value element to match                                       */
+        /************************************************************************/
         const Iterator Find(const T& value) const;
 
+        /************************************************************************/
+        /** Removes the first element from the list that is equivalent to the   */
+        /** given value.                                                        */
+        /** @param value data to match.                                         */
+        /** @return true if an element was removed. false otherwise.            */
+        /************************************************************************/
         bool Remove(const T& value);
 
+        /************************************************************************/
+        /** Removes all elements from the list that are equivalent to the       */
+        /** provided value.                                                     */
+        /** @param value data to match.                                         */
+        /** @return true if at least one element was removed. false otherwise.  */
+        /************************************************************************/
         bool RemoveAll(const T& value);
 
         class Iterator
@@ -124,20 +175,69 @@ namespace FieaGameEngine
 
             friend SList;
 
+            /************************************************************************/
+            /** Constructs an iterator that belongs to no SList and references no   */
+            /** data.                                                               */
+            /************************************************************************/
             Iterator();
 
+            /************************************************************************/
+            /** Essentially the default destructor.                                 */
+            /************************************************************************/
             ~Iterator();
+
+            /************************************************************************/
+            /** Constructs an iterator given another iterator. Basically the        */
+            /** default copy constructor.                                           */
+            /************************************************************************/
             Iterator(const Iterator& rhs);
 
+            /************************************************************************/
+            /** Compares two iterators for equivalence.                             */
+            /** @return true if both iterators point to the same data contained by  */
+            /** the same list.                                                      */
+            /************************************************************************/
             bool operator==(const Iterator& rhs) const;
+
+            /************************************************************************/
+            /** Compares two iterators for inequivalence.                           */
+            /** @return false if both iterators point to the same data contained by */
+            /** the same list. true otherwise.                                      */
+            /************************************************************************/
             bool operator!=(const Iterator& rhs) const;
 
+            /************************************************************************/
+            /** Assigns this iterator to a given different iterator. The two        */
+            /** iterators will point to the same data and be equivalent after this. */
+            /************************************************************************/
             Iterator& operator=(const Iterator& rhs);
 
+            /************************************************************************/
+            /** Increments this iterator to point to the next element in the list.  */
+            /** @return a reference to the newly adjusted iterator.                 */
+            /************************************************************************/
             Iterator& operator++();
+
+            /************************************************************************/
+            /** Increments this iterator to point to the next element in the list   */
+            /** and returns a copy of the iterator as it was before incrementing    */
+            /** it.                                                                 */
+            /** @return a reference to the newly adjusted iterator.                 */
+            /************************************************************************/
             Iterator operator++(int post);
 
+            /************************************************************************/
+            /** Dereferences the iterator, returning a reference to the data which  */
+            /** the iterator is currently pointing at.                              */
+            /** @return reference to current data                                   */
+            /************************************************************************/
             T& operator*();
+
+            /************************************************************************/
+            /** Dereferences the iterator, returning a reference to the data which  */
+            /** the iterator is currently pointing at.                              */
+            /** @return reference to current data                                   */
+            /************************************************************************/
             const T& operator*() const;
 
         private:

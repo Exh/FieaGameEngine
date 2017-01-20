@@ -214,15 +214,17 @@ namespace FieaGameEngine
 
         if (iterator == end())
         {
-            throw std::exception("Cannot insert after the end of list.");
+            PushBack(item);
         }
+        else
+        {
+            Node* newNode = new Node();
+            newNode->mItem = item;
+            newNode->mNext = iterator.mNode->mNext;
+            iterator.mNode->mNext = newNode;
 
-        Node* newNode = new Node();
-        newNode->mItem = item;
-        newNode->mNext = iterator.mNode->mNext;
-        iterator.mNode->mNext = newNode;
-
-        mSize++;
+            mSize++;
+        }
     }
 
     template<typename T>
