@@ -101,24 +101,22 @@ namespace FieaGameEngine
 
         Iterator begin();
 
-        //const Iterator begin() const;
+        const Iterator begin() const;
 
         Iterator end();
 
-        //const Iterator end() const;
+        const Iterator end() const;
 
         void InsertAfter(const T& item,
                          const Iterator& iterator);
 
         Iterator Find(const T& value);
 
-        //const Iterator Find(const T&) const;
+        const Iterator Find(const T& value) const;
 
         bool Remove(const T& value);
 
         bool RemoveAll(const T& value);
-
-        bool Remove(const Iterator& iterator);
 
         class Iterator
         {
@@ -154,7 +152,8 @@ namespace FieaGameEngine
 
         void DeepCopy(const SList<T>& rhs);
 
-        void RemoveNode(Node* node);
+        void RemoveNode(Node* previous,
+                        Node* target);
 
         struct Node
         {

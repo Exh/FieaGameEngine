@@ -5,6 +5,22 @@
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace FieaGameEngine;
 
+namespace Microsoft
+{
+    namespace VisualStudio
+    {
+        namespace CppUnitTestFramework
+        {
+            template<>
+            inline std::wstring ToString<SList<Foo>::Iterator>(const SList<Foo>::Iterator& it)
+            {
+                (it);
+                    return L"SList<Foo>::Iterator string!";
+            }
+        }
+    }
+}
+
 namespace LibraryDesktopTest
 {
     TEST_CLASS(SListTest)
@@ -472,6 +488,10 @@ namespace LibraryDesktopTest
 
             it = list.begin();
             Assert::AreEqual<Foo>(*it, Foo(2,3));
+
+            const SList<Foo>* constList = &list;
+            const SList<Foo>::Iterator constIt = constList->begin();
+            Assert::AreEqual<Foo>(*it, Foo(2,3));
         }
 
         TEST_METHOD(end)
@@ -492,6 +512,10 @@ namespace LibraryDesktopTest
                 i++;
             }
             Assert::AreEqual<int>(i, 2);
+
+            const SList<Foo>* constList = &list;
+            const SList<Foo>::Iterator constIt = constList->end();
+            Assert::AreEqual<SList<Foo>::Iterator>(it, list.end());
         }
 
         TEST_METHOD(InsertAfter)
@@ -508,6 +532,148 @@ namespace LibraryDesktopTest
             it = list.begin();
             ++it;
             Assert::AreEqual<Foo>(*it, Foo(3, 4));
+        }
+
+        TEST_METHOD(Find)
+        {
+            SList<Foo> list;
+            SList<Foo>::Iterator it = list.Find(Foo(1, 2));
+            if (it != list.end()) 
+            {
+                Assert::Fail();
+            }
+            
+            list.PushFront(Foo(1, 2));
+            list.PushFront(Foo(2, 3));
+            list.PushFront(Foo(3, 4));
+
+            Assert::AreEqual<Foo>(*(list.Find(Foo(2, 3))), Foo(2, 3));
+            Assert::AreEqual<Foo>(*(list.Find(Foo(3, 4))), Foo(3, 4));
+            Assert::AreEqual<Foo>(*(list.Find(Foo(1, 2))), Foo(1, 2));
+
+            const SList<Foo>* constList = &list;
+            const SList<Foo>::Iterator constIt = constList->Find(Foo(2, 3));
+            it = list.Find(Foo(2, 3));
+            Assert::AreEqual<Foo>(*it, *constIt);
+        }
+
+        TEST_METHOD(Remove)
+        {
+            SList<Foo> list;
+            Assert::IsFalse(list.Remove(Foo(1, 2)));
+
+            list.PushFront(Foo(1, 2));
+            list.PushFront(Foo(2, 3));
+            list.PushFront(Foo(3, 4));
+            list.PushFront(Foo(4, 5));
+
+            Assert::IsFalse(list.Remove(Foo(5, 6)));
+            Assert::AreEqual<int>(list.Size(), 4);
+            Assert::IsTrue(list.Remove(Foo(2, 3)));
+            Assert::AreEqual<int>(list.Size(), 3);
+            Assert::IsFalse(list.Remove(Foo(2, 3)));
+            Assert::AreEqual<int>(list.Size(), 3);
+            Assert::IsTrue(list.Remove(Foo(1, 2)));
+            Assert::AreEqual<int>(list.Size(), 2);
+            Assert::IsTrue(list.Remove(Foo(4, 5)));
+            Assert::AreEqual<int>(list.Size(), 1);
+            Assert::IsTrue(list.Remove(Foo(3, 4)));
+            Assert::IsTrue(list.IsEmpty());
+
+            Assert::IsFalse(list.RemoveAll(Foo(1, 2)));
+            list.PushFront(Foo(1, 2));
+            list.PushFront(Foo(1, 2));
+            list.PushFront(Foo(3, 4));
+            list.PushFront(Foo(4, 5));
+            list.PushFront(Foo(1, 2));
+
+            Assert::AreEqual<int>(list.Size(), 5);
+            Assert::IsTrue(list.RemoveAll(Foo(1, 2)));
+            Assert::AreEqual<int>(list.Size(), 2);
+            Assert::IsTrue(list.RemoveAll(Foo(3, 4)));
+            Assert::IsFalse(list.RemoveAll(Foo(3, 4)));
+        }
+
+        TEST_METHOD(IteratorConstructors)
+        {
+            SList<Foo> list;
+            SList<Foo>::Iterator it;
+            Assert::AreNotEqual<SList<Foo>::Iterator>(it, list.end());
+
+            SList<Foo>::Iterator it2 = list.begin();
+            Assert::AreEqual<SList<Foo>::Iterator>(it2, list.begin());
+        }
+
+        TEST_METHOD(IteratorEquality)
+        {
+            SList<Foo> list;
+            list.PushBack(Foo(1, 2));
+            list.PushBack(Foo(2, 3));
+            list.PushBack(Foo(3, 4));
+
+            // Equality
+            SList<Foo>::Iterator it1 = list.begin();
+            SList<Foo>::Iterator it2 = list.begin();
+            Assert::AreEqual<SList<Foo>::Iterator>(it1, it2);
+
+            // Inequality
+            int count = 0;
+            for (auto it = list.begin(); it != list.end(); ++it)
+            {
+                count++;
+            }
+            Assert::AreEqual<int>(count, 3);
+        }
+
+        TEST_METHOD(IteratorAssignment)
+        {
+            SList<Foo> list;
+            list.PushBack(Foo(1, 2));
+            list.PushBack(Foo(2, 3));
+            list.PushBack(Foo(3, 4));
+
+            SList<Foo>::Iterator it1 = list.begin();
+            SList<Foo>::Iterator it2 = list.begin();
+            Assert::AreEqual<SList<Foo>::Iterator>(it1, it2);
+            ++it1;
+            Assert::AreNotEqual<SList<Foo>::Iterator>(it1, it2);
+            it2 = it1;
+            Assert::AreEqual<SList<Foo>::Iterator>(it1, it2);
+        }
+
+        TEST_METHOD(IteratorIncrements)
+        {
+            SList<Foo> list;
+            list.PushBack(Foo(1, 2));
+            list.PushBack(Foo(2, 3));
+            list.PushBack(Foo(3, 4));
+
+            SList<Foo>::Iterator it = list.begin();
+
+            // Postincrement
+            Assert::AreEqual<Foo>(*it, Foo(1, 2));
+            Assert::AreEqual<Foo>(*(it++), Foo(1, 2));
+            Assert::AreEqual<Foo>(*it, Foo(2, 3));
+
+            // Preincrement
+            Assert::AreEqual(*(++it), Foo(3, 4));
+            Assert::AreEqual<Foo>(*it, Foo(3, 4));
+        }
+
+        TEST_METHOD(IteratorDereference)
+        {
+            SList<Foo> list;
+            list.PushBack(Foo(1, 2));
+            list.PushBack(Foo(2, 3));
+            list.PushBack(Foo(3, 4));
+
+            SList<Foo>::Iterator it = list.begin();
+            Assert::AreEqual<Foo>(*it, Foo(1, 2));
+            it++;
+            Assert::AreEqual<Foo>(*it, Foo(2, 3));
+
+            const SList<Foo>::Iterator constIt = ++it;
+            Assert::AreEqual<Foo>(*constIt, Foo(3, 4));
         }
 
     private:

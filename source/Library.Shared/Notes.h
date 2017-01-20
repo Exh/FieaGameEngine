@@ -132,6 +132,7 @@ QUESTIONS:
 (5) What is the reasoning behind writing "typename" before dependent types in templated methods
 (6) Should InsertAfter throw an exception when inserting after the end iterator or
     should it place it after the last element in the list?
+(7) Can we have one iterator test instead of tests for each iterator method?
 */
 
 

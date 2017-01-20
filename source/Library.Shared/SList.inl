@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <windows.h>
 
 namespace FieaGameEngine
 {
@@ -182,7 +183,19 @@ namespace FieaGameEngine
     }
 
     template<typename T>
+    typename const SList<T>::Iterator SList<T>::begin() const
+    {
+        return Iterator(*this, mFront);
+    }
+
+    template<typename T>
     typename SList<T>::Iterator SList<T>::end()
+    {
+        return Iterator(*this, nullptr);
+    }
+
+    template<typename T>
+    typename const SList<T>::Iterator SList<T>::end() const
     {
         return Iterator(*this, nullptr);
     }
@@ -215,6 +228,12 @@ namespace FieaGameEngine
     template<typename T>
     typename SList<T>::Iterator SList<T>::Find(const T& value)
     {
+        return const_cast<const SList<T>*>(this)->Find(value);
+    }
+
+    template<typename T>
+    typename const SList<T>::Iterator SList<T>::Find(const T& value) const
+    {
         Node* currentNode = mFront;
 
         while (currentNode != nullptr)
@@ -236,22 +255,62 @@ namespace FieaGameEngine
         // This remove will remove the first item from the list whose
         // value matches the provided value.
         Node* currentNode = mFront;
+        Node* previousNode = nullptr;
 
         while (currentNode != nullptr)
         {
             if (currentNode->mItem == value)
             {
-                RemoveNode(currentNode);
+                RemoveNode(previousNode, currentNode);
                 break;
             }
+
+            previousNode = currentNode;
             currentNode = currentNode->mNext;
         }
+
+        return (currentNode != nullptr);
     }
 
     template<typename T>
     bool SList<T>::RemoveAll(const T& value)
     {
-    
+        // One way of implementing this function could be by 
+        // calling Remove() with the same value until a false
+        // is returned, but this is slow because Remove()
+        // is O(n) and it would be called m times where m is the 
+        // number of elements equal to value. Thus, remove all
+        // would be O(n^2).
+
+        // The following implementation duplicates some code of Remove()
+        // but this allows O(n) time for removing all.
+
+        bool found = false;
+        Node* currentNode = mFront;
+        Node* previousNode = nullptr;
+        Node* nextNode = nullptr;
+
+        while (currentNode != nullptr)
+        {
+            nextNode = currentNode->mNext;
+
+            if (currentNode->mItem == value)
+            {
+                RemoveNode(previousNode, currentNode);
+                found = true;
+
+                // The current node was just removed, so it can't 
+                // be used as a previous node.
+                currentNode = nextNode;
+            }
+            else 
+            {
+                previousNode = currentNode;
+                currentNode = currentNode->mNext;
+            }
+        }
+
+        return found;
     }
 
     template<typename T>
@@ -267,9 +326,40 @@ namespace FieaGameEngine
     }
 
     template<typename T>
-    void SList<T>::RemoveNode(Node* node)
+    void SList<T>::RemoveNode(Node* previous,
+                              Node* target)
     {
-        
+        assert(target != nullptr);
+
+        if (target == mFront &&
+            target == mBack)
+        {
+            assert(mSize == 1);
+            mFront = nullptr;
+            mBack = nullptr;
+        }
+        else if (target == mFront)
+        {
+            assert(previous == nullptr);
+            assert(target != mBack);
+            mFront = target->mNext;
+        }
+        else if (target == mBack)
+        {
+            assert(target != mFront);
+            assert(target->mNext == nullptr);
+            previous->mNext = nullptr;
+            mBack = previous;
+        }
+        else 
+        {
+            assert(mSize > 2);
+            previous->mNext = target->mNext;
+        }
+
+        mSize--;
+        delete target;
+        target = nullptr;
     }
 
     template<typename T>
@@ -342,6 +432,8 @@ namespace FieaGameEngine
     template<typename T>
     typename SList<T>::Iterator SList<T>::Iterator::operator++(int post)
     {
+        UNREFERENCED_PARAMETER(post);
+
         Iterator previous = *this;
         operator++();
         return previous;

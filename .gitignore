@@ -6,3 +6,4 @@ documentation/
 *.sdf
 bin/
 obj/
+*.TMP
