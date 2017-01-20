@@ -1,7 +1,7 @@
 #pragma once
 
 //***************
-// Assignment 01
+// Assignment 02
 //***************
 
 /*
@@ -61,7 +61,7 @@ If you should provide a constructor, then you should supply destructor, copy con
 */
 
 //***************
-// Assignment 02
+// Assignment 03
 //***************
 
 /*
@@ -109,7 +109,7 @@ Could you envision a way of letting the user offer their own equality function i
 there is no operator== for the class that they are working with.
 
 operator* should have const and const*
-dont have to do decrement or pointer arithmetic.
+don't have to do decrement or pointer arithmetic.
 
 Remove could possibly return a bool
 Find should not fire an exception, but rather it should return an iterator to end().
@@ -122,12 +122,21 @@ decrement()
 insert()
 after()
 
-refactor the copy contructor to use iterator
+refactor the copy constructor to use iterator
+
+QUESTIONS:
+(1) Can we make SList a friend of iterator.
+(2) Do iterators return by end() and begin() return by value?
+(3) do begin() end() Find() need const and nonconst versions?
+(4) Remove looks for first item in list?
+(5) What is the reasoning behind writing "typename" before dependent types in templated methods
+(6) Should InsertAfter throw an exception when inserting after the end iterator or
+    should it place it after the last element in the list?
 */
 
 
 //***************
-// Assignment 03
+// Assignment 04
 //***************
 
 /*
@@ -158,7 +167,7 @@ refactor the copy contructor to use iterator
 
     Pixel* pixel = new (buffer) Pixel();
     // new in this case, does not call malloc. It just calls the constructor 
-    // any consturctor can be invoked with placement new
+    // any constructor can be invoked with placement new
 /*
     You cannot call the constructor explicitly outside of new, but you can call the 
     destructor explicitly, and you will have to. Why default construct an object that will only be 

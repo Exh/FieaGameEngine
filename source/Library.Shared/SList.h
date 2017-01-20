@@ -7,7 +7,10 @@ namespace FieaGameEngine
     template <typename T>
     class SList
     {
-    public:
+        public:
+
+        class Iterator;
+        struct Node;
 
         /************************************************************************/
         /** Initializes an empty list.                                          */
@@ -96,12 +99,35 @@ namespace FieaGameEngine
         /************************************************************************/
         void Clear();
 
+        Iterator begin();
+
+        //const Iterator begin() const;
+
+        Iterator end();
+
+        //const Iterator end() const;
+
+        void InsertAfter(const T& item,
+                         const Iterator& iterator);
+
+        Iterator Find(const T& value);
+
+        //const Iterator Find(const T&) const;
+
+        bool Remove(const T& value);
+
+        bool RemoveAll(const T& value);
+
+        bool Remove(const Iterator& iterator);
+
         class Iterator
         {
         public:
+
+            friend SList;
+
             Iterator();
-            Iterator(const SList& owner,
-                     class Node* node);
+
             ~Iterator();
             Iterator(const Iterator& rhs);
 
@@ -117,13 +143,18 @@ namespace FieaGameEngine
             const T& operator*() const;
 
         private:
-            class Node* mNode;
+            Iterator(const SList& owner,
+                     Node* node);
+
             const SList* mOwner;
+            Node* mNode;
         };
 
     private:
 
         void DeepCopy(const SList<T>& rhs);
+
+        void RemoveNode(Node* node);
 
         struct Node
         {

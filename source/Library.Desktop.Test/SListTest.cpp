@@ -457,6 +457,59 @@ namespace LibraryDesktopTest
             }
         }
 
+        TEST_METHOD(begin)
+        {
+            SList<Foo> list;
+            SList<Foo>::Iterator it = list.begin();
+            
+            if (it != list.end())
+            {
+                Assert::Fail();
+            }
+
+            list.PushFront(Foo(1, 2));
+            list.PushFront(Foo(2, 3));
+
+            it = list.begin();
+            Assert::AreEqual<Foo>(*it, Foo(2,3));
+        }
+
+        TEST_METHOD(end)
+        {
+            SList<Foo> list;
+            SList<Foo>::Iterator it = list.end();
+
+            if (it != list.begin())
+            {
+                Assert::Fail();
+            }
+
+            list.PushFront(Foo(1, 2));
+            list.PushFront(Foo(2, 3));
+            int i = 0;
+            for (it = list.begin(); it != list.end(); ++it)
+            {
+                i++;
+            }
+            Assert::AreEqual<int>(i, 2);
+        }
+
+        TEST_METHOD(InsertAfter)
+        {
+            SList<Foo> list;
+            SList<Foo>::Iterator it = list.begin();
+
+            auto emptyListInsertAfter = [&list, &it](){ list.InsertAfter(Foo(1,2), it); };
+            Assert::ExpectException<std::exception>(emptyListInsertAfter, L"InsertAfter used on end iterator should throw exception.");
+
+            list.PushFront(Foo(1, 2));
+            list.PushBack(Foo(2, 3));
+            list.InsertAfter(Foo(3, 4), list.begin());
+            it = list.begin();
+            ++it;
+            Assert::AreEqual<Foo>(*it, Foo(3, 4));
+        }
+
     private:
         static _CrtMemState sStartMemState;
     };
