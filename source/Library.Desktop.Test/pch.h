@@ -14,6 +14,7 @@
 
 // Fiea Game Engine Headers
 #include "SList.h"
+#include "Vector.h"
 
 // Testing Headers
 #include "Foo.h"

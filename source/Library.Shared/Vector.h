@@ -4,15 +4,19 @@
 
 namespace FieaGameEngine
 {
+
     template<typename T>
     class Vector
     {
     public:
+        
+        class Iterator;
+
         Vector();
 
-        T& operator[](const int index);
+        T& operator[](int index);
 
-        const T& operator[](const int index) const;
+        const T& operator[](unsigned int index) const;
 
         void PopBack();
 
@@ -38,7 +42,7 @@ namespace FieaGameEngine
 
         const Iterator end() const;
 
-        void PushBack(T& item);
+        void PushBack(const T& item);
 
         Vector(const Vector& rhs);
 
@@ -70,6 +74,12 @@ namespace FieaGameEngine
 
     private:
 
+        void Expand();
 
+        T* mBuffer;
+        std::uint32_t mSize;
+        std::uint32_t mCapacity;
     };
 }
+
+#include "Vector.inl"
