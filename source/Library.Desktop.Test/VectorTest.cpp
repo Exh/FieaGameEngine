@@ -56,6 +56,10 @@ namespace LibraryDesktopTest
         TEST_METHOD(SubscriptOperator)
         {
             Vector<Foo> vector;
+
+            auto exceptionalCase1 = [&vector]() { vector[0]; };
+            Assert::ExpectException<std::exception>(exceptionalCase1, L"Out of bounds access threw no exception");
+
             vector.PushBack(Foo(1, 2));
             vector.PushBack(Foo(2, 3));
             vector.PushBack(Foo(3, 4));
@@ -63,9 +67,29 @@ namespace LibraryDesktopTest
             Assert::AreEqual<Foo>(vector[0], Foo(1, 2));
             Assert::AreEqual<Foo>(vector[1], Foo(2, 3));
             Assert::AreEqual<Foo>(vector[2], Foo(3, 4));
-            auto exceptionalCase = [&vector](){vector[3];};
-            Assert::ExpectException<std::exception>(exceptionalCase, L"Out of bounds access threw no exception");
+            auto exceptionalCase2 = [&vector](){ vector[3]; };
+            Assert::ExpectException<std::exception>(exceptionalCase2, L"Out of bounds access threw no exception");
         }
+
+        TEST_METHOD(CopySemantics)
+        {
+            // Copy constructor tests
+            Vector<Foo> vector1;
+            vector1.PushBack(Foo(1, 2));
+            vector1.PushBack(Foo(2, 3));
+            vector1.PushBack(Foo(3, 4));
+
+            Vector<Foo> vector2(vector1);
+
+            Assert::AreEqual<Foo>(vector1[0], vector2[0]);
+            Assert::AreEqual<Foo>(vector1[1], vector2[1]);
+            Assert::AreEqual<Foo>(vector1[2], vector2[2]);
+
+            // Assignment operator
+            //@@ TODO
+        }
+
+        
 
     private:
         static _CrtMemState sStartMemState;

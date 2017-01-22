@@ -69,12 +69,36 @@ namespace FieaGameEngine
 
         class Iterator
         {
-        
+        public:
+            friend Vector;
+
+            Iterator();
+            ~Iterator();
+            Iterator(const Iterator& rhs);
+
+            bool operator==(const Iterator& rhs) const;
+            bool operator!=(const Iterator& rhs) const;
+
+            Iterator& operator++();
+            Iterator operator++(int post);
+
+            T& operator*();
+            const T& operator*() const;
+
+            Iterator& operator=(const Iterator& rhs);
+
+        private:
+            Iterator(const Vector* owner,
+                     std::uint32_t index);
+            const Vector* mOwner;
+            std:int32_t mIndex;
         };
 
     private:
 
         void Expand();
+
+        void DeepCopy(const Vector& rhs);
 
         T* mBuffer;
         std::uint32_t mSize;
