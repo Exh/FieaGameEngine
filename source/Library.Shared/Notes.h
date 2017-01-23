@@ -125,15 +125,34 @@ after()
 refactor the copy constructor to use iterator
 
 QUESTIONS:
-(1) Can we make SList a friend of iterator.
-(2) Do iterators return by end() and begin() return by value?
-(3) do begin() end() Find() need const and nonconst versions?
-(4) Remove looks for first item in list?
+(1) Can we make SList a friend of iterator. [YES]
+(2) Do iterators return by end() and begin() return by value? [YES]
+(3) do begin() end() Find() need const and nonconst versions? [YES?]
+(4) Remove looks for first item in list? [YES]
 (5) What is the reasoning behind writing "typename" before dependent types in templated methods
 (6) Should InsertAfter throw an exception when inserting after the end iterator or
-    should it place it after the last element in the list?
-(7) Can we have one iterator test instead of tests for each iterator method?
+    should it place it after the last element in the list? [PUSHBACK]
+(7) Can we have one iterator test instead of tests for each iterator method? [NO]
+
+    [X] Refactor pushfront and pushback should return iterators!!!
+    [X] InsertAfter should return an iterator to the newly inserted item.
+    [X] REFACTOR operator= and similar to use range based for loops
+    [ ] Use <random> std::_randomDevice _randomEngine for random number generation.
+    [ ] Refactor tests to use variables instead of literals.
+    [X] Check the iterator being passed into InsertAfter to make sure that it is owned by the list.
 */
+
+    for (const Iterator it = begin(); it != end(); i++)
+    {
+        PushBack(*it)
+    }
+
+    // is equivalent to :
+
+    for (auto& value : rhs)
+    {
+        PushBack(value);
+    }
 
 
 //***************
@@ -197,4 +216,44 @@ QUESTIONS:
 
     functors are objects that contain an operator() and be called like a function.
     can use std::function 
+
+    CASTING:
+
+    const_cast works on pointers, references, and values.
+
+    static_cast is not a c style cast.
+    You can down-cast with static cast. Only works with references, pointers, and objects.
+    Compile time checking.
+    Upcasting is always acceptable.
+    The opposite is not always true. The compiler will make sure that the casted types are
+    in the same heirarchy. cast primitives using static cast.
+
+    dynamic cast only works with references and pointers. Does both compile time and run
+    time checking. if you dynamic cast a pointer and it is not a valid type conversion, it will
+    return a nullptr. If you dynamic cast a reference and it is invalid, it will throw an exception.
+
+    reinterpret_cast, only works on pointers and references. Does not run time and no compile time checking.
+
+    Look up slicing. Upcasting will remove data from derived class.
+*/
+
+    // Cascading constructors is a C++ 11 feature.
+    SList<T>::Slist(const SList& rhs) :
+      SList()
+      {
+        operator=(rhs);
+      }
+
+/*
+    C++ allows you to write  = delete() to delete functions.
+
+    friend class SList;
+    SList can access private member of this class / method. You can friend a single method too apparently.
+
+    If you are not reducing the capacity when doing a Clear(), then you should implement a Destroy() 
+    function that also reduces capacity to 0 (and size). 
+
+    The functor invocation for expanding memory should be called whenever PushBack()ing. 
+    Also the functor should return an unsigned int of the number of elements to increase capacity by.
+    Check to make sure that it doesn't return 0 because then a new item can't be pushbacked.
 */

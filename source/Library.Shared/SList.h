@@ -33,7 +33,7 @@ namespace FieaGameEngine
         /** Inserts the given item before the front of the list.                */
         /** @param item The new item that will be added to the list by value.   */
         /************************************************************************/
-        void PushFront(const T& item);
+        Iterator PushFront(const T& item);
 
         /************************************************************************/
         /** Removes the first item in the list.                                 */
@@ -45,7 +45,7 @@ namespace FieaGameEngine
         /** @param item The item that will be added by value to the back of the */
         /** list by value.                                                      */
         /************************************************************************/
-        void PushBack(const T& item);
+        Iterator PushBack(const T& item);
 
         /************************************************************************/
         /** Returns true if the list contains no items.                         */
@@ -133,9 +133,10 @@ namespace FieaGameEngine
         /** element will be added to the back of the list.                      */
         /** @param item element to place into the list.                         */
         /** @param iterator position in list to insert new element after        */
+        /** @return iterator that points to the newly inserted item             */
         /************************************************************************/
-        void InsertAfter(const T& item,
-                         const Iterator& iterator);
+        Iterator InsertAfter(const T& item,
+                             const Iterator& iterator);
 
         /************************************************************************/
         /** Returns an iterator that references the first element found in the  */

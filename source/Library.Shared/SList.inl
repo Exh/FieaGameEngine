@@ -28,7 +28,7 @@ namespace FieaGameEngine
     }
 
     template<typename T>
-    void SList<T>::PushFront(const T& item)
+    typename SList<T>::Iterator SList<T>::PushFront(const T& item)
     {
         Node* newNode = new Node(item, mFront);
 
@@ -38,8 +38,9 @@ namespace FieaGameEngine
         }
 
         mFront = newNode;
-
         mSize++;
+
+        return Iterator(*this, mFront);
     }
 
     template<typename T>
@@ -65,7 +66,7 @@ namespace FieaGameEngine
     }
 
     template<typename T>
-    void SList<T>::PushBack(const T& item)
+    typename SList<T>::Iterator SList<T>::PushBack(const T& item)
     {
         if (!IsEmpty())
         {
@@ -84,6 +85,8 @@ namespace FieaGameEngine
         }
 
         mSize++;
+
+        return Iterator(*this, mBack);
     }
 
     template<typename T>
@@ -201,8 +204,8 @@ namespace FieaGameEngine
     }
 
     template<typename T>
-    void SList<T>::InsertAfter(const T& item,
-                               const Iterator& iterator)
+    typename SList<T>::Iterator SList<T>::InsertAfter(const T& item,
+                                                      const Iterator& iterator)
     {
         if (iterator.mOwner != this)
         {
@@ -215,6 +218,7 @@ namespace FieaGameEngine
         if (iterator == end())
         {
             PushBack(item);
+            return Iterator(*this, mBack);
         }
         else
         {
@@ -224,6 +228,8 @@ namespace FieaGameEngine
             iterator.mNode->mNext = newNode;
 
             mSize++;
+
+            return Iterator(*this, newNode);
         }
     }
 
@@ -318,12 +324,9 @@ namespace FieaGameEngine
     template<typename T>
     void SList<T>::DeepCopy(const SList<T>& rhs)
     {
-        Node* current = rhs.mFront;
-
-        while (current != nullptr)
+        for (auto& value : rhs)
         {
-            PushBack(current->mItem);
-            current = current->mNext;
+            PushBack(value);
         }
     }
 

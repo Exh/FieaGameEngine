@@ -17,6 +17,20 @@ namespace Microsoft
                 (it);
                     return L"SList<Foo>::Iterator string!";
             }
+
+            template<>
+            inline std::wstring ToString<SList<int>::Iterator>(const SList<int>::Iterator& it)
+            {
+                (it);
+                return L"SList<int>::Iterator string!";
+            }
+
+            template<>
+            inline std::wstring ToString<SList<int*>::Iterator>(const SList<int*>::Iterator& it)
+            {
+                (it);
+                return L"SList<int*>::Iterator string!";
+            }
         }
     }
 }
@@ -74,11 +88,11 @@ namespace LibraryDesktopTest
 
             // int tests 
             SList<int> intList;
-            intList.PushFront(10);
+            intList.PushFront(int1);
             Assert::AreEqual<int>(intList.Size(), 1);
 
             int intFront = intList.Front();
-            Assert::AreEqual<int>(intFront, 10);
+            Assert::AreEqual<int>(intFront, int1);
 
             intList.PushFront(int2);
             Assert::AreEqual<int>(intList.Size(), 2);
@@ -125,14 +139,14 @@ namespace LibraryDesktopTest
 
             // int tests 
             SList<int> intList;
-            intList.PushFront(1);
-            intList.PushFront(2);
+            intList.PushFront(int1);
+            intList.PushFront(int2);
 
             Assert::AreEqual<int>(intList.Size(), 2);
-            Assert::AreEqual<int>(intList.Front(), 2);
+            Assert::AreEqual<int>(intList.Front(), int2);
             intList.PopFront();
             Assert::AreEqual<int>(intList.Size(), 1);
-            Assert::AreEqual<int>(intList.Front(), 1);
+            Assert::AreEqual<int>(intList.Front(), int1);
             intList.PopFront();
             Assert::AreEqual<int>(intList.Size(), 0);
 
@@ -173,12 +187,12 @@ namespace LibraryDesktopTest
 
             // int tests
             SList<int> intList;
-            intList.PushBack(1);
+            intList.PushBack(int1);
             Assert::AreEqual<int>(intList.Size(), 1);
-            Assert::AreEqual<int>(intList.Front(), 1);
-            intList.PushBack(2);
+            Assert::AreEqual<int>(intList.Front(), int1);
+            intList.PushBack(int2);
             Assert::AreEqual<int>(intList.Size(), 2);
-            Assert::AreEqual<int>(intList.Front(), 1);
+            Assert::AreEqual<int>(intList.Front(), int1);
 
             // pointer tests
             SList<int*> pointerList;
@@ -208,7 +222,7 @@ namespace LibraryDesktopTest
             // int tests
             SList<int> intList;
             Assert::IsTrue(intList.IsEmpty());
-            intList.PushFront(1);
+            intList.PushFront(int1);
             Assert::IsFalse(intList.IsEmpty());
             intList.PopFront();
             Assert::IsTrue(intList.IsEmpty());
@@ -243,20 +257,20 @@ namespace LibraryDesktopTest
             // int test
             SList<int> intList;
             const SList<int>* constIntList = &intList;
-            intList.PushFront(1);
-            Assert::AreEqual<int>(intList.Front(), 1);
-            Assert::AreEqual<int>(constIntList->Front(), 1);
-            intList.Front() = 5;
-            Assert::AreEqual<int>(intList.Front(), 5);
-            intList.PushFront(2);
-            Assert::AreEqual<int>(intList.Front(), 2);
-            intList.PushBack(3);
-            Assert::AreEqual<int>(intList.Front(), 2);
+            intList.PushFront(int1);
+            Assert::AreEqual<int>(intList.Front(), int1);
+            Assert::AreEqual<int>(constIntList->Front(), int1);
+            intList.Front() = int3;
+            Assert::AreEqual<int>(intList.Front(), int3);
+            intList.PushFront(int2);
+            Assert::AreEqual<int>(intList.Front(), int2);
+            intList.PushBack(int3);
+            Assert::AreEqual<int>(intList.Front(), int2);
             intList.PopFront();
             intList.PopFront();
             intList.PopFront();
-            try { intList.Front(); Assert::Fail(); } 
-            catch (...){ }
+            auto exceptionInt = [&intList]{ intList.Front(); };
+            Assert::ExpectException<std::exception>(exceptionInt);
 
             // pointer test
             SList<int*> pointerList;
@@ -273,8 +287,8 @@ namespace LibraryDesktopTest
             pointerList.PopFront();
             pointerList.PopFront();
             pointerList.PopFront();
-            try { pointerList.Front(); Assert::Fail(); }
-            catch (...) {}
+            auto exceptionPointer = [&pointerList] { pointerList.Front(); };
+            Assert::ExpectException<std::exception>(exceptionPointer);
 
             // Foo test
             SList<Foo> fooList;
@@ -291,8 +305,8 @@ namespace LibraryDesktopTest
             fooList.PopFront();
             fooList.PopFront();
             fooList.PopFront();
-            try { fooList.Front(); Assert::Fail(); }
-            catch (...) {}
+            auto exceptionFoo = [&fooList] { fooList.Front(); };
+            Assert::ExpectException<std::exception>(exceptionFoo);
         }
 
         TEST_METHOD(Back)
@@ -308,20 +322,20 @@ namespace LibraryDesktopTest
             // int test
             SList<int> intList;
             const SList<int>* constIntList = &intList;
-            intList.PushBack(1);
-            Assert::AreEqual<int>(intList.Back(), 1);
-            Assert::AreEqual<int>(constIntList->Back(), 1);
-            intList.Back() = 5;
-            Assert::AreEqual<int>(intList.Back(), 5);
-            intList.PushBack(2);
-            Assert::AreEqual<int>(intList.Back(), 2);
-            intList.PushFront(3);
-            Assert::AreEqual<int>(intList.Back(), 2);
+            intList.PushBack(int1);
+            Assert::AreEqual<int>(intList.Back(), int1);
+            Assert::AreEqual<int>(constIntList->Back(), int1);
+            intList.Back() = int3;
+            Assert::AreEqual<int>(intList.Back(), int3);
+            intList.PushBack(int2);
+            Assert::AreEqual<int>(intList.Back(), int2);
+            intList.PushFront(int3);
+            Assert::AreEqual<int>(intList.Back(), int2);
             intList.PopFront();
             intList.PopFront();
             intList.PopFront();
-            try { intList.Back(); Assert::Fail(); }
-            catch (...) {}
+            auto exceptionInt = [&intList] { intList.Back(); };
+            Assert::ExpectException<std::exception>(exceptionInt);
 
             // pointer test
             SList<int*> pointerList;
@@ -338,8 +352,8 @@ namespace LibraryDesktopTest
             pointerList.PopFront();
             pointerList.PopFront();
             pointerList.PopFront();
-            try { pointerList.Back(); Assert::Fail(); }
-            catch (...) {}
+            auto exceptionPointer = [&pointerList] { pointerList.Back(); };
+            Assert::ExpectException<std::exception>(exceptionPointer);
 
             // Foo test
             SList<Foo> fooList;
@@ -356,8 +370,8 @@ namespace LibraryDesktopTest
             fooList.PopFront();
             fooList.PopFront();
             fooList.PopFront();
-            try { fooList.Back(); Assert::Fail(); }
-            catch (...) {}
+            auto exceptionFoo = [&fooList] { fooList.Back(); };
+            Assert::ExpectException<std::exception>(exceptionFoo);
         }
 
         TEST_METHOD(Size)
@@ -371,9 +385,9 @@ namespace LibraryDesktopTest
             // int tests
             SList<int> intList;
             Assert::AreEqual<int>(intList.Size(), 0);
-            intList.PushFront(1);
+            intList.PushFront(int1);
             Assert::AreEqual<int>(intList.Size(), 1);
-            intList.PushBack(2);
+            intList.PushBack(int2);
             Assert::AreEqual<int>(intList.Size(), 2);
             intList.PopFront();
             Assert::AreEqual<int>(intList.Size(), 1);
@@ -420,8 +434,8 @@ namespace LibraryDesktopTest
             // Copy Constructor test
             // int SList setup
             SList<int> intList;
-            intList.PushBack(1);
-            intList.PushBack(2);
+            intList.PushBack(int1);
+            intList.PushBack(int2);
             SList<int> intListCopy(intList);
 
             // pointer SList setup
@@ -449,7 +463,7 @@ namespace LibraryDesktopTest
             Assert::AreEqual<int>(fooList.Size(), fooListCopy.Size());
 
             // Assignment operator test
-            intList.PushFront(3);
+            intList.PushFront(int3);
             pointerList.PushFront(&int3);
             fooList.PushFront(foo3);
 
@@ -475,123 +489,392 @@ namespace LibraryDesktopTest
 
         TEST_METHOD(begin)
         {
-            SList<Foo> list;
-            SList<Foo>::Iterator it = list.begin();
-            
-            if (it != list.end())
+            int int1 = 1;
+            int int2 = 2;
+
+            Foo foo1(1, 2);
+            Foo foo2(2, 3);
+
+            // int test
+            SList<int> intList;
+            SList<int>::Iterator itInt = intList.begin();
+
+            if (itInt != intList.end())
             {
                 Assert::Fail();
             }
 
-            list.PushFront(Foo(1, 2));
-            list.PushFront(Foo(2, 3));
+            intList.PushFront(int1);
+            intList.PushFront(int2);
 
-            it = list.begin();
-            Assert::AreEqual<Foo>(*it, Foo(2,3));
+            itInt = intList.begin();
+            Assert::AreEqual<int>(*itInt, int2);
 
-            const SList<Foo>* constList = &list;
-            const SList<Foo>::Iterator constIt = constList->begin();
-            Assert::AreEqual<Foo>(*it, Foo(2,3));
+            const SList<int>* constIntList = &intList;
+            const SList<int>::Iterator constItInt = constIntList->begin();
+            Assert::AreEqual<int>(*constItInt, int2);
+
+            // pointer test
+            SList<int*> pointerList;
+            SList<int*>::Iterator itPointer = pointerList.begin();
+
+            if (itPointer != pointerList.end())
+            {
+                Assert::Fail();
+            }
+
+            pointerList.PushFront(&int1);
+            pointerList.PushFront(&int2);
+
+            itPointer = pointerList.begin();
+            Assert::AreEqual<int*>(*itPointer, &int2);
+
+            const SList<int*>* constPointerList = &pointerList;
+            const SList<int*>::Iterator constItPointer = constPointerList->begin();
+            Assert::AreEqual<int*>(*constItPointer, &int2);
+
+            // Foo test
+            SList<Foo> fooList;
+            SList<Foo>::Iterator itFoo = fooList.begin();
+            
+            if (itFoo != fooList.end())
+            {
+                Assert::Fail();
+            }
+
+            fooList.PushFront(foo1);
+            fooList.PushFront(foo2);
+
+            itFoo = fooList.begin();
+            Assert::AreEqual<Foo>(*itFoo, foo2);
+
+            const SList<Foo>* constFooList = &fooList;
+            const SList<Foo>::Iterator constItFoo = constFooList->begin();
+            Assert::AreEqual<Foo>(*constItFoo, foo2);
         }
 
         TEST_METHOD(end)
         {
-            SList<Foo> list;
-            SList<Foo>::Iterator it = list.end();
+            int int1 = 1;
+            int int2 = 2;
 
-            if (it != list.begin())
+            Foo foo1(1, 2);
+            Foo foo2(2, 3);
+
+            // int test
+            SList<int> listInt;
+            SList<int>::Iterator itInt = listInt.end();
+
+            if (itInt != listInt.begin())
             {
                 Assert::Fail();
             }
 
-            list.PushFront(Foo(1, 2));
-            list.PushFront(Foo(2, 3));
-            int i = 0;
-            for (it = list.begin(); it != list.end(); ++it)
+            listInt.PushFront(int1);
+            listInt.PushFront(int2);
+            int iInt = 0;
+            for (itInt = listInt.begin(); itInt != listInt.end(); ++itInt)
             {
-                i++;
+                iInt++;
             }
-            Assert::AreEqual<int>(i, 2);
+            Assert::AreEqual<int>(iInt, 2);
 
-            const SList<Foo>* constList = &list;
-            const SList<Foo>::Iterator constIt = constList->end();
-            Assert::AreEqual<SList<Foo>::Iterator>(it, list.end());
+            const SList<int>* constListInt = &listInt;
+            const SList<int>::Iterator constItInt = constListInt->end();
+            Assert::AreEqual<SList<int>::Iterator>(constItInt, listInt.end());
+
+            // pointer test
+            SList<int*> listPointer;
+            SList<int*>::Iterator itPointer = listPointer.end();
+
+            if (itPointer != listPointer.begin())
+            {
+                Assert::Fail();
+            }
+
+            listPointer.PushFront(&int1);
+            listPointer.PushFront(&int2);
+            int iPointer = 0;
+            for (itPointer = listPointer.begin(); itPointer != listPointer.end(); ++itPointer)
+            {
+                iPointer++;
+            }
+            Assert::AreEqual<int>(iPointer, 2);
+
+            const SList<int*>* constListPointer = &listPointer;
+            const SList<int*>::Iterator constItPointer = constListPointer->end();
+            Assert::AreEqual<SList<int*>::Iterator>(constItPointer, listPointer.end());
+
+            // Foo test
+            SList<Foo> listFoo;
+            SList<Foo>::Iterator itFoo = listFoo.end();
+
+            if (itFoo != listFoo.begin())
+            {
+                Assert::Fail();
+            }
+
+            listFoo.PushFront(foo1);
+            listFoo.PushFront(foo2);
+            int iFoo = 0;
+            for (itFoo = listFoo.begin(); itFoo != listFoo.end(); ++itFoo)
+            {
+                iFoo++;
+            }
+            Assert::AreEqual<int>(iFoo, 2);
+
+            const SList<Foo>* constListFoo = &listFoo;
+            const SList<Foo>::Iterator constItFoo = constListFoo->end();
+            Assert::AreEqual<SList<Foo>::Iterator>(constItFoo, listFoo.end());
         }
 
         TEST_METHOD(InsertAfter)
         {
-            SList<Foo> list;
-            SList<Foo>::Iterator it = list.begin();
-            list.InsertAfter(Foo(0, 0), it);
-            Assert::IsFalse(list.IsEmpty());
-            list.PopFront();
+            int int0 = 0;
+            int int1 = 1;
+            int int2 = 2;
+            int int3 = 3;
 
-            list.PushFront(Foo(1, 2));
-            list.PushBack(Foo(2, 3));
-            list.InsertAfter(Foo(3, 4), list.begin());
-            it = list.begin();
-            ++it;
-            Assert::AreEqual<Foo>(*it, Foo(3, 4));
+            Foo foo0(0, 0);
+            Foo foo1(1, 2);
+            Foo foo2(2, 3);
+            Foo foo3(3, 4);
+
+            // int test
+            SList<int> listInt;
+            SList<int>::Iterator itInt = listInt.begin();
+            listInt.InsertAfter(int0, itInt);
+            Assert::IsFalse(listInt.IsEmpty());
+            listInt.PopFront();
+
+            listInt.PushFront(int1);
+            listInt.PushBack(int2);
+            listInt.InsertAfter(int3, listInt.begin());
+            itInt = listInt.begin();
+            ++itInt;
+            Assert::AreEqual<int>(*itInt, int3);
+
+            // pointer test
+            SList<int*> listPointer;
+            SList<int*>::Iterator itPointer = listPointer.begin();
+            listPointer.InsertAfter(&int0, itPointer);
+            Assert::IsFalse(listPointer.IsEmpty());
+            listPointer.PopFront();
+
+            listPointer.PushFront(&int1);
+            listPointer.PushBack(&int2);
+            listPointer.InsertAfter(&int3, listPointer.begin());
+            itPointer = listPointer.begin();
+            ++itPointer;
+            Assert::AreEqual<int*>(*itPointer, &int3);
+
+            // Foo test
+            SList<Foo> listFoo;
+            SList<Foo>::Iterator itFoo = listFoo.begin();
+            listFoo.InsertAfter(foo0, itFoo);
+            Assert::IsFalse(listFoo.IsEmpty());
+            listFoo.PopFront();
+
+            listFoo.PushFront(foo1);
+            listFoo.PushBack(foo2);
+            listFoo.InsertAfter(foo3, listFoo.begin());
+            itFoo = listFoo.begin();
+            ++itFoo;
+            Assert::AreEqual<Foo>(*itFoo, foo3);
         }
 
         TEST_METHOD(Find)
         {
-            SList<Foo> list;
-            SList<Foo>::Iterator it = list.Find(Foo(1, 2));
-            if (it != list.end()) 
+            int int1 = 1;
+            int int2 = 2;
+            int int3 = 3;
+
+            Foo foo1(1, 2);
+            Foo foo2(2, 3);
+            Foo foo3(3, 4);
+
+            // int test
+            SList<int> listInt;
+            SList<int>::Iterator itInt = listInt.Find(int1);
+            if (itInt != listInt.end())
+            {
+                Assert::Fail();
+            }
+
+            listInt.PushFront(int1);
+            listInt.PushFront(int2);
+            listInt.PushFront(int3);
+
+            Assert::AreEqual<int>(*(listInt.Find(int2)), int2);
+            Assert::AreEqual<int>(*(listInt.Find(int3)), int3);
+            Assert::AreEqual<int>(*(listInt.Find(int1)), int1);
+
+            const SList<int>* constListInt = &listInt;
+            const SList<int>::Iterator constItInt = constListInt->Find(int2);
+            itInt = listInt.Find(int2);
+            Assert::AreEqual<int>(*itInt, *constItInt);
+
+            // pointer test
+            SList<int*> listPointer;
+            SList<int*>::Iterator itPointer = listPointer.Find(&int1);
+            if (itPointer != listPointer.end())
+            {
+                Assert::Fail();
+            }
+
+            listPointer.PushFront(&int1);
+            listPointer.PushFront(&int2);
+            listPointer.PushFront(&int3);
+
+            Assert::AreEqual<int*>(*(listPointer.Find(&int2)), &int2);
+            Assert::AreEqual<int*>(*(listPointer.Find(&int3)), &int3);
+            Assert::AreEqual<int*>(*(listPointer.Find(&int1)), &int1);
+
+            const SList<int*>* constListPointer = &listPointer;
+            const SList<int*>::Iterator constItPointer = constListPointer->Find(&int2);
+            itPointer = listPointer.Find(&int2);
+            Assert::AreEqual<int*>(*itPointer, *constItPointer);
+
+            // Foo test
+            SList<Foo> listFoo;
+            SList<Foo>::Iterator itFoo = listFoo.Find(foo1);
+            if (itFoo != listFoo.end()) 
             {
                 Assert::Fail();
             }
             
-            list.PushFront(Foo(1, 2));
-            list.PushFront(Foo(2, 3));
-            list.PushFront(Foo(3, 4));
+            listFoo.PushFront(foo1);
+            listFoo.PushFront(foo2);
+            listFoo.PushFront(foo3);
 
-            Assert::AreEqual<Foo>(*(list.Find(Foo(2, 3))), Foo(2, 3));
-            Assert::AreEqual<Foo>(*(list.Find(Foo(3, 4))), Foo(3, 4));
-            Assert::AreEqual<Foo>(*(list.Find(Foo(1, 2))), Foo(1, 2));
+            Assert::AreEqual<Foo>(*(listFoo.Find(foo2)), foo2);
+            Assert::AreEqual<Foo>(*(listFoo.Find(foo3)), foo3);
+            Assert::AreEqual<Foo>(*(listFoo.Find(foo1)), foo1);
 
-            const SList<Foo>* constList = &list;
-            const SList<Foo>::Iterator constIt = constList->Find(Foo(2, 3));
-            it = list.Find(Foo(2, 3));
-            Assert::AreEqual<Foo>(*it, *constIt);
+            const SList<Foo>* constListFoo = &listFoo;
+            const SList<Foo>::Iterator constItFoo = constListFoo->Find(foo2);
+            itFoo = listFoo.Find(foo2);
+            Assert::AreEqual<Foo>(*itFoo, *constItFoo);
         }
 
         TEST_METHOD(Remove)
         {
-            SList<Foo> list;
-            Assert::IsFalse(list.Remove(Foo(1, 2)));
+            int int1 = 1;
+            int int2 = 2;
+            int int3 = 3;
+            int int4 = 4;
+            int int5 = 5;
 
-            list.PushFront(Foo(1, 2));
-            list.PushFront(Foo(2, 3));
-            list.PushFront(Foo(3, 4));
-            list.PushFront(Foo(4, 5));
+            Foo foo1(1, 2);
+            Foo foo2(2, 3);
+            Foo foo3(3, 4);
+            Foo foo4(4, 5);
+            Foo foo5(5, 6);
 
-            Assert::IsFalse(list.Remove(Foo(5, 6)));
-            Assert::AreEqual<int>(list.Size(), 4);
-            Assert::IsTrue(list.Remove(Foo(2, 3)));
-            Assert::AreEqual<int>(list.Size(), 3);
-            Assert::IsFalse(list.Remove(Foo(2, 3)));
-            Assert::AreEqual<int>(list.Size(), 3);
-            Assert::IsTrue(list.Remove(Foo(1, 2)));
-            Assert::AreEqual<int>(list.Size(), 2);
-            Assert::IsTrue(list.Remove(Foo(4, 5)));
-            Assert::AreEqual<int>(list.Size(), 1);
-            Assert::IsTrue(list.Remove(Foo(3, 4)));
-            Assert::IsTrue(list.IsEmpty());
+            // int test
+            SList<int> listInt;
+            Assert::IsFalse(listInt.Remove(int1));
 
-            Assert::IsFalse(list.RemoveAll(Foo(1, 2)));
-            list.PushFront(Foo(1, 2));
-            list.PushFront(Foo(1, 2));
-            list.PushFront(Foo(3, 4));
-            list.PushFront(Foo(4, 5));
-            list.PushFront(Foo(1, 2));
+            listInt.PushFront(int1);
+            listInt.PushFront(int2);
+            listInt.PushFront(int3);
+            listInt.PushFront(int4);
 
-            Assert::AreEqual<int>(list.Size(), 5);
-            Assert::IsTrue(list.RemoveAll(Foo(1, 2)));
-            Assert::AreEqual<int>(list.Size(), 2);
-            Assert::IsTrue(list.RemoveAll(Foo(3, 4)));
-            Assert::IsFalse(list.RemoveAll(Foo(3, 4)));
+            Assert::IsFalse(listInt.Remove(int5));
+            Assert::AreEqual<int>(listInt.Size(), 4);
+            Assert::IsTrue(listInt.Remove(int2));
+            Assert::AreEqual<int>(listInt.Size(), 3);
+            Assert::IsFalse(listInt.Remove(int2));
+            Assert::AreEqual<int>(listInt.Size(), 3);
+            Assert::IsTrue(listInt.Remove(int1));
+            Assert::AreEqual<int>(listInt.Size(), 2);
+            Assert::IsTrue(listInt.Remove(int4));
+            Assert::AreEqual<int>(listInt.Size(), 1);
+            Assert::IsTrue(listInt.Remove(int3));
+            Assert::IsTrue(listInt.IsEmpty());
+
+            Assert::IsFalse(listInt.RemoveAll(int1));
+            listInt.PushFront(int1);
+            listInt.PushFront(int1);
+            listInt.PushFront(int3);
+            listInt.PushFront(int4);
+            listInt.PushFront(int1);
+
+            Assert::AreEqual<int>(listInt.Size(), 5);
+            Assert::IsTrue(listInt.RemoveAll(int1));
+            Assert::AreEqual<int>(listInt.Size(), 2);
+            Assert::IsTrue(listInt.RemoveAll(int3));
+            Assert::IsFalse(listInt.RemoveAll(int3));
+
+            // pointer test
+            SList<int*> listPointer;
+            Assert::IsFalse(listPointer.Remove(&int1));
+
+            listPointer.PushFront(&int1);
+            listPointer.PushFront(&int2);
+            listPointer.PushFront(&int3);
+            listPointer.PushFront(&int4);
+
+            Assert::IsFalse(listPointer.Remove(&int5));
+            Assert::AreEqual<int>(listPointer.Size(), 4);
+            Assert::IsTrue(listPointer.Remove(&int2));
+            Assert::AreEqual<int>(listPointer.Size(), 3);
+            Assert::IsFalse(listPointer.Remove(&int2));
+            Assert::AreEqual<int>(listPointer.Size(), 3);
+            Assert::IsTrue(listPointer.Remove(&int1));
+            Assert::AreEqual<int>(listPointer.Size(), 2);
+            Assert::IsTrue(listPointer.Remove(&int4));
+            Assert::AreEqual<int>(listPointer.Size(), 1);
+            Assert::IsTrue(listPointer.Remove(&int3));
+            Assert::IsTrue(listPointer.IsEmpty());
+
+            Assert::IsFalse(listPointer.RemoveAll(&int1));
+            listPointer.PushFront(&int1);
+            listPointer.PushFront(&int1);
+            listPointer.PushFront(&int3);
+            listPointer.PushFront(&int4);
+            listPointer.PushFront(&int1);
+
+            Assert::AreEqual<int>(listPointer.Size(), 5);
+            Assert::IsTrue(listPointer.RemoveAll(&int1));
+            Assert::AreEqual<int>(listPointer.Size(), 2);
+            Assert::IsTrue(listPointer.RemoveAll(&int3));
+            Assert::IsFalse(listPointer.RemoveAll(&int3));
+
+            // Foo test
+            SList<Foo> listFoo;
+            Assert::IsFalse(listFoo.Remove(foo1));
+
+            listFoo.PushFront(foo1);
+            listFoo.PushFront(foo2);
+            listFoo.PushFront(foo3);
+            listFoo.PushFront(foo4);
+
+            Assert::IsFalse(listFoo.Remove(foo5));
+            Assert::AreEqual<int>(listFoo.Size(), 4);
+            Assert::IsTrue(listFoo.Remove(foo2));
+            Assert::AreEqual<int>(listFoo.Size(), 3);
+            Assert::IsFalse(listFoo.Remove(foo2));
+            Assert::AreEqual<int>(listFoo.Size(), 3);
+            Assert::IsTrue(listFoo.Remove(foo1));
+            Assert::AreEqual<int>(listFoo.Size(), 2);
+            Assert::IsTrue(listFoo.Remove(foo4));
+            Assert::AreEqual<int>(listFoo.Size(), 1);
+            Assert::IsTrue(listFoo.Remove(foo3));
+            Assert::IsTrue(listFoo.IsEmpty());
+
+            Assert::IsFalse(listFoo.RemoveAll(foo1));
+            listFoo.PushFront(foo1);
+            listFoo.PushFront(foo1);
+            listFoo.PushFront(foo3);
+            listFoo.PushFront(foo4);
+            listFoo.PushFront(foo1);
+
+            Assert::AreEqual<int>(listFoo.Size(), 5);
+            Assert::IsTrue(listFoo.RemoveAll(foo1));
+            Assert::AreEqual<int>(listFoo.Size(), 2);
+            Assert::IsTrue(listFoo.RemoveAll(foo3));
+            Assert::IsFalse(listFoo.RemoveAll(foo3));
         }
 
         TEST_METHOD(IteratorConstructors)
