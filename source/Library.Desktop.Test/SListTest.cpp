@@ -879,29 +879,94 @@ namespace LibraryDesktopTest
 
         TEST_METHOD(IteratorConstructors)
         {
-            SList<Foo> list;
-            SList<Foo>::Iterator it;
-            Assert::AreNotEqual<SList<Foo>::Iterator>(it, list.end());
+            // int test
+            SList<int> listInt;
+            SList<int>::Iterator itInt;
+            Assert::AreNotEqual<SList<int>::Iterator>(itInt, listInt.end());
 
-            SList<Foo>::Iterator it2 = list.begin();
-            Assert::AreEqual<SList<Foo>::Iterator>(it2, list.begin());
+            SList<int>::Iterator it2Int = listInt.begin();
+            Assert::AreEqual<SList<int>::Iterator>(it2Int, listInt.begin());
+
+            // pointer test
+            SList<int*> listPointer;
+            SList<int*>::Iterator itPointer;
+            Assert::AreNotEqual<SList<int*>::Iterator>(itPointer, listPointer.end());
+
+            SList<int*>::Iterator it2Pointer = listPointer.begin();
+            Assert::AreEqual<SList<int*>::Iterator>(it2Pointer, listPointer.begin());
+
+            // Foo test
+            SList<Foo> listFoo;
+            SList<Foo>::Iterator itFoo;
+            Assert::AreNotEqual<SList<Foo>::Iterator>(itFoo, listFoo.end());
+
+            SList<Foo>::Iterator it2Foo = listFoo.begin();
+            Assert::AreEqual<SList<Foo>::Iterator>(it2Foo, listFoo.begin());
         }
 
         TEST_METHOD(IteratorEquality)
         {
-            SList<Foo> list;
-            list.PushBack(Foo(1, 2));
-            list.PushBack(Foo(2, 3));
-            list.PushBack(Foo(3, 4));
+            int int1 = 1;
+            int int2 = 2;
+            int int3 = 3;
+            int count = 0;
+
+            Foo foo1(1, 2);
+            Foo foo2(2, 3);
+            Foo foo3(3, 4);
+
+            // int test
+            SList<int> listInt;
+            listInt.PushBack(int1);
+            listInt.PushBack(int2);
+            listInt.PushBack(int3);
 
             // Equality
-            SList<Foo>::Iterator it1 = list.begin();
-            SList<Foo>::Iterator it2 = list.begin();
-            Assert::AreEqual<SList<Foo>::Iterator>(it1, it2);
+            SList<int>::Iterator it1Int = listInt.begin();
+            SList<int>::Iterator it2Int = listInt.begin();
+            Assert::AreEqual<SList<int>::Iterator>(it1Int, it2Int);
 
             // Inequality
-            int count = 0;
-            for (auto it = list.begin(); it != list.end(); ++it)
+            count = 0;
+            for (SList<int>::Iterator itInt = listInt.begin(); itInt != listInt.end(); ++itInt)
+            {
+                count++;
+            }
+            Assert::AreEqual<int>(count, 3);
+
+            // pointer test
+            SList<int*> listPointer;
+            listPointer.PushBack(&int1);
+            listPointer.PushBack(&int2);
+            listPointer.PushBack(&int3);
+
+            // Equality
+            SList<int*>::Iterator it1Pointer = listPointer.begin();
+            SList<int*>::Iterator it2Pointer = listPointer.begin();
+            Assert::AreEqual<SList<int*>::Iterator>(it1Pointer, it2Pointer);
+
+            // Inequality
+            count = 0;
+            for (SList<int*>::Iterator itPointer = listPointer.begin(); itPointer != listPointer.end(); ++itPointer)
+            {
+                count++;
+            }
+            Assert::AreEqual<int>(count, 3);
+
+            // Foo test
+            SList<Foo> listFoo;
+            listFoo.PushBack(foo1);
+            listFoo.PushBack(foo2);
+            listFoo.PushBack(foo3);
+
+            // Equality
+            SList<Foo>::Iterator it1Foo = listFoo.begin();
+            SList<Foo>::Iterator it2Foo = listFoo.begin();
+            Assert::AreEqual<SList<Foo>::Iterator>(it1Foo, it2Foo);
+
+            // Inequality
+            count = 0;
+            for (SList<Foo>::Iterator itFoo = listFoo.begin(); itFoo != listFoo.end(); ++itFoo)
             {
                 count++;
             }
@@ -910,53 +975,170 @@ namespace LibraryDesktopTest
 
         TEST_METHOD(IteratorAssignment)
         {
-            SList<Foo> list;
-            list.PushBack(Foo(1, 2));
-            list.PushBack(Foo(2, 3));
-            list.PushBack(Foo(3, 4));
+            int int1 = 1;
+            int int2 = 2;
+            int int3 = 3;
 
-            SList<Foo>::Iterator it1 = list.begin();
-            SList<Foo>::Iterator it2 = list.begin();
-            Assert::AreEqual<SList<Foo>::Iterator>(it1, it2);
-            ++it1;
-            Assert::AreNotEqual<SList<Foo>::Iterator>(it1, it2);
-            it2 = it1;
-            Assert::AreEqual<SList<Foo>::Iterator>(it1, it2);
+            Foo foo1(1, 2);
+            Foo foo2(2, 3);
+            Foo foo3(3, 4);
+
+            //  int test
+            SList<int> listInt;
+            listInt.PushBack(int1);
+            listInt.PushBack(int2);
+            listInt.PushBack(int3);
+
+            SList<int>::Iterator it1Int = listInt.begin();
+            SList<int>::Iterator it2Int = listInt.begin();
+            Assert::AreEqual<SList<int>::Iterator>(it1Int, it2Int);
+            ++it1Int;
+            Assert::AreNotEqual<SList<int>::Iterator>(it1Int, it2Int);
+            it2Int = it1Int;
+            Assert::AreEqual<SList<int>::Iterator>(it1Int, it2Int);
+
+            // pointer test
+            SList<int*> listPointer;
+            listPointer.PushBack(&int1);
+            listPointer.PushBack(&int2);
+            listPointer.PushBack(&int3);
+
+            SList<int*>::Iterator it1Pointer = listPointer.begin();
+            SList<int*>::Iterator it2Pointer = listPointer.begin();
+            Assert::AreEqual<SList<int*>::Iterator>(it1Pointer, it2Pointer);
+            ++it1Pointer;
+            Assert::AreNotEqual<SList<int*>::Iterator>(it1Pointer, it2Pointer);
+            it2Pointer = it1Pointer;
+            Assert::AreEqual<SList<int*>::Iterator>(it1Pointer, it2Pointer);
+
+            // Foo test
+            SList<Foo> listFoo;
+            listFoo.PushBack(foo1);
+            listFoo.PushBack(foo2);
+            listFoo.PushBack(foo3);
+
+            SList<Foo>::Iterator it1Foo = listFoo.begin();
+            SList<Foo>::Iterator it2Foo = listFoo.begin();
+            Assert::AreEqual<SList<Foo>::Iterator>(it1Foo, it2Foo);
+            ++it1Foo;
+            Assert::AreNotEqual<SList<Foo>::Iterator>(it1Foo, it2Foo);
+            it2Foo = it1Foo;
+            Assert::AreEqual<SList<Foo>::Iterator>(it1Foo, it2Foo);
         }
 
         TEST_METHOD(IteratorIncrements)
         {
-            SList<Foo> list;
-            list.PushBack(Foo(1, 2));
-            list.PushBack(Foo(2, 3));
-            list.PushBack(Foo(3, 4));
+            int int1 = 1;
+            int int2 = 2;
+            int int3 = 3;
 
-            SList<Foo>::Iterator it = list.begin();
+            Foo foo1(1, 2);
+            Foo foo2(2, 3);
+            Foo foo3(3, 4);
+
+            // int test
+            SList<int> listInt;
+            listInt.PushBack(int1);
+            listInt.PushBack(int2);
+            listInt.PushBack(int3);
+
+            SList<int>::Iterator itInt = listInt.begin();
 
             // Postincrement
-            Assert::AreEqual<Foo>(*it, Foo(1, 2));
-            Assert::AreEqual<Foo>(*(it++), Foo(1, 2));
-            Assert::AreEqual<Foo>(*it, Foo(2, 3));
+            Assert::AreEqual<int>(*itInt, int1);
+            Assert::AreEqual<int>(*(itInt++), int1);
+            Assert::AreEqual<int>(*itInt, int2);
 
             // Preincrement
-            Assert::AreEqual(*(++it), Foo(3, 4));
-            Assert::AreEqual<Foo>(*it, Foo(3, 4));
+            Assert::AreEqual(*(++itInt), int3);
+            Assert::AreEqual<int>(*itInt, int3);
+
+            // pointer test
+            SList<int*> listPointer;
+            listPointer.PushBack(&int1);
+            listPointer.PushBack(&int2);
+            listPointer.PushBack(&int3);
+
+            SList<int*>::Iterator itPointer = listPointer.begin();
+
+            // Postincrement
+            Assert::AreEqual<int*>(*itPointer, &int1);
+            Assert::AreEqual<int*>(*(itPointer++), &int1);
+            Assert::AreEqual<int*>(*itPointer, &int2);
+
+            // Preincrement
+            Assert::AreEqual(*(++itPointer), &int3);
+            Assert::AreEqual<int*>(*itPointer, &int3);
+
+            // Foo test
+            SList<Foo> listFoo;
+            listFoo.PushBack(foo1);
+            listFoo.PushBack(foo2);
+            listFoo.PushBack(foo3);
+
+            SList<Foo>::Iterator itFoo = listFoo.begin();
+
+            // Postincrement
+            Assert::AreEqual<Foo>(*itFoo, foo1);
+            Assert::AreEqual<Foo>(*(itFoo++), foo1);
+            Assert::AreEqual<Foo>(*itFoo, foo2);
+
+            // Preincrement
+            Assert::AreEqual(*(++itFoo), foo3);
+            Assert::AreEqual<Foo>(*itFoo, foo3);
         }
 
         TEST_METHOD(IteratorDereference)
         {
-            SList<Foo> list;
-            list.PushBack(Foo(1, 2));
-            list.PushBack(Foo(2, 3));
-            list.PushBack(Foo(3, 4));
+            int int1 = 1;
+            int int2 = 2;
+            int int3 = 3;
 
-            SList<Foo>::Iterator it = list.begin();
-            Assert::AreEqual<Foo>(*it, Foo(1, 2));
-            it++;
-            Assert::AreEqual<Foo>(*it, Foo(2, 3));
+            Foo foo1(1, 2);
+            Foo foo2(2, 3);
+            Foo foo3(3, 4);
 
-            const SList<Foo>::Iterator constIt = ++it;
-            Assert::AreEqual<Foo>(*constIt, Foo(3, 4));
+            // int test
+            SList<int> listInt;
+            listInt.PushBack(int1);
+            listInt.PushBack(int2);
+            listInt.PushBack(int3);
+
+            SList<int>::Iterator itInt = listInt.begin();
+            Assert::AreEqual<int>(*itInt, int1);
+            itInt++;
+            Assert::AreEqual<int>(*itInt, int2);
+
+            const SList<int>::Iterator constItInt = ++itInt;
+            Assert::AreEqual<int>(*constItInt, int3);
+
+            // pointer test
+            SList<int*> listPointer;
+            listPointer.PushBack(&int1);
+            listPointer.PushBack(&int2);
+            listPointer.PushBack(&int3);
+
+            SList<int*>::Iterator itPointer = listPointer.begin();
+            Assert::AreEqual<int*>(*itPointer, &int1);
+            itPointer++;
+            Assert::AreEqual<int*>(*itPointer, &int2);
+
+            const SList<int*>::Iterator constItPointer = ++itPointer;
+            Assert::AreEqual<int*>(*constItPointer, &int3);
+
+            // Foo Test
+            SList<Foo> listFoo;
+            listFoo.PushBack(foo1);
+            listFoo.PushBack(foo2);
+            listFoo.PushBack(foo3);
+
+            SList<Foo>::Iterator itFoo = listFoo.begin();
+            Assert::AreEqual<Foo>(*itFoo, foo1);
+            itFoo++;
+            Assert::AreEqual<Foo>(*itFoo, foo2);
+
+            const SList<Foo>::Iterator constItFoo = ++itFoo;
+            Assert::AreEqual<Foo>(*constItFoo, foo3);
         }
 
     private:

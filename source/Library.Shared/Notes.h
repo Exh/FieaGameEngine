@@ -138,7 +138,7 @@ QUESTIONS:
     [X] InsertAfter should return an iterator to the newly inserted item.
     [X] REFACTOR operator= and similar to use range based for loops
     [ ] Use <random> std::_randomDevice _randomEngine for random number generation.
-    [ ] Refactor tests to use variables instead of literals.
+    [X] Refactor tests to use variables instead of literals.
     [X] Check the iterator being passed into InsertAfter to make sure that it is owned by the list.
 */
 
