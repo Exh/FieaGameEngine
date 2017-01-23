@@ -58,7 +58,7 @@ namespace FieaGameEngine
     template<typename T>
     T& Vector<T>::Front()
     {
-        const_cast<T&>(const_cast<Vector<T>*>(this)->Front());
+        return const_cast<T&>(const_cast<const Vector<T>*>(this)->Front());
     }
 
     template<typename T>
@@ -66,7 +66,7 @@ namespace FieaGameEngine
     {
         if (mSize == 0)
         {
-            return std::exception("Cannot get front of an empty vector.");
+            throw std::exception("Cannot get front of an empty vector.");
         }
 
         assert(mBuffer != nullptr);
@@ -104,25 +104,25 @@ namespace FieaGameEngine
     }
 
     template<typename T>
-    Vector<T>::Iterator Vector<T>::begin()
+    typename Vector<T>::Iterator Vector<T>::begin()
     {
-        const_cast<Iterator>(const_cast<const Vector<T>*>(this)->begin());
+        return const_cast<Iterator>(const_cast<const Vector<T>*>(this)->begin());
     }
 
     template<typename T>
-    const Vector<T>::Iterator Vector<T>::begin() const
+    typename const Vector<T>::Iterator Vector<T>::begin() const
     {
         return Iterator(this, 0);
     }
 
     template<typename T>
-    Vector<T>::Iterator Vector<T>::end()
+    typename Vector<T>::Iterator Vector<T>::end()
     {
-        const_cast<Iterator>(const_cast<const Vector<T>*>(this)->begin());
+        return const_cast<Iterator>(const_cast<const Vector<T>*>(this)->end());
     }
 
     template<typename T>
-    const Vector<T>::Iterator Vector<T>::end() const
+    typename const Vector<T>::Iterator Vector<T>::end() const
     {
         return Iterator(this, mSize);
     }
@@ -195,9 +195,96 @@ namespace FieaGameEngine
     }
 
     template<typename T>
+    void Vector<T>::Reserve(std::uint32_t capacity)
+    {
+        // Do not shrink the array.
+        if (capacity > mCapacity)
+        {
+            // Allocate new, larger buffer
+            T* previousBuffer = mBuffer;
+            mBuffer = reinterpret_cast<T*>(malloc(sizeof(T) * capacity));
+
+            // Copy only the in-use data of the previous buffer; do not
+            // call destructor as the data is simply being moved.
+            memcpy(mBuffer, previousBuffer, sizeof(T) * mSize);
+
+            free(previousBuffer);
+            previousBuffer = nullptr;
+        }
+    }
+
+    template<typename T>
+    typename Vector<T>::Iterator Vector<T>::Find(const T& item)
+    {
+        return const_cast<Iterator>(const_cast<const Vector<T>*>(this)->Find(item));
+    }
+
+    template<typename T>
+    typename const Vector<T>::Iterator Vector<T>::Find(const T& item) const
+    {
+        for (std::uint32_t i = 0; i < mSize; i++)
+        {
+            if (mBuffer[i] == item)
+            {
+                return Iterator(this, i);
+            }
+        }
+
+        return end();
+    }
+
+    template<typename T>
+    void Vector<T>::Remove(std::uint32_t index)
+    {
+        if (index < 0 ||
+            index >= mSize)
+        {
+            throw std::exception("Index out of bounds.");
+        }
+
+        assert(mBuffer != nullptr);
+        assert(mSize > 0);
+        assert(mCapacity > 0);
+
+        mBuffer[index].~T();
+
+        memmove(mBuffer + index, mBuffer + index + 1, (mSize - index - 1) * sizeof(T));
+
+        mSize--;
+    }
+
+    template<typename T>
+    std::uint32_t Vector<T>::Remove(std::uint32_t begin,
+                                    std::uint32_t end)
+    {
+        if (begin < 0      ||
+            begin >= mSize ||
+            end   < 0      ||
+            end   >= mSize)
+        {
+            throw std::exception("Index out of bounds.");
+        }
+
+        if (begin > end)
+        {
+            return 0;
+        }
+
+        // Destroy objects being removed form list.
+        for (uint32_t i = begin; i < end; i++)
+        {
+            mBuffer[i].~T();
+        }
+
+        // Shift data of higher elements downward so that elements in 
+        // the vector's buffer are contiguous for random access.
+        memmove(mBuffer + begin, mBuffer + (mSize - end - 1), sizeof(T) * (end - begin + 1))
+    }
+
+    template<typename T>
     void Vector<T>::Clear()
     {
-        for (int i = 0; i < mSize; i++)
+        for (std::uint32_t i = 0; i < mSize; i++)
         {
             mBuffer[i].~T();
         }

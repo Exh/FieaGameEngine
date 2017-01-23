@@ -69,6 +69,9 @@ namespace LibraryDesktopTest
             Assert::AreEqual<Foo>(vector[2], Foo(3, 4));
             auto exceptionalCase2 = [&vector](){ vector[3]; };
             Assert::ExpectException<std::exception>(exceptionalCase2, L"Out of bounds access threw no exception");
+
+            const Vector<Foo>* constVector = &vector;
+            Assert::AreEqual<Foo>((*constVector)[1], Foo(2, 3));
         }
 
         TEST_METHOD(CopySemantics)
@@ -89,7 +92,45 @@ namespace LibraryDesktopTest
             //@@ TODO
         }
 
-        
+        TEST_METHOD(PopBack)
+        {
+            Vector<Foo> vector;
+            vector.PopBack();
+            Assert::AreEqual<unsigned int>(vector.Size(), 0);
+            vector.PushBack(Foo(1, 2));
+            vector.PushBack(Foo(2, 3));
+            vector.PopBack();
+            Assert::AreEqual<Foo>(vector[0], Foo(1,2));
+            Assert::AreEqual<unsigned int>(vector.Size(), 1);
+            vector.PopBack();
+        }
+
+        TEST_METHOD(IsEmpty)
+        {
+            Vector<Foo> vector;
+            Assert::IsTrue(vector.IsEmpty());
+            vector.PushBack(Foo(1, 2));
+            Assert::IsFalse(vector.IsEmpty());
+            vector.PopBack();
+            Assert::IsTrue(vector.IsEmpty());
+        }
+
+        TEST_METHOD(Front)
+        {
+            Vector<Foo> vector;
+            auto exceptionalFront = [vector](){ vector.Front(); };
+            Assert::ExpectException<std::exception>(exceptionalFront);
+            vector.PushBack(Foo(1, 2));
+            vector.PushBack(Foo(2, 3));
+            vector.PushBack(Foo(3, 4));
+            Assert::AreEqual<Foo>(vector.Front(), Foo(1, 2));
+            vector.Remove(0);
+            Assert::AreEqual<Foo>(vector.Front(), Foo(2, 3));
+            vector.PopBack();
+            const Vector<Foo>* constVector = &vector;
+            const Foo constFoo = constVector->Front();
+            Assert::AreEqual<Foo>(constFoo, Foo(2, 3));
+        }
 
     private:
         static _CrtMemState sStartMemState;
