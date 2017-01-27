@@ -17,16 +17,15 @@ namespace FieaGameEngine
     }
 
     template<typename T>
-    T& Vector<T>::operator[](int index)
+    T& Vector<T>::operator[](std::uint32_t index)
     {
         return const_cast<T&>(const_cast<const Vector<T>*>(this)->operator[](index));
     }
 
     template<typename T>
-    const T& Vector<T>::operator[](unsigned int index) const
+    const T& Vector<T>::operator[](std::uint32_t index) const
     {
-        if(index < 0 ||
-           index >= mSize)
+        if(index >= mSize)
         {
             throw std::exception("Index out of bounds.");
         }
@@ -174,24 +173,7 @@ namespace FieaGameEngine
     template<typename T>
     Vector<T>::~Vector()
     {
-        //@@ TODO: Change this to use iterator + ranged based for loop
-        if (mBuffer != nullptr)
-        {
-            for (std::uint32_t i = 0; i < mSize; i++)
-            {
-                (mBuffer + i)->~T();
-            }
-
-            free(mBuffer);
-            mBuffer = nullptr;
-            mSize = 0;
-            mCapacity = 0;
-        }
-        else
-        {
-            assert(mSize == 0);
-            assert(mCapacity == 0);
-        }
+        Destroy();
     }
 
     template<typename T>
@@ -254,6 +236,17 @@ namespace FieaGameEngine
     }
 
     template<typename T>
+    void Vector<T>::Remove(Iterator it)
+    {
+        if (it.mOwner != this)
+        {
+            throw std::exception("Iterator does not belong to this Vector.");
+        }
+
+        Remove(it.mIndex);
+    }
+
+    template<typename T>
     std::uint32_t Vector<T>::Remove(std::uint32_t begin,
                                     std::uint32_t end)
     {
@@ -278,7 +271,64 @@ namespace FieaGameEngine
 
         // Shift data of higher elements downward so that elements in 
         // the vector's buffer are contiguous for random access.
-        memmove(mBuffer + begin, mBuffer + (mSize - end - 1), sizeof(T) * (end - begin + 1))
+        memmove(mBuffer + begin, mBuffer + (mSize - end - 1), sizeof(T) * (end - begin + 1));
+
+        return end - begin + 1;
+    }
+
+    std::uint32_t Vector<T>::Remove(Iterator begin,
+                                    Iterator end)
+    {
+        if (begin.mOwner != this ||
+            end.mOwner != this)
+        {
+            throw std::exception("Iterator does not belong to this Vector.");
+        }
+
+        // If the user passed in an iterator equivalent to this->end(),
+        // then change the iterator's index to point at the last element 
+        // in the list, as the remove is inclusive, and it is assumed that
+        // the user wants to remove up to the end of the vector.
+        if (end.mIndex == mSize)
+        {
+            end.mIndex--;
+        }
+
+        return Remove(begin.mIndex, end.mIndex);
+    }
+
+    void Vector<T>::ShrinkToFit()
+    {
+        T* previousBuffer = mBuffer;
+
+        mBuffer = reinterpret_cast<T*>(malloc(sizeof(T) * mSize));
+
+        memcpy(m_Buffer, previousBuffer, sizeof(T) * mSize);
+
+        free(previousBuffer);
+        previousBuffer = nullptr;
+    }
+
+    void Vector<T>::Destroy()
+    {
+        //@@ TODO: Change this to use iterator + ranged based for loop
+        if (mBuffer != nullptr)
+        {
+            for (std::uint32_t i = 0; i < mSize; i++)
+            {
+                (mBuffer + i)->~T();
+            }
+
+            free(mBuffer);
+            mBuffer = nullptr;
+            mSize = 0;
+            mCapacity = 0;
+        }
+        else
+        {
+            assert(mSize == 0);
+            assert(mCapacity == 0);
+        }
     }
 
     template<typename T>

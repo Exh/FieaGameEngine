@@ -256,4 +256,87 @@ QUESTIONS:
     The functor invocation for expanding memory should be called whenever PushBack()ing. 
     Also the functor should return an unsigned int of the number of elements to increase capacity by.
     Check to make sure that it doesn't return 0 because then a new item can't be pushbacked.
+
+	Copy constructor should call reserve?
+	The place to write malloc is in reserve.
+	Don't rewrite malloc multiple times.
+
+
+	Copy constructor
+	operator=
+
+	[ ] Make sure to add a ShrinkToFit() or Destroy() because Clear() does not reduce the capacity.
+	[ ] Make Remove(begin, end) to take an iterator, not a an unsigned int.
+
+	Mutable 
 */
+
+//***************
+// Assignment 05
+//***************
+/*
+	public inheritance:
+
+	protected inheritance:
+	any members that 
+
+	private inheritance:
+	outside the derived class, there is not a is-a
+
+	Use composition instead of private inheritance for your stack.
+	Probably use SList because you get constant time inserts, and dont care about linear lookups.
+	You just need to get the back, which you have.
+*/
+
+//***************
+// Assignment 06
+//***************
+/*
+	open addressing
+	chaining
+
+	Move semantics, New in C++11
+
+	RVO, return value optimization
+	Compiler would rearrange code, and before 
+
+	an l-value is any variable that you can take an address of.
+	and expression that lasts more than one line of code.
+	Can't take an address of an r-value.
+	All variables are l-values, because you can take the address of them.
+
+	Iterator&& rhs   <----- R-Value reference
+
+	So if you want to move
+
+	no default move constructor.
+	You get move semantics if you don't create a constructor/copy constructor/ or assignment operator
+*/
+
+SList<T>::Iterator::Iterator(Iterator&& rhs) : 
+	Iterator(rhs.mOwner, rhs.mNode)
+{
+
+}
+
+/* 
+	Hash table is not distinctly ordered. No pushback/pushfront. There is only an insert.
+
+	Desirable properties: fast, produces uniform distribution of values from keys.
+
+	class should have two type arguments, TKey, TValue
+
+	key and element stored in each bin of the array
+
+	std::pair used for storing pairs
+
+	Vector<SList<std::pair<TKey, TValue> > >
+
+	give the user an option to resize the array, but never resize automatically.
+	you have to make a new hash table, reinsert the elements from the old hash map, 
+	and then delete the previous hash map.
+
+	Maybe get the ratio
+*/
+
+

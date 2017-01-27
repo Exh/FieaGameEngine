@@ -14,9 +14,9 @@ namespace FieaGameEngine
 
         Vector();
 
-        T& operator[](int index);
+        T& operator[](std::uint32_t index);
 
-        const T& operator[](unsigned int index) const;
+        const T& operator[](std::uint32_t index) const;
 
         void PopBack();
 
@@ -64,8 +64,17 @@ namespace FieaGameEngine
 
         void Remove(std::uint32_t index);
 
+        void Remove(Iterator it);
+
         std::uint32_t Remove(std::uint32_t begin,
                             std::uint32_t end);
+
+        std::uint32_t Remove(Iterator begin,
+                             Iterator end);
+
+        void ShrinkToFit();
+
+        void Destroy();
 
         class Iterator
         {
