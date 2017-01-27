@@ -186,12 +186,21 @@ namespace FieaGameEngine
             T* previousBuffer = mBuffer;
             mBuffer = reinterpret_cast<T*>(malloc(sizeof(T) * capacity));
 
-            // Copy only the in-use data of the previous buffer; do not
-            // call destructor as the data is simply being moved.
-            memcpy(mBuffer, previousBuffer, sizeof(T) * mSize);
+            if (previousBuffer != nullptr)
+            {
+                // Copy only the in-use data of the previous buffer; do not
+                // call destructor as the data is simply being moved.
+                memcpy(mBuffer, previousBuffer, sizeof(T) * mSize);
+                free(previousBuffer);
+                previousBuffer = nullptr;
+            }
+            else
+            {
+                assert(mCapacity == 0);
+                assert(mSize == 0);
+            }
 
-            free(previousBuffer);
-            previousBuffer = nullptr;
+            mCapacity = capacity;
         }
     }
 
@@ -356,50 +365,30 @@ namespace FieaGameEngine
             mCapacity = mCapacity << 1;
         }
 
-        T* previousBuffer = mBuffer;
-        mBuffer = reinterpret_cast<T*>(malloc(sizeof(T) * mCapacity));
-        
-        if (previousBuffer != nullptr)
-        {
-            memcpy(mBuffer, previousBuffer, sizeof(T) * mSize);
-            free(previousBuffer);
-            previousBuffer = nullptr;
-        }
-        else
-        {
-            assert(mSize == 0);
-            // Capacity was 0, but after expanding, will be 1
-            assert(mCapacity == 1);
-        }
+        Reserve(mCapacity);
     }
 
     template<typename T>
     void Vector<T>::DeepCopy(const Vector& rhs)
     {
-        if (mBuffer != nullptr)
+        Destroy();
+
+        // Allocate buffer to store copy.
+        Reserve(rhs.mCapacity);
+
+        if (rhs.mSize > 0)
         {
-            Clear();
-            free(mBuffer);
-        }
+            assert(rhs.mCapacity >= rhs.mSize);
+            assert(rhs.mBuffer != nullptr);
 
-        mSize = rhs.mSize;
-        mCapacity = rhs.mCapacity;
-
-        if (mCapacity > 0)
-        {
-            mBuffer = reinterpret_cast<T*>(malloc(mCapacity * sizeof(T)));
-        }
-
-        if (mSize > 0)
-        {
-            assert(mCapacity != 0);
-            assert(mBuffer != nullptr);
-
-            for (std::uint32_t i = 0; i < mSize; i++)
+            for (std::uint32_t i = 0; i < rhs.mSize; i++)
             {
                 new (mBuffer + i) T(rhs.mBuffer[i]);
             }
         }
+
+        mSize = rhs.mSize;
+        mCapacity = rhs.mCapacity;
     }
 
 

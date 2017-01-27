@@ -261,14 +261,12 @@ QUESTIONS:
 	The place to write malloc is in reserve.
 	Don't rewrite malloc multiple times.
 
+    [X] Rewrite code to use malloc almost exclusively in reserve.
+	[X] Make sure to add a ShrinkToFit() or Destroy() because Clear() does not reduce the capacity.
+	[X] Make Remove(begin, end) to take an iterator, not a an unsigned int.
+    [ ] Replace iterations in Vector with range-based for loops.
 
-	Copy constructor
-	operator=
-
-	[ ] Make sure to add a ShrinkToFit() or Destroy() because Clear() does not reduce the capacity.
-	[ ] Make Remove(begin, end) to take an iterator, not a an unsigned int.
-
-	Mutable 
+	Mutable to allow const objects to modify the member.
 */
 
 //***************
