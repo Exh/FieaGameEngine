@@ -1,6 +1,5 @@
 #pragma once
 
-#include "HashMap.h"
 #include <cstdint>
 #include <assert.h>
 
@@ -10,7 +9,7 @@ namespace FieaGameEngine
 #pragma region DefaultHashFunctorMethods
 
 	template<typename TKey>
-	std::uint32_t DefaultHashFunctor<TKey>::operator(const TKey& key) const
+	std::uint32_t DefaultHashFunctor<TKey>::operator()(const TKey& key) const
 	{
 		return AdditiveHash(reinterpret_cast<std::uint8_t*>(&key), sizeof(TKey));
 	}
@@ -28,7 +27,6 @@ namespace FieaGameEngine
 
 		return hash;
 	}
-}
 
 #pragma endregion
 
@@ -164,6 +162,12 @@ namespace FieaGameEngine
 	}
 
 	template<typename TKey, typename TValue, typename THash>
+	std::uint32_t HashMap<TKey, TValue, THash>::Capacity() const
+	{
+		return mCapacity;
+	}
+
+	template<typename TKey, typename TValue, typename THash>
 	bool HashMap<TKey, TValue, THash>::ContainsKey(const TKey& key) const
 	{
 		return Find(key) != end();
@@ -198,9 +202,9 @@ namespace FieaGameEngine
 	{
 		if (mArray.IsEmpty())
 		{
-			mArray.Reserve(size);
+			mArray.Reserve(mCapacity);
 
-			for (int i = 0; i < size; i++)
+			for (std::uint32_t i = 0; i < mCapacity; i++)
 			{
 				mArray.PushBack(ChainType());
 			}
@@ -208,7 +212,7 @@ namespace FieaGameEngine
 	}
 
 	template<typename TKey, typename TValue, typename THash>
-	ChainType::Iterator HashMap<TKey, TValue, THash>::GetNextNonEmptySListIndex(std::uint32_t currentIndex)
+	std::uint32_t HashMap<TKey, TValue, THash>::GetNextNonEmptySListIndex(std::uint32_t currentIndex)
 	{
 		assert(currentIndex >= 0);
 		assert(currentIndex <= mCapacity);
@@ -234,24 +238,12 @@ namespace FieaGameEngine
 	HashMap<TKey, TValue, THash>::Iterator::Iterator() :
 		mOwner(nullptr),
 		mBucket(0),
-		mChainIterator()
 	{
 		
 	}
 
 	template<typename TKey, typename TValue, typename THash>
-	HashMap<TKey, TValue, THash>::Iterator::Iterator(HashMap* owner, 
-													 std::int32_t bucket,
-													 ChainType::Iterator chainIterator) :
-		mOwner(nullptr),
-		mBucket(0),
-		mChainIterator()
-	{
-
-	}
-
-	template<typename TKey, typename TValue, typename THash>
-	HashMap<TKey, TValue, THash>::Iterator::Iterator(HashMap* owner, std:uint32_t bucket, ChainType::Iterator chainIterator) :
+	HashMap<TKey, TValue, THash>::Iterator::Iterator(HashMap* owner, std::uint32_t bucket, typename ChainType::Iterator chainIterator) :
 		mOwner(owner),
 		mBucket(bucket),
 		mChainIterator(chainIterator)

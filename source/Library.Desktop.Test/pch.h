@@ -11,6 +11,7 @@
 
 // C++ Standard Library Headers
 #include <exception>
+#include <string>
 
 // Fiea Game Engine Headers
 #include "SList.h"

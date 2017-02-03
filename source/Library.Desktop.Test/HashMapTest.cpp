@@ -2,6 +2,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace FieaGameEngine;
+using namespace std;
 
 namespace Microsoft
 {
@@ -10,24 +11,38 @@ namespace Microsoft
 		namespace CppUnitTestFramework
 		{
 			template<>
-			inline std::wstring ToString<SList<Foo>::Iterator>(const SList<Foo>::Iterator& it)
+			inline std::wstring ToString<HashMap<Foo, int>::Iterator>(const HashMap<Foo, int>::Iterator& it)
 			{
 				(it);
-				return L"SList<Foo>::Iterator string!";
+				return L"HashMap Iterator string!";
 			}
 
 			template<>
-			inline std::wstring ToString<SList<int>::Iterator>(const SList<int>::Iterator& it)
+			inline std::wstring ToString<HashMap<Foo*, int>::Iterator>(const HashMap<Foo*, int>::Iterator& it)
 			{
 				(it);
-				return L"SList<int>::Iterator string!";
+				return L"HashMap Iterator string!";
 			}
 
 			template<>
-			inline std::wstring ToString<SList<int*>::Iterator>(const SList<int*>::Iterator& it)
+			inline std::wstring ToString<HashMap<int, int>::Iterator>(const HashMap<int, int>::Iterator& it)
 			{
 				(it);
-				return L"SList<int*>::Iterator string!";
+				return L"HashMap Iterator string!";
+			}
+
+			template<>
+			inline std::wstring ToString<HashMap<int*, int>::Iterator>(const HashMap<int*, int>::Iterator& it)
+			{
+				(it);
+				return L"HashMap Iterator string!";
+			}
+
+			template<>
+			inline std::wstring ToString<HashMap<string, int>::Iterator>(const HashMap<string, int>::Iterator& it)
+			{
+				(it);
+				return L"HashMap Iterator string!";
 			}
 		}
 	}
@@ -63,7 +78,20 @@ namespace LibraryDesktopTest
 
 		TEST_METHOD(Constructor)
 		{
+			const std::uint32_t DEFAULT_CAPACITY = 13;
 
+			// int test
+			HashMap<int, int> intMap;
+			Assert::AreEqual(intMap.Size(), 0U);
+			Assert::AreEqual(intMap.Capacity(), DEFAULT_CAPACITY);
+
+			// intPointer test
+
+			// string test
+
+			// Foo test
+
+			// FooPointer test
 		}
 
 

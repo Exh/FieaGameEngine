@@ -10,6 +10,10 @@ namespace FieaGameEngine
 	template<typename TKey>
 	class DefaultHashFunctor
 	{
+	public:
+		DefaultHashFunctor() = default;
+		virtual ~DefaultHashFunctor() = default;
+
 		std::uint32_t operator()(const TKey& key) const;
 
 	protected:
@@ -17,16 +21,16 @@ namespace FieaGameEngine
 		std::uint32_t AdditiveHash(std::uint8_t* data, std::uint32_t size) const;
 	};
 
-	template<typename TKey, typename TValue, typename THash = DefaultHashFunctor>
+	template<typename TKey, typename TValue, typename THash = DefaultHashFunctor<TKey> >
 	class HashMap
 	{
-		class Iterator;
-
 		typedef std::pair<TKey, TValue> PairType;
 		typedef SList<PairType> ChainType;
 		typedef Vector<ChainType> ArrayType;
 
 	public:
+
+		class Iterator;
 
 		HashMap(std::uint32_t capacity = 13);
 
@@ -53,6 +57,8 @@ namespace FieaGameEngine
 		void Clear();
 
 		std::uint32_t Size() const;
+
+		std::uint32_t Capacity() const;
 
 		bool ContainsKey(const TKey& key) const;
 
@@ -109,5 +115,6 @@ namespace FieaGameEngine
 
 		THash mHash;
 	};
-
 }
+
+#include "HashMap.inl"
