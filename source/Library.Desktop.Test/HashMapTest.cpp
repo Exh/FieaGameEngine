@@ -766,7 +766,20 @@ namespace LibraryDesktopTest
 
 		TEST_METHOD(HighVolume)
 		{
+			const std::uint32_t COUNT = 1000;
+			const std::uint32_t CAPACITY = 20;
 
+			// int test
+			{
+				HashMap<std::uint32_t, int> map;
+
+				for (std::uint32_t i = 0; i < COUNT; i++)
+				{
+					map[i] = i % 7;
+				}
+
+				Assert::AreEqual(map.Size(), COUNT);
+			}
 		}
 
 		TEST_METHOD(SpecializationTest)
