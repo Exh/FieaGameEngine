@@ -1,5 +1,7 @@
 #include "pch.h"
 
+#pragma region FooMethods
+
 Foo::Foo() :
     mData(0),
     mHeapData(nullptr)
@@ -76,3 +78,44 @@ void Foo::SetHeapData(int data)
     assert(mHeapData != nullptr);
     *mHeapData = data;
 }
+
+#pragma endregion 
+
+#pragma region FooHashFunctorMethods
+
+std::uint32_t Foo::FooHashFunctor::operator()(const Foo& key) const
+{
+	uint32_t data[2] = { 0, 0 };
+	data[0] = key.GetData();
+	data[1] = key.GetHeapData();
+
+	return AdditiveHash(reinterpret_cast<uint8_t*>(data), sizeof(uint32_t) * 2);
+}
+
+std::uint32_t Foo::FooHashFunctor::operator()(Foo* key) const
+{
+	uint32_t data[2] = { 0, 0 };
+
+	if (key != nullptr)
+	{
+		data[0] = key->GetData();
+		data[1] = key->GetHeapData();
+	}
+
+	return AdditiveHash(reinterpret_cast<uint8_t*>(data), sizeof(uint32_t) * 2);
+}
+
+std::uint32_t Foo::FooHashFunctor::AdditiveHash(const std::uint8_t* data, std::uint32_t size) const
+{
+	static const std::uint8_t C = 13;
+	std::uint32_t hash = 0;
+
+	for (std::uint32_t i = 0; i < size; i++)
+	{
+		hash += C + data[i];
+	}
+
+	return hash;
+}
+
+#pragma endregion

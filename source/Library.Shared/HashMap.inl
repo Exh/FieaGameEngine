@@ -11,16 +11,16 @@ namespace FieaGameEngine
 	template<typename TKey>
 	std::uint32_t DefaultHashFunctor<TKey>::operator()(const TKey& key) const
 	{
-		return AdditiveHash(reinterpret_cast<std::uint8_t*>(&key), sizeof(TKey));
+		return AdditiveHash(reinterpret_cast<const std::uint8_t*>(&key), sizeof(TKey));
 	}
 
 	template<typename TKey>
-	std::uint32_t DefaultHashFunctor<TKey>::AdditiveHash(std::uint8_t* data, std::uint32_t size) const
+	std::uint32_t DefaultHashFunctor<TKey>::AdditiveHash(const std::uint8_t* data, std::uint32_t size) const
 	{
 		static const std::uint8_t C = 13;
 		std::uint32_t hash = 0;
 
-		for (int i = 0; i < size; i++)
+		for (std::uint32_t i = 0; i < size; i++)
 		{
 			hash += C + data[i];
 		}
@@ -47,20 +47,6 @@ namespace FieaGameEngine
 		mCapacity = 0;
 	}
 
-	//template<typename TKey, typename TValue, typename THash>
-	//HashMap<TKey, TValue, THash>::HashMap(const HashMap& rhs)
-	//{
-	//	DeepCopy();
-	//}
-
-	//template<typename TKey, typename TValue, typename THash>
-	//void HashMap<TKey, TValue, THash>::DeepCopy(const HashMap& rhs)
-	//{
-	//	mArray = rhs.mArray;
-	//	mSize = rhs.mSize;
-	//	mCapacity = rhs.mCapacity;
-	//}
-
 	template<typename TKey, typename TValue, typename THash>
 	typename HashMap<TKey, TValue, THash>::Iterator HashMap<TKey, TValue, THash>::Find(const TKey& key) const
 	{
@@ -70,7 +56,7 @@ namespace FieaGameEngine
 		{
 			if ((*it).first == key)
 			{
-				return it;
+				return Iterator(this, index, it);
 			}
 		}
 
@@ -80,19 +66,19 @@ namespace FieaGameEngine
 	template<typename TKey, typename TValue, typename THash>
 	typename HashMap<TKey, TValue, THash>::Iterator HashMap<TKey, TValue, THash>::Insert(const PairType& pair)
 	{
-		std::uint32_t index = mHash(key) % mCapacity;
+		std::uint32_t index = mHash(pair.first) % mCapacity;
 
-		for (it = mArray[index].begin(); it != mArray[index].end(); ++it)
+		for (auto it = mArray[index].begin(); it != mArray[index].end(); ++it)
 		{
 			if ((*it).first == pair.first)
 			{
-				return it;
+				return Iterator(this, index, it);
 			}
 		}
 
 		// If the same key was not found, then we can add a new key.
 		mSize++;
-		return mArray[index].PushBack(pair);
+		return Iterator(this, index, mArray[index].PushBack(pair));
 	}
 
 	template<typename TKey, typename TValue, typename THash>
@@ -102,7 +88,7 @@ namespace FieaGameEngine
 
 		if (it == end())
 		{
-			it = Insert(std::pair(key, TValue()));
+			it = Insert(std::pair<TKey, TValue>(key, TValue()));
 		}
 
 		return (*it).second;
@@ -291,21 +277,25 @@ namespace FieaGameEngine
 	}
 
 	template<typename TKey, typename TValue, typename THash>
+	typename HashMap<TKey, TValue, THash>::PairType& HashMap<TKey, TValue, THash>::Iterator::operator*()
+	{
+		return const_cast<PairType&>(const_cast<const Iterator*>(this)->operator*());
+	}
+
+	template<typename TKey, typename TValue, typename THash>
 	const typename HashMap<TKey, TValue, THash>::PairType& HashMap<TKey, TValue, THash>::Iterator::operator*() const
 	{
-		if (mOwner != nullptr)
+		if (mOwner == nullptr)
 		{
-			if (mBucket == mOwner->mCapacity)
-			{
-				assert(mChainIterator == ChainType::Iterator());
-				throw std::exception("Cannot dereference end iterator.");
-			}
-			else
-			{
-				assert(mChainIterator.mOwner != nullptr);
-				return *mChainIterator;
-			}
+			throw std::exception("Cannot dereference unassigned iterator.");
 		}
+		if (mBucket == mOwner->mCapacity)
+		{
+			assert(mChainIterator == ChainType::Iterator());
+			throw std::exception("Cannot dereference end iterator.");
+		}
+
+		return *mChainIterator;
 	}
 
 	template<typename TKey, typename TValue, typename THash>

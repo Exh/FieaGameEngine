@@ -25,11 +25,28 @@ public:
 
     void SetHeapData(int data);
 
+	class FooHashFunctor
+	{
+	public:
+
+		std::uint32_t operator()(const Foo& key) const;
+
+		std::uint32_t operator()(Foo* key) const;
+
+	private:
+
+		std::uint32_t AdditiveHash(const std::uint8_t* data, std::uint32_t size) const;
+
+	};
+
+
 private:
 
     int mData;
     int* mHeapData;
 };
+
+
 
 namespace Microsoft
 {

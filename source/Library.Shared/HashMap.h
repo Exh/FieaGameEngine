@@ -18,7 +18,7 @@ namespace FieaGameEngine
 
 	protected:
 
-		std::uint32_t AdditiveHash(std::uint8_t* data, std::uint32_t size) const;
+		std::uint32_t AdditiveHash(const std::uint8_t* data, std::uint32_t size) const;
 	};
 
 	template<typename TKey, typename TValue, typename THash = DefaultHashFunctor<TKey> >
@@ -84,7 +84,7 @@ namespace FieaGameEngine
 
 			Iterator operator++(int);
 
-			//PairType& operator*();
+			PairType& operator*();
 
 			const PairType& operator*() const;
 
