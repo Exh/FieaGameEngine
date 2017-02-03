@@ -179,7 +179,7 @@ namespace FieaGameEngine
 		if (mSize != 0)
 		{
 			//for (auto& chain : mArray)
-			for (int i = 0; i < mCapacity; i++)
+			for (std::uint32_t i = 0; i < mCapacity; i++)
 			{
 				if (!mArray[i].IsEmpty())
 				{
@@ -243,7 +243,7 @@ namespace FieaGameEngine
 	}
 
 	template<typename TKey, typename TValue, typename THash>
-	HashMap<TKey, TValue, THash>::Iterator::Iterator(HashMap* owner, std::uint32_t bucket, typename ChainType::Iterator chainIterator) :
+	HashMap<TKey, TValue, THash>::Iterator::Iterator(const HashMap* owner, std::uint32_t bucket, typename ChainType::Iterator chainIterator) :
 		mOwner(owner),
 		mBucket(bucket),
 		mChainIterator(chainIterator)

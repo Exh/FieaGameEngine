@@ -32,7 +32,7 @@ namespace FieaGameEngine
 
 		class Iterator;
 
-		HashMap(std::uint32_t capacity = 13);
+		explicit HashMap(std::uint32_t capacity = 13);
 
 		~HashMap();
 
@@ -94,7 +94,7 @@ namespace FieaGameEngine
 
 		private:
 
-			Iterator(HashMap<TKey, TValue, THash>* owner, std::uint32_t bucket, typename ChainType::Iterator chainIterator);
+			Iterator(const HashMap* owner, std::uint32_t bucket, typename ChainType::Iterator chainIterator);
 
 			const HashMap* mOwner;
 			std::uint32_t mBucket;

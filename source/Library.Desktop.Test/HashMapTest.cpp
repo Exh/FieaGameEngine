@@ -84,6 +84,7 @@ namespace LibraryDesktopTest
 			HashMap<int, int> intMap;
 			Assert::AreEqual(intMap.Size(), 0U);
 			Assert::AreEqual(intMap.Capacity(), DEFAULT_CAPACITY);
+			Assert::AreEqual(intMap.begin(), intMap.end());
 
 			// intPointer test
 

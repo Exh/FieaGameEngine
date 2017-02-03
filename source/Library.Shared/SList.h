@@ -104,28 +104,14 @@ namespace FieaGameEngine
         /** Will return the same value as end() if the list is empty.           */
         /** @return iterator at the first element in the list.                  */
         /************************************************************************/
-        Iterator begin();
-
-        /************************************************************************/
-        /** Returns an iterator that points to the first element in the list.   */
-        /** Will return the same value as end() if the list is empty.           */
-        /** @return iterator at the first element in the list.                  */
-        /************************************************************************/
-        const Iterator begin() const;
+        Iterator begin() const;
 
         /************************************************************************/
         /** Returns an iterator past the end of the list. This iterator should  */
         /** not be dereferenced.                                                */
         /** @return iterator past the last element in the list.                 */
         /************************************************************************/
-        Iterator end();
-
-        /************************************************************************/
-        /** Returns an iterator past the end of the list. This iterator should  */
-        /** not be dereferenced.                                                */
-        /** @return iterator past the last element in the list.                 */
-        /************************************************************************/
-        const Iterator end() const;
+        Iterator end() const;
 
         /************************************************************************/
         /** Places an element into the list at the position one past the given  */

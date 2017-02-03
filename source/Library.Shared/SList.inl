@@ -180,25 +180,13 @@ namespace FieaGameEngine
     }
 
     template<typename T>
-    typename SList<T>::Iterator SList<T>::begin()
+    typename SList<T>::Iterator SList<T>::begin() const
     {
         return Iterator(*this, mFront);
     }
 
     template<typename T>
-    typename const SList<T>::Iterator SList<T>::begin() const
-    {
-        return Iterator(*this, mFront);
-    }
-
-    template<typename T>
-    typename SList<T>::Iterator SList<T>::end()
-    {
-        return Iterator(*this, nullptr);
-    }
-
-    template<typename T>
-    typename const SList<T>::Iterator SList<T>::end() const
+    typename SList<T>::Iterator SList<T>::end() const
     {
         return Iterator(*this, nullptr);
     }
