@@ -16,6 +16,8 @@ namespace FieaGameEngine
 
 		std::uint32_t operator()(const TKey& key) const;
 
+		std::uint32_t operator()(const TKey* key) const;
+
 	protected:
 
 		std::uint32_t AdditiveHash(const std::uint8_t* data, std::uint32_t size) const;
