@@ -24,7 +24,7 @@ namespace FieaGameEngine
 	template<>
 	inline std::uint32_t DefaultHashFunctor<std::string>::operator()(const std::string& key) const
 	{
-		return AdditiveHash(reinterpret_cast<const std::uint8_t*>(key.c_str()),  key.length());
+		return AdditiveHash(reinterpret_cast<const std::uint8_t*>(key.c_str()),  static_cast<std::uint32_t>(key.length()));
 	}
 
 	template<typename TKey>
