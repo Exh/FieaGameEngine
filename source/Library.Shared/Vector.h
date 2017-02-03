@@ -64,7 +64,7 @@ namespace FieaGameEngine
 
         void Remove(std::uint32_t index);
 
-        void Remove(Iterator it);
+        bool Remove(Iterator it);
 
         std::uint32_t Remove(std::uint32_t begin,
                             std::uint32_t end);
@@ -100,7 +100,7 @@ namespace FieaGameEngine
             Iterator(const Vector* owner,
                      std::uint32_t index);
             const Vector* mOwner;
-            std::int32_t mIndex;
+            std::uint32_t mIndex;
         };
 
     private:

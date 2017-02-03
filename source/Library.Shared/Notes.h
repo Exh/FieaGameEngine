@@ -334,7 +334,101 @@ SList<T>::Iterator::Iterator(Iterator&& rhs) :
 	you have to make a new hash table, reinsert the elements from the old hash map, 
 	and then delete the previous hash map.
 
-	Maybe get the ratio
+	Type cast constructor.
+	if you have a constructor that takes a single parameter, then it can be invoked like
+	Vector<int> v = 10; (setting the capacity to 10).
+	If you mark the constructor as explicit, then this implicit conversion
+
+	you can use newLvalue = move(lValue)) to do a move instead of a copy.
+
+	begin() would return an iterator to the first non empty sList's first node.
+	Maybe use a Vector index and an SList iterator.
+	begin and end don't have to be in constant time (as the standard would suggest).
+
+	additive hash: hash += C + key[i]
+
+
+	specialiaztion for T*,
+	char*, 
+	Foo,
+	std::string is okay to use.
+	so use a custom Foo 
+
+	template<typename T>
+	class DefaultHash
+	{
+		std::uint
+	}
+
+	operator[] should always call Insert().
+
+	At() vs operator[]...
+	At(): will throw an exception if there is no value inserted at a key.
+	operator[]: will add a new element.
+
+	operator[] will call Insert with a default constructor if there is a new key being added.
+
+	could possibly move instead of copying after operator[]?? or something. we dont have to though
+	look up emplace_back()?
+
+	Do the hash functor thing as a Template, not as an assignable callback.
+
+	Specialization for:
+	char* - required 
+	String - required 
+	Foo - would be smart to do this
+	int - would be good too
+	int* - yea this too
+	T* - possibility? Up to us
+	Paul doesn't care about the TValue when testing. it can all be the same
+
+	Make the HashMap constructor explicit.
+	Default the capacity to a prime number if not specified.
+	You CAN use a literal in the HashMap constructor
+
+	For the hash functor object, make a member variable because it will probably 
+	need to be used in multiple places.
+
+	Copy constructor could just use vector's copy constructor
+	and maybe assignment operator would also be very simple because 
+
+	No need to explicitly call default constructor in initialization list.
+
+	For template specialization
+
+	Hash function should take the value of 
+
+	If you have a hashmap of TKey = int*, then the hashing should be using the integer value,
+	not the int* pointer value;
+*/
+
+/* 
+	Compile Time Polymorphism: like template classes
+	Also macros are like compile time polymorphism
+
+	Virtual Table stores function pointers.
+	Virtual table is shared across all instances of a class.
+	If a class has at least one virtual method.
+	All derived class gets VTable of there own even if no virtual methods
+	were overridden from the parent class.
+
+	Every class that has a VTable has a pointer to the VTable
+	When you dereference the VTable, it might produce a cache miss.
+
+	You cannot call derived class methods from a base class Constructor().
+	The derived class has not been constructed yet. The vtable pointer is 
+	pointing to the base class while in the base class constructor. And then
+	when it moves to the derived1 class, the vtable changes.
+
+	Pure virtual functions can have implementations.
+	called from child with BaseClass::Function();
+
+	Virtual constructor... C++ does not provide a virtual constructor.
+	Factory pattern basically allows this with a Factory base class and 
+	different derived classes. If you have an array of Factory*s, then you
+	call factories[i]->Create().
+
+	RTTI can only be globally turned on when using C++'s RTTI.
 */
 
 

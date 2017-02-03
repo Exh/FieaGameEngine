@@ -19,6 +19,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)HashMap.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)HashMap.inl">
+      <FileType>Document</FileType>
+    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Notes.h">
       <FileType>Text</FileType>
     </ClInclude>

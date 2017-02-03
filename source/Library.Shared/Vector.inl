@@ -75,7 +75,7 @@ namespace FieaGameEngine
     template<typename T>
     T& Vector<T>::Back()
     {
-        const_cast<T&>(const_cast<Vector<T>*>(this)->Back());
+        return const_cast<T&>(const_cast<const Vector<T>*>(this)->Back());
     }
 
     template<typename T>
@@ -83,7 +83,7 @@ namespace FieaGameEngine
     {
         if (mSize == 0)
         {
-            return std::exception("Cannot get back of an empty vector.");
+            throw std::exception("Cannot get back of an empty vector.");
         }
 
         assert(mBuffer != nullptr);
@@ -105,7 +105,7 @@ namespace FieaGameEngine
     template<typename T>
     typename Vector<T>::Iterator Vector<T>::begin()
     {
-        return const_cast<Iterator>(const_cast<const Vector<T>*>(this)->begin());
+        return Iterator(this, 0);
     }
 
     template<typename T>
@@ -117,7 +117,7 @@ namespace FieaGameEngine
     template<typename T>
     typename Vector<T>::Iterator Vector<T>::end()
     {
-        return const_cast<Iterator>(const_cast<const Vector<T>*>(this)->end());
+        return Iterator(this, mSize);
     }
 
     template<typename T>
@@ -141,8 +141,8 @@ namespace FieaGameEngine
     template<typename T>
     Vector<T>::Vector(const Vector& rhs) :
         mBuffer(nullptr),
-        mSize(rhs.mSize),
-        mCapacity(rhs.mCapacity)
+        mSize(0),
+        mCapacity(0)
     {
         DeepCopy(rhs);
     }
@@ -207,17 +207,25 @@ namespace FieaGameEngine
     template<typename T>
     typename Vector<T>::Iterator Vector<T>::Find(const T& item)
     {
-        return const_cast<Iterator>(const_cast<const Vector<T>*>(this)->Find(item));
+        for (auto it = begin(); it != end(); it++)
+        {
+            if (*it == item)
+            {
+                return it;
+            }
+        }
+
+        return end();
     }
 
     template<typename T>
     typename const Vector<T>::Iterator Vector<T>::Find(const T& item) const
     {
-        for (std::uint32_t i = 0; i < mSize; i++)
+        for (auto it = begin(); it != end(); it++)
         {
-            if (mBuffer[i] == item)
+            if (*it == item)
             {
-                return Iterator(this, i);
+                return it;
             }
         }
 
@@ -245,14 +253,20 @@ namespace FieaGameEngine
     }
 
     template<typename T>
-    void Vector<T>::Remove(Iterator it)
+    bool Vector<T>::Remove(Iterator it)
     {
         if (it.mOwner != this)
         {
             throw std::exception("Iterator does not belong to this Vector.");
         }
 
-        Remove(it.mIndex);
+        if (it != end())
+        {
+            Remove(it.mIndex);
+            return true;
+        }
+
+        return false;
     }
 
     template<typename T>
@@ -285,6 +299,7 @@ namespace FieaGameEngine
         return end - begin + 1;
     }
 
+    template<typename T>
     std::uint32_t Vector<T>::Remove(Iterator begin,
                                     Iterator end)
     {
@@ -306,26 +321,29 @@ namespace FieaGameEngine
         return Remove(begin.mIndex, end.mIndex);
     }
 
+    template<typename T>
     void Vector<T>::ShrinkToFit()
     {
         T* previousBuffer = mBuffer;
 
         mBuffer = reinterpret_cast<T*>(malloc(sizeof(T) * mSize));
 
-        memcpy(m_Buffer, previousBuffer, sizeof(T) * mSize);
+        memcpy(mBuffer, previousBuffer, sizeof(T) * mSize);
+
+        mCapacity = mSize;
 
         free(previousBuffer);
         previousBuffer = nullptr;
     }
 
+    template<typename T>
     void Vector<T>::Destroy()
     {
-        //@@ TODO: Change this to use iterator + ranged based for loop
         if (mBuffer != nullptr)
         {
-            for (std::uint32_t i = 0; i < mSize; i++)
+            for (T& item : *this)
             {
-                (mBuffer + i)->~T();
+                item.~T();
             }
 
             free(mBuffer);
@@ -343,9 +361,9 @@ namespace FieaGameEngine
     template<typename T>
     void Vector<T>::Clear()
     {
-        for (std::uint32_t i = 0; i < mSize; i++)
+        for (T& item : *this)
         {
-            mBuffer[i].~T();
+            item.~T();
         }
 
         mSize = 0;
@@ -354,18 +372,20 @@ namespace FieaGameEngine
     template<typename T>
     void Vector<T>::Expand()
     {
+        std::uint32_t newCapacity = 0;
+
         // Expands the capacity of the vector by twice its size.
         // If the vector has 0 capacity, then make it 1.
         if (mCapacity == 0)
         {
-            mCapacity = 1;
+            newCapacity = 1;
         }
         else
         {
-            mCapacity = mCapacity << 1;
+            newCapacity = mCapacity << 1;
         }
 
-        Reserve(mCapacity);
+        Reserve(newCapacity);
     }
 
     template<typename T>
@@ -439,12 +459,19 @@ namespace FieaGameEngine
     template<typename T>
     typename Vector<T>::Iterator& Vector<T>::Iterator::operator++()
     {
-        mIndex++;
-        
-        if (mIndex > mSize)
+        if (mOwner == nullptr)
         {
-            mIndex = mSize;
+            throw std::exception("Cannot increment unassigned iterator.");
         }
+
+        mIndex++;
+
+        if (mIndex > mOwner->Size())
+        {
+            mIndex = mOwner->Size();
+        }
+
+        return *this;
     }
 
     template<typename T>
