@@ -5,6 +5,7 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Foo.cpp" />
     <ClCompile Include="VectorTest.cpp" />
+    <ClCompile Include="HashMapTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

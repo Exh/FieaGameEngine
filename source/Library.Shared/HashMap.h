@@ -10,7 +10,7 @@ namespace FieaGameEngine
 	template<typename TKey>
 	class DefaultHashFunctor
 	{
-		std::uint32_t operator(const TKey& key) const;
+		std::uint32_t operator()(const TKey& key) const;
 
 	protected:
 
@@ -88,11 +88,11 @@ namespace FieaGameEngine
 
 		private:
 
-			Iterator(HashMap* owner, std::uint32_t bucket, ChainType::Iterator chainIterator);
+			Iterator(HashMap<TKey, TValue, THash>* owner, std::uint32_t bucket, typename ChainType::Iterator chainIterator);
 
 			const HashMap* mOwner;
 			std::uint32_t mBucket;
-			ChainType::Iterator mChainIterator;
+			typename ChainType::Iterator mChainIterator;
 		};
 
 	private:
