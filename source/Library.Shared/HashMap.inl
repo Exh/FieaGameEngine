@@ -1,10 +1,39 @@
 #pragma once
 
 #include "HashMap.h"
+#include <cstdint>
 #include <assert.h>
 
 namespace FieaGameEngine
 {
+
+#pragma region DefaultHashFunctorMethods
+
+	template<typename TKey>
+	std::uint32_t DefaultHashFunctor<TKey>::operator(const TKey& key) const
+	{
+		return AdditiveHash(reinterpret_cast<std::uint8_t*>(&key), sizeof(TKey));
+	}
+
+	template<typename TKey>
+	std::uint32_t DefaultHashFunctor<TKey>::AdditiveHash(std::uint8_t* data, std::uint32_t size) const
+	{
+		static const std::uint8_t C = 13;
+		std::uint32_t hash = 0;
+
+		for (int i = 0; i < size; i++)
+		{
+			hash += C + data[i];
+		}
+
+		return hash;
+	}
+}
+
+#pragma endregion
+
+#pragma region HashMapMethods
+
 	template<typename TKey, typename TValue, typename THash>
 	HashMap<TKey, TValue, THash>::HashMap(std::uint32_t capacity) : 
 		mSize(0),
@@ -197,9 +226,9 @@ namespace FieaGameEngine
 		return currentIndex;
 	}
 
+#pragma endregion
 
-
-
+#pragma region IteratorMethods
 
 	template<typename TKey, typename TValue, typename THash>
 	HashMap<TKey, TValue, THash>::Iterator::Iterator() :
@@ -300,4 +329,7 @@ namespace FieaGameEngine
 	{
 		return !operator==(rhs);
 	}
+
+#pragma endregion
+
 }

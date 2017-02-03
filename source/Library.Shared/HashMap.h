@@ -7,7 +7,17 @@
 
 namespace FieaGameEngine
 {
-	template<typename TKey, typename TValue, typename THash>
+	template<typename TKey>
+	class DefaultHashFunctor
+	{
+		std::uint32_t operator(const TKey& key) const;
+
+	protected:
+
+		std::uint32_t AdditiveHash(std::uint8_t* data, std::uint32_t size) const;
+	};
+
+	template<typename TKey, typename TValue, typename THash = DefaultHashFunctor>
 	class HashMap
 	{
 		class Iterator;
