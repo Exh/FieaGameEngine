@@ -105,7 +105,7 @@ namespace FieaGameEngine
 
 	private:
 
-		std::uint32_t GetNextNonEmptySListIndex(std::uint32_t currentIndex);
+		std::uint32_t GetNextNonEmptySListIndex(std::uint32_t currentIndex) const;
 
 		void FillArray();
 

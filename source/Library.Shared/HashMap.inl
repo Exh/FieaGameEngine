@@ -122,7 +122,7 @@ namespace FieaGameEngine
 	template<typename TKey, typename TValue, typename THash>
 	TValue& HashMap<TKey, TValue, THash>::At(const TKey& key)
 	{
-		const_cast<TValue&>(const_cast<const HashMap*>(this)->operator[](key));
+		return const_cast<TValue&>(const_cast<const HashMap*>(this)->operator[](key));
 	}
 
 	template<typename TKey, typename TValue, typename THash>
@@ -143,6 +143,7 @@ namespace FieaGameEngine
 			if (pair.first == key)
 			{
 				chain.Remove(pair);
+				--mSize;
 				break;
 			}
 		}
@@ -152,6 +153,8 @@ namespace FieaGameEngine
 	void HashMap<TKey, TValue, THash>::Clear()
 	{
 		mArray.Clear();
+		mSize = 0;
+		FillArray();
 	}
 
 	template<typename TKey, typename TValue, typename THash>
@@ -211,19 +214,25 @@ namespace FieaGameEngine
 	}
 
 	template<typename TKey, typename TValue, typename THash>
-	std::uint32_t HashMap<TKey, TValue, THash>::GetNextNonEmptySListIndex(std::uint32_t currentIndex)
+	std::uint32_t HashMap<TKey, TValue, THash>::GetNextNonEmptySListIndex(std::uint32_t currentIndex) const
 	{
 		assert(currentIndex >= 0);
 		assert(currentIndex <= mCapacity);
 
-		while (currentBucket != mCapacity)
+		currentIndex++;
+		if (currentIndex > mCapacity)
 		{
-			currentIndex++;
+			currentIndex = mCapacity;
+		}
 
-			if (!mBuckets[currentIndex].IsEmpty())
+		while (currentIndex != mCapacity)
+		{
+			if (!mArray[currentIndex].IsEmpty())
 			{
 				break;
 			}
+
+			currentIndex++;
 		}
 
 		return currentIndex;
@@ -236,7 +245,7 @@ namespace FieaGameEngine
 	template<typename TKey, typename TValue, typename THash>
 	HashMap<TKey, TValue, THash>::Iterator::Iterator() :
 		mOwner(nullptr),
-		mBucket(0),
+		mBucket(0)
 	{
 		
 	}
@@ -260,17 +269,18 @@ namespace FieaGameEngine
 
 		if (mBucket < mOwner->mCapacity)
 		{
-			if (mChainIterator.mOwner != nullptr)
+			if (mChainIterator != ChainType::Iterator())
 			{
 				mChainIterator++;
 
-				if (mChainIterator == mChainIterator.mOwner->end())
+				if (mChainIterator == mOwner->mArray[mBucket].end())
 				{
-					mBucket = mOwner->GetNextNonEmptySListIndex();
+					mBucket = mOwner->GetNextNonEmptySListIndex(mBucket);
 
-					if (mBucket != mCapacity)
+					if (mBucket != mOwner->mCapacity)
 					{
-						mChainIterator = (*mOwner)[mBucket].begin();
+						//mChainIterator = (*mOwner)[mBucket].begin();
+						mChainIterator = mOwner->mArray[mBucket].begin();
 					}
 					else 
 					{
@@ -279,6 +289,8 @@ namespace FieaGameEngine
 				}
 			}
 		}
+
+		return *this;
 	}
 
 	template<typename TKey, typename TValue, typename THash>
