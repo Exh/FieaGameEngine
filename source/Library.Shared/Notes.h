@@ -429,6 +429,136 @@ SList<T>::Iterator::Iterator(Iterator&& rhs) :
 	call factories[i]->Create().
 
 	RTTI can only be globally turned on when using C++'s RTTI.
+
+	DatumType should be a strong enum. (or an enum class)
 */
 
+enum class DatumType
+{
+	Integer,
+	Float,
+	String
+};
 
+/*
+	Datums are basically vectors. Not templated. Runtime polymorphism.
+
+*/
+
+union DatumValues
+{
+	std::int32_t* i;
+	std::string* s;
+	float* f;
+	glm::vec4* v;
+	glm::mat4* m;
+	RTTI** r;
+};
+
+DatumValues mData;
+std::uint32_t mSize;
+std::uint32_t mCapacity;
+
+/*
+	Only allow user to set type of datum once. Throw an exception if they try to change the type.
+	If they call SetType() with the same type, then that's okay, don't throw an excpetion.
+
+	When you call Clear(), you dont have to free memory. You could implement a ShrinkToFit() method.
+	Don't change the type when Clear() is invoked.
+
+	You should use the assignment operator as a scalar assignment. Which should set the value's type,
+	set its size to 1. and then push the value that was assigned in the 0th element.
+
+	Get() could be templated, or you could use GetInteger();
+*/
+
+Datum d = 50;
+d = 60; // overwrites the element at 0th index with 60.
+
+/* 
+	Also consider adding PushBack()
+
+	Comparison Operators: Overload all of the operators for string, int, float etc.
+	Only compare the first element if the datum holds a non-scalar. 
+	Datum to Datum oeprator==()
+
+	glm::vec4 and glm::mat4 has glm::To_String for converting to string.
+	Corresponding stuff to parse out from string.
+
+	The SetFromString() and ToString() formats should match!!
+
+	You could possibly serialize the string formats to include type.
+
+	It's okay if SetFromString() requires that SetType has already been called.
+
+	External storage is used to reference C++ variables from the Datum scripting framework.
+
+	Just copy the values of pointer for RTTI*s.
+
+	If you push back on an external storage datum, you would throw an exception.
+
+	SetStorage() params: pointer to storage + size. Should not be a void*. Overload for each type.
+
+	Even for internal storage, you should not delete the RTTI object data, just the pointer RTTI*
+
+	Do not provide the user with the template for like Get or something? Don't put the general template nor
+	specializations in the header.
+
+	Set for an RTTI pointer should be a pointer. Could possibly be nullptr. (RTTI*)
+
+	Set Storage for an RTTI pointer should be an RTTI**
+
+	Set() for integer should take an int. (could possibly do a const int& but doesnt matter.
+	Possibly do a move semantics call for Set(), but glm might not support move semantics? You could add it yourself.
+
+	Make Foo an RTTI, and then you can stick foo pointers inside of datums
+
+	Set from string will probaby need a datum to have its type set before getting called, unless you
+	were to add a tag format.
+
+	Hard things about this assignment:
+	Copying
+	Deleting
+	Instantiating
+
+	Can't call reserve before SetType().
+
+	You can include a void* member inside the Buffer union.
+
+	If you choose to never have a different size from capacity, then you wouldn't need to use placement new.
+
+	You can use an unnamed union because you wont be reusing the type.
+
+	USE THESE COMMENT TAGS:
+	@param
+	@return 
+	@brief
+	@exception
+
+	Get<RTTI*>() should return a RTTI*&
+
+	If you Get<string>() of a vector, it should 
+*/
+
+noexcept // Says that this function will not throw an exception
+
+//***************
+// Assignment 08
+//***************
+/* 
+
+Scopes that are contained by other scopes, then they have a pointer to their parent.
+If the scope is a top-level scope then it's owner pointer is null.
+
+Only one parent ever. Multiple scopes can't use the same child. unless you use RTTI*.
+
+HashMap of string, Datum pairs.
+
+Prototype pattern splits up class definition and instance.
+
+Chain of Responsibility pattern??
+
+The vector would contain type Pair<string, Datum>*
+
+You will own the data of Scopes contained in the Datum
+*/

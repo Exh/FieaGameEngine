@@ -279,7 +279,6 @@ namespace FieaGameEngine
 
 					if (mBucket != mOwner->mCapacity)
 					{
-						//mChainIterator = (*mOwner)[mBucket].begin();
 						mChainIterator = mOwner->mArray[mBucket].begin();
 					}
 					else 
