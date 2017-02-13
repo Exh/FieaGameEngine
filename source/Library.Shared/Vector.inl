@@ -411,16 +411,6 @@ namespace FieaGameEngine
         mCapacity = rhs.mCapacity;
     }
 
-
-
-
-
-
-
-
-
-
-
     template<typename T>
     Vector<T>::Iterator::Iterator() :
         mOwner(nullptr),

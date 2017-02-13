@@ -6,6 +6,7 @@
     <ClCompile Include="Foo.cpp" />
     <ClCompile Include="VectorTest.cpp" />
     <ClCompile Include="HashMapTest.cpp" />
+    <ClCompile Include="DatumTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

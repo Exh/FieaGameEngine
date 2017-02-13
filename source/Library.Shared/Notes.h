@@ -513,7 +513,7 @@ d = 60; // overwrites the element at 0th index with 60.
 
 	Make Foo an RTTI, and then you can stick foo pointers inside of datums
 
-	Set from string will probaby need a datum to have its type set before getting called, unless you
+	Set from string will probably need a datum to have its type set before getting called, unless you
 	were to add a tag format.
 
 	Hard things about this assignment:

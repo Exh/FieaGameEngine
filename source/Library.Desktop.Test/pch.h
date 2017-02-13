@@ -17,6 +17,7 @@
 #include "SList.h"
 #include "Vector.h"
 #include "HashMap.h"
+#include "Datum.h"
 
 // Testing Headers
 #include "Foo.h"
