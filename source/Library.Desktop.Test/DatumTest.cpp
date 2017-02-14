@@ -747,7 +747,8 @@ namespace LibraryDesktopTest
 
 				Datum datum2;
 				datum2.SetStorage(externalInts, 3);
-				Assert::ExpectException<std::exception>([&datum2, &int1]{datum2.Set(int1);});
+				datum2.Set(int3);
+				Assert::AreEqual(datum2.GetInteger(), int3);
 			}
 
 			{
@@ -763,7 +764,8 @@ namespace LibraryDesktopTest
 
 				Datum datum2;
 				datum2.SetStorage(externalFloats, 3);
-				Assert::ExpectException<std::exception>([&datum2, &float1] {datum2.Set(float1); });
+				datum2.Set(float3);
+				Assert::AreEqual(datum2.GetFloat(), float3);
 			}
 
 			{
@@ -779,7 +781,8 @@ namespace LibraryDesktopTest
 
 				Datum datum2;
 				datum2.SetStorage(externalVectors, 3);
-				Assert::ExpectException<std::exception>([&datum2, &vector1] {datum2.Set(vector1); });
+				datum2.Set(vector3);
+				Assert::AreEqual(datum2.GetVector(), vector3);
 			}
 
 			{
@@ -795,7 +798,8 @@ namespace LibraryDesktopTest
 
 				Datum datum2;
 				datum2.SetStorage(externalMatrices, 3);
-				Assert::ExpectException<std::exception>([&datum2, &matrix1] {datum2.Set(matrix1); });
+				datum2.Set(matrix3);
+				Assert::AreEqual(datum2.GetMatrix(), matrix3);
 			}
 
 			{
@@ -811,7 +815,8 @@ namespace LibraryDesktopTest
 
 				Datum datum2;
 				datum2.SetStorage(externalStrings, 3);
-				Assert::ExpectException<std::exception>([&datum2, &string1] {datum2.Set(string1); });
+				datum2.Set(string3);
+				Assert::AreEqual(datum2.GetString(), string3);
 			}
 
 			{
@@ -827,7 +832,8 @@ namespace LibraryDesktopTest
 
 				Datum datum2;
 				datum2.SetStorage(externalPointers, 3);
-				Assert::ExpectException<std::exception>([&datum2, &pointer1] {datum2.Set(pointer1); });
+				datum2.Set(pointer3);
+				Assert::AreEqual(datum2.GetPointer(), pointer3);
 			}
 		}
 

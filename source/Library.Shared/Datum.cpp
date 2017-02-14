@@ -482,10 +482,10 @@ namespace FieaGameEngine
 			throw std::exception("Invalid type on Set().");
 		}
 
-		if (mExternal)
-		{
-			throw std::exception("Cannot Set() on external storage datum.");
-		}
+		//if (mExternal)
+		//{
+		//	throw std::exception("Cannot Set() on external storage datum.");
+		//}
 	}
 
 	std::int32_t& Datum::GetInteger(std::uint32_t index)
@@ -602,16 +602,16 @@ namespace FieaGameEngine
 			break;
 		case DatumType::Vector:
 			float vectorValues[VEC4_ELEMENTS];
-			scanf_s(text.c_str(), "%f %f %f", vectorValues[0], vectorValues[1], vectorValues[2] ,vectorValues[3]);
+			sscanf_s(text.c_str(), "%f %f %f %f", &vectorValues[0], &vectorValues[1], &vectorValues[2] ,&vectorValues[3]);
 			mData.v[index] = glm::vec4(vectorValues[0], vectorValues[1], vectorValues[2], vectorValues[3]);
 			break;
 		case DatumType::Matrix:
 			float matrixValues[MAT4_ELEMENTS];
-			scanf_s(text.c_str(), "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f",
-				matrixValues[0], matrixValues[1], matrixValues[2], matrixValues[3],
-				matrixValues[4], matrixValues[5], matrixValues[6], matrixValues[7],
-				matrixValues[8], matrixValues[9], matrixValues[10], matrixValues[11],
-				matrixValues[12], matrixValues[13], matrixValues[14], matrixValues[15]);
+			sscanf_s(text.c_str(), "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f",
+				&matrixValues[0], &matrixValues[1], &matrixValues[2], &matrixValues[3],
+				&matrixValues[4], &matrixValues[5], &matrixValues[6], &matrixValues[7],
+				&matrixValues[8], &matrixValues[9], &matrixValues[10], &matrixValues[11],
+				&matrixValues[12], &matrixValues[13], &matrixValues[14], &matrixValues[15]);
 			mData.m[index] = glm::mat4(matrixValues[0], matrixValues[1], matrixValues[2], matrixValues[3],
 										matrixValues[4], matrixValues[5], matrixValues[6], matrixValues[7],
 										matrixValues[8], matrixValues[9], matrixValues[10], matrixValues[11],
@@ -657,6 +657,7 @@ namespace FieaGameEngine
 			for (std::uint32_t i = 0; i < VEC4_ELEMENTS; i++)
 			{
 				returnString += std::to_string(floats[i]);
+				returnString += " ";
 			}
 			break;
 		}
@@ -666,6 +667,7 @@ namespace FieaGameEngine
 			for (std::uint32_t i = 0; i < MAT4_ELEMENTS; i++)
 			{
 				returnString += std::to_string(floats[i]);
+				returnString += " ";
 			}
 			break;
 		}
