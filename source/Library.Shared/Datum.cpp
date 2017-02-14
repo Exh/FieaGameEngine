@@ -316,13 +316,13 @@ namespace FieaGameEngine
 			switch (mType)
 			{
 			case DatumType::String:
-				if (mData.s != rhs.mData.s)
+				if (mData.s[i] != rhs.mData.s[i])
 				{
 					return false;
 				}
 				break;
 			default:
-				if (memcmp(mData.vp, rhs.mData.vp, dataSize) != 0)
+				if (memcmp(reinterpret_cast<char*>(mData.vp) + i, reinterpret_cast<char*>(rhs.mData.vp) + i, dataSize) != 0)
 				{
 					return false;
 				}

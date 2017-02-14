@@ -563,6 +563,7 @@ If the scope is a top-level scope then it's owner pointer is null.
 Only one parent ever. Multiple scopes can't use the same child. unless you use RTTI*.
 
 HashMap of string, Datum pairs.
+^ make strings const?
 
 Prototype pattern splits up class definition and instance.
 
@@ -571,4 +572,13 @@ Chain of Responsibility pattern??
 The vector would contain type Pair<string, Datum>*
 
 You will own the data of Scopes contained in the Datum
+
+Should never be able to change the key of string,Datum pair.
+
+Search will be recursive and look up the tree.
+
+Most complilcated part of assignment:
+When you have datums of type Table, all the pointers in there... you own them.
+Makse sure that two scopes dont think that they have the same child
+Scope** element in the Datum union
 */
