@@ -216,69 +216,64 @@ namespace FieaGameEngine
 
 	void Datum::Clear()
 	{
-		if (!mExternal)
+		if (mExternal)
 		{
-			for (std::uint32_t i = 0; i < mSize; i++)
+			throw std::exception("Cannot clear external memory.");
+		}
+
+		for (std::uint32_t i = 0; i < mSize; i++)
+		{
+			switch (mType)
 			{
-				switch (mType)
-				{
-				case DatumType::String:
-					mData.s[i].std::string::~string();
-					break;
-				}
+			case DatumType::String:
+				mData.s[i].std::string::~string();
+				break;
 			}
 		}
 
 		mSize = 0;
-		mExternal = false;
 	}
 
 	void Datum::SetStorage(std::int32_t* data, std::uint32_t size)
 	{
 		PreSetStorage();
 		mData.i = data;
-		mSize = size;
-		mCapacity = size;
+		PostSetStorage(DatumType::Integer, size);
 	}
 
 	void Datum::SetStorage(float* data, std::uint32_t size)
 	{
 		PreSetStorage();
 		mData.f = data;
-		mSize = size;
-		mCapacity = size;
+		PostSetStorage(DatumType::Float, size);
 	}
 
 	void Datum::SetStorage(glm::vec4* data, std::uint32_t size)
 	{
 		PreSetStorage();
 		mData.v = data;
-		mSize = size;
-		mCapacity = size;
+		PostSetStorage(DatumType::Vector, size);
 	}
 
 	void Datum::SetStorage(glm::mat4* data, std::uint32_t size)
 	{
 		PreSetStorage();
 		mData.m = data;
-		mSize = size;
-		mCapacity = size;
+		PostSetStorage(DatumType::Matrix, size);
 	}
 
 	void Datum::SetStorage(std::string* data, std::uint32_t size)
 	{
 		PreSetStorage();
 		mData.s = data;
-		mSize = size;
-		mCapacity = size;
+		PostSetStorage(DatumType::String, size);
 	}
 
 	void Datum::SetStorage(RTTI** data, std::uint32_t size)
 	{
 		PreSetStorage();
 		mData.p = data;
-		mSize = size;
-		mCapacity = size;
+		PostSetStorage(DatumType::Pointer, size);
 	}
 
 	void Datum::PreSetStorage()
@@ -292,6 +287,151 @@ namespace FieaGameEngine
 		assert(mCapacity == 0);
 		assert(mData.vp == nullptr);
 		assert(mExternal == false);
+	}
+
+	void Datum::PostSetStorage(DatumType type, std::uint32_t size)
+	{
+		assert(type != DatumType::Unknown);
+
+		mSize = size;
+		mCapacity = size;
+		mExternal = true;
+		mType = type;
+	}
+
+	bool Datum::operator==(const Datum& rhs) const
+	{
+		if (mType != rhs.mType ||
+			mSize != rhs.mSize)
+		{
+			return false;
+		}
+
+		std::uint32_t dataSize = GetDatumTypeSize();
+
+		for (std::uint32_t i = 0; i < mSize; i++)
+		{
+			assert(mType != DatumType::Unknown);
+
+			switch (mType)
+			{
+			case DatumType::String:
+				if (mData.s != rhs.mData.s)
+				{
+					return false;
+				}
+				break;
+			default:
+				if (memcmp(mData.vp, rhs.mData.vp, dataSize) != 0)
+				{
+					return false;
+				}
+				break;
+			}
+		}
+
+		return true;
+	}
+
+	bool Datum::operator==(const std::int32_t& rhs) const
+	{
+		if (mSize == 0 ||
+			mType != DatumType::Integer)
+		{
+			return false;
+		}
+
+		return mData.i[0] == rhs;
+	}
+
+	bool Datum::operator==(const float& rhs) const
+	{
+		if (mSize == 0 ||
+			mType != DatumType::Float)
+		{
+			return false;
+		}
+
+		return mData.f[0] == rhs;
+	}
+
+	bool Datum::operator==(const glm::vec4& rhs) const
+	{
+		if (mSize == 0 ||
+			mType != DatumType::Vector)
+		{
+			return false;
+		}
+
+		return mData.v[0] == rhs;
+	}
+
+	bool Datum::operator==(const glm::mat4& rhs) const
+	{
+		if (mSize == 0 ||
+			mType != DatumType::Matrix)
+		{
+			return false;
+		}
+
+		return mData.m[0] == rhs;
+	}
+
+	bool Datum::operator==(const std::string& rhs) const
+	{
+		if (mSize == 0 ||
+			mType != DatumType::String)
+		{
+			return false;
+		}
+
+		return mData.s[0] == rhs;
+	}
+
+	bool Datum::operator==(const RTTI* const& rhs) const
+	{
+		if (mSize == 0 ||
+			mType != DatumType::Pointer)
+		{
+			return false;
+		}
+
+		return mData.p[0] == rhs;
+	}
+
+	bool Datum::operator!=(const Datum& rhs) const
+	{
+		return !operator==(rhs);
+	}
+
+	bool Datum::operator!=(const std::int32_t& rhs) const
+	{
+		return !operator==(rhs);
+	}
+
+	bool Datum::operator!=(const float& rhs) const
+	{
+		return !operator==(rhs);
+	}
+
+	bool Datum::operator!=(const glm::vec4& rhs) const
+	{
+		return !operator==(rhs);
+	}
+
+	bool Datum::operator!=(const glm::mat4& rhs) const
+	{
+		return !operator==(rhs);
+	}
+
+	bool Datum::operator!=(const std::string& rhs) const
+	{
+		return !operator==(rhs);
+	}
+
+	bool Datum::operator!=(const RTTI* const& rhs) const
+	{
+		return !operator==(rhs);
 	}
 
 	void Datum::Set(std::int32_t value, std::uint32_t index)
@@ -340,6 +480,11 @@ namespace FieaGameEngine
 		if (mType != type)
 		{
 			throw std::exception("Invalid type on Set().");
+		}
+
+		if (mExternal)
+		{
+			throw std::exception("Cannot Set() on external storage datum.");
 		}
 	}
 
@@ -600,7 +745,7 @@ namespace FieaGameEngine
 			void* previousBuffer = mData.vp;
 
 			mCapacity = capacity;
-			std::int32_t typeSize = GetDatumTypeSize();
+			std::uint32_t typeSize = GetDatumTypeSize();
 			mData.vp = malloc(mCapacity * typeSize);
 
 			if (previousBuffer != nullptr)
@@ -668,9 +813,9 @@ namespace FieaGameEngine
 
 	void Datum::Destroy()
 	{
-		if (mData.vp != nullptr)
+		if (!mExternal && 
+			mData.vp != nullptr)
 		{
-			assert(!mExternal);
 			assert(mType != DatumType::Unknown);
 
 			for (std::uint32_t i = 0; i < mSize; i++)
@@ -697,7 +842,7 @@ namespace FieaGameEngine
 		}
 	}
 
-	std::uint32_t Datum::GetDatumTypeSize()
+	std::uint32_t Datum::GetDatumTypeSize() const
 	{
 		std::uint32_t size = 0;
 

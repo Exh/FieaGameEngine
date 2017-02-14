@@ -56,7 +56,7 @@ namespace FieaGameEngine
 		bool operator==(const glm::vec4& rhs) const;
 		bool operator==(const glm::mat4& rhs) const;
 		bool operator==(const std::string& rhs) const;
-		bool operator==(const RTTI*& rhs) const;
+		bool operator==(const RTTI* const& rhs) const;
 
 		bool operator!=(const Datum& rhs) const;
 		bool operator!=(const std::int32_t& rhs) const;
@@ -64,7 +64,7 @@ namespace FieaGameEngine
 		bool operator!=(const glm::vec4& rhs) const;
 		bool operator!=(const glm::mat4& rhs) const;
 		bool operator!=(const std::string& rhs) const;
-		bool operator!=(const RTTI*& rhs) const;
+		bool operator!=(const RTTI* const& rhs) const;
 
 		void Set(std::int32_t value, std::uint32_t index = 0);
 		void Set(float value, std::uint32_t index = 0);
@@ -106,6 +106,8 @@ namespace FieaGameEngine
 
 		void PreSetStorage();
 
+		void PostSetStorage(DatumType type, std::uint32_t size);
+
 		void PreSet(std::uint32_t index, DatumType type);
 
 		void Reserve(std::uint32_t capacity);
@@ -116,7 +118,7 @@ namespace FieaGameEngine
 
 		void Destroy();
 
-		std::uint32_t GetDatumTypeSize();
+		std::uint32_t GetDatumTypeSize() const;
 
 		DatumType mType;
 

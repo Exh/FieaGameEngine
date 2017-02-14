@@ -508,7 +508,6 @@ namespace LibraryDesktopTest
 		{
 			CREATE_TEST_VARS
 
-			int arr[] = {int1, int2, int3};
 			{
 				Datum datum;
 				datum.SetStorage(externalInts, 3U);
@@ -523,6 +522,321 @@ namespace LibraryDesktopTest
 				Datum datum2;
 				datum2.PushBack(int1);
 				Assert::ExpectException<std::exception>([&datum2, &externalInts] {datum2.SetStorage(externalInts, 3);});
+			}
+
+			{
+				Datum datum;
+				datum.SetStorage(externalFloats, 3U);
+				Assert::AreEqual(datum.Size(), 3U);
+				Assert::AreEqual(datum.Type(), DatumType::Float);
+				datum.GetFloat(2) = float1;
+				Assert::AreEqual(datum.GetFloat(2), float1);
+				Assert::ExpectException<std::exception>([&datum, &externalFloats] {datum.SetStorage(externalFloats, 3); });
+				Assert::ExpectException<std::exception>([&datum] {datum.Clear(); });
+				Assert::ExpectException<std::exception>([&datum, &float1] {datum.PushBack(float1); });
+
+				Datum datum2;
+				datum2.PushBack(float1);
+				Assert::ExpectException<std::exception>([&datum2, &externalFloats] {datum2.SetStorage(externalFloats, 3); });
+			}
+
+			{
+				Datum datum;
+				datum.SetStorage(externalVectors, 3U);
+				Assert::AreEqual(datum.Size(), 3U);
+				Assert::AreEqual(datum.Type(), DatumType::Vector);
+				datum.GetVector(2) = vector1;
+				Assert::AreEqual(datum.GetVector(2), vector1);
+				Assert::ExpectException<std::exception>([&datum, &externalFloats] {datum.SetStorage(externalFloats, 3); });
+				Assert::ExpectException<std::exception>([&datum] {datum.Clear(); });
+				Assert::ExpectException<std::exception>([&datum, &vector1] {datum.PushBack(vector1); });
+
+				Datum datum2;
+				datum2.PushBack(vector1);
+				Assert::ExpectException<std::exception>([&datum2, &externalVectors] {datum2.SetStorage(externalVectors, 3); });
+			}
+
+			{
+				Datum datum;
+				datum.SetStorage(externalMatrices, 3U);
+				Assert::AreEqual(datum.Size(), 3U);
+				Assert::AreEqual(datum.Type(), DatumType::Matrix);
+				datum.GetMatrix(2) = matrix1;
+				Assert::AreEqual(datum.GetMatrix(2), matrix1);
+				Assert::ExpectException<std::exception>([&datum, &externalFloats] {datum.SetStorage(externalFloats, 3); });
+				Assert::ExpectException<std::exception>([&datum] {datum.Clear(); });
+				Assert::ExpectException<std::exception>([&datum, &matrix1] {datum.PushBack(matrix1); });
+
+				Datum datum2;
+				datum2.PushBack(matrix1);
+				Assert::ExpectException<std::exception>([&datum2, &externalMatrices] {datum2.SetStorage(externalMatrices, 3); });
+			}
+
+			{
+				Datum datum;
+				datum.SetStorage(externalStrings, 3U);
+				Assert::AreEqual(datum.Size(), 3U);
+				Assert::AreEqual(datum.Type(), DatumType::String);
+				datum.GetString(2) = string1;
+				Assert::AreEqual(datum.GetString(2), string1);
+				Assert::ExpectException<std::exception>([&datum, &externalFloats] {datum.SetStorage(externalFloats, 3); });
+				Assert::ExpectException<std::exception>([&datum] {datum.Clear(); });
+				Assert::ExpectException<std::exception>([&datum, &string1] {datum.PushBack(string1); });
+
+				Datum datum2;
+				datum2.PushBack(string1);
+				Assert::ExpectException<std::exception>([&datum2, &externalStrings] {datum2.SetStorage(externalStrings, 3); });
+			}
+
+			{
+				Datum datum;
+				datum.SetStorage(externalPointers, 3U);
+				Assert::AreEqual(datum.Size(), 3U);
+				Assert::AreEqual(datum.Type(), DatumType::Pointer);
+				datum.GetPointer(2) = pointer1;
+				Assert::AreEqual(datum.GetPointer(2), pointer1);
+				Assert::ExpectException<std::exception>([&datum, &externalFloats] {datum.SetStorage(externalFloats, 3); });
+				Assert::ExpectException<std::exception>([&datum] {datum.Clear(); });
+				Assert::ExpectException<std::exception>([&datum, &pointer1] {datum.PushBack(pointer1); });
+
+				Datum datum2;
+				datum2.PushBack(pointer1);
+				Assert::ExpectException<std::exception>([&datum2, &externalPointers] {datum2.SetStorage(externalPointers, 3); });
+			}
+		}
+
+		TEST_METHOD(Equality)
+		{
+			CREATE_TEST_VARS
+
+			// Datum to Datum
+			{
+				Datum datum1;
+				datum1.SetStorage(externalInts, 3);
+
+				Datum datum2;
+				datum2.PushBack(int1);
+				datum2.PushBack(int2);
+				datum2.PushBack(int3);
+
+				Assert::AreEqual(datum1, datum2);
+
+				Datum datum3;
+				Assert::AreNotEqual(datum1, datum3);
+				Assert::AreNotEqual(datum2, datum3);
+
+				datum3.PushBack(float1);
+				datum3.PushBack(float2);
+				datum3.PushBack(float3);
+
+				Assert::AreNotEqual(datum1, datum3);
+				Assert::AreNotEqual(datum2, datum3);
+			}
+
+			// Integer
+			{
+				Datum datum1;
+				datum1 = int1;
+				Assert::IsTrue(datum1 == int1);
+				Assert::IsFalse(datum1 != int1);
+
+				Datum datum2;
+				datum2.SetStorage(externalInts, 3);
+				Assert::IsTrue(datum2 == int1);
+				Assert::IsFalse(datum2 != int1);
+				
+				Assert::IsFalse(datum1 == float1);
+				Assert::IsFalse(datum2 == float1);
+			}
+
+			// Floats
+			{
+				Datum datum1;
+				datum1 = float1;
+				Assert::IsTrue(datum1 == float1);
+				Assert::IsFalse(datum1 != float1);
+
+				Datum datum2;
+				datum2.SetStorage(externalFloats, 3);
+				Assert::IsTrue(datum2 == float1);
+				Assert::IsFalse(datum2 != float1);
+
+				Assert::IsFalse(datum1 == int1);
+				Assert::IsFalse(datum2 == int1);
+			}
+
+			// Vectors
+			{
+				Datum datum1;
+				datum1 = vector1;
+				Assert::IsTrue(datum1 == vector1);
+				Assert::IsFalse(datum1 != vector1);
+
+				Datum datum2;
+				datum2.SetStorage(externalVectors, 3);
+				Assert::IsTrue(datum2 == vector1);
+				Assert::IsFalse(datum2 != vector1);
+
+				Assert::IsFalse(datum1 == float1);
+				Assert::IsFalse(datum2 == float1);
+			}
+
+			// Matrices
+			{
+				Datum datum1;
+				datum1 = matrix1;
+				Assert::IsTrue(datum1 == matrix1);
+				Assert::IsFalse(datum1 != matrix1);
+
+				Datum datum2;
+				datum2.SetStorage(externalMatrices, 3);
+				Assert::IsTrue(datum2 == matrix1);
+				Assert::IsFalse(datum2 != matrix1);
+
+				Assert::IsFalse(datum1 == float1);
+				Assert::IsFalse(datum2 == float1);
+			}
+
+			// Strings
+			{
+				Datum datum1;
+				datum1 = string1;
+				Assert::IsTrue(datum1 == string1);
+				Assert::IsFalse(datum1 != string1);
+
+				Datum datum2;
+				datum2.SetStorage(externalStrings, 3);
+				Assert::IsTrue(datum2 == string1);
+				Assert::IsFalse(datum2 != string1);
+
+				Assert::IsFalse(datum1 == float1);
+				Assert::IsFalse(datum2 == float1);
+			}
+
+			// Pointer
+			{
+				Datum datum1;
+				datum1 = pointer1;
+				Assert::IsTrue(datum1 == pointer1);
+				Assert::IsFalse(datum1 != pointer1);
+
+				Datum datum2;
+				datum2.SetStorage(externalPointers, 3);
+				Assert::IsTrue(datum2 == pointer1);
+				Assert::IsFalse(datum2 != pointer1);
+
+				Assert::IsFalse(datum1 == float1);
+				Assert::IsFalse(datum2 == float1);
+			}
+		}
+
+		TEST_METHOD(Set)
+		{
+			CREATE_TEST_VARS
+
+			{
+				Datum datum;
+				Assert::ExpectException<std::exception>([&datum, &int1] {datum.Set(int1);});
+				datum.SetType(DatumType::Integer);
+				datum.SetSize(3);
+				datum.Set(int1);
+				datum.Set(int2, 1);
+				Assert::AreEqual(datum.Size(), 3U);
+				Assert::AreEqual(datum.GetInteger(), int1);
+				Assert::AreEqual(datum.GetInteger(1), int2);
+
+				Datum datum2;
+				datum2.SetStorage(externalInts, 3);
+				Assert::ExpectException<std::exception>([&datum2, &int1]{datum2.Set(int1);});
+			}
+
+			{
+				Datum datum;
+				Assert::ExpectException<std::exception>([&datum, &float1] {datum.Set(float1); });
+				datum.SetType(DatumType::Float);
+				datum.SetSize(3);
+				datum.Set(float1);
+				datum.Set(float2, 1);
+				Assert::AreEqual(datum.Size(), 3U);
+				Assert::AreEqual(datum.GetFloat(), float1);
+				Assert::AreEqual(datum.GetFloat(1), float2);
+
+				Datum datum2;
+				datum2.SetStorage(externalFloats, 3);
+				Assert::ExpectException<std::exception>([&datum2, &float1] {datum2.Set(float1); });
+			}
+
+			{
+				Datum datum;
+				Assert::ExpectException<std::exception>([&datum, &vector1] {datum.Set(vector1); });
+				datum.SetType(DatumType::Vector);
+				datum.SetSize(3);
+				datum.Set(vector1);
+				datum.Set(vector2, 1);
+				Assert::AreEqual(datum.Size(), 3U);
+				Assert::AreEqual(datum.GetVector(), vector1);
+				Assert::AreEqual(datum.GetVector(1), vector2);
+
+				Datum datum2;
+				datum2.SetStorage(externalVectors, 3);
+				Assert::ExpectException<std::exception>([&datum2, &vector1] {datum2.Set(vector1); });
+			}
+
+			{
+				Datum datum;
+				Assert::ExpectException<std::exception>([&datum, &matrix1] {datum.Set(matrix1); });
+				datum.SetType(DatumType::Matrix);
+				datum.SetSize(3);
+				datum.Set(matrix1);
+				datum.Set(matrix2, 1);
+				Assert::AreEqual(datum.Size(), 3U);
+				Assert::AreEqual(datum.GetMatrix(), matrix1);
+				Assert::AreEqual(datum.GetMatrix(1), matrix2);
+
+				Datum datum2;
+				datum2.SetStorage(externalMatrices, 3);
+				Assert::ExpectException<std::exception>([&datum2, &matrix1] {datum2.Set(matrix1); });
+			}
+
+			{
+				Datum datum;
+				Assert::ExpectException<std::exception>([&datum, &string1] {datum.Set(string1); });
+				datum.SetType(DatumType::String);
+				datum.SetSize(3);
+				datum.Set(string1);
+				datum.Set(string2, 1);
+				Assert::AreEqual(datum.Size(), 3U);
+				Assert::AreEqual(datum.GetString(), string1);
+				Assert::AreEqual(datum.GetString(1), string2);
+
+				Datum datum2;
+				datum2.SetStorage(externalStrings, 3);
+				Assert::ExpectException<std::exception>([&datum2, &string1] {datum2.Set(string1); });
+			}
+
+			{
+				Datum datum;
+				Assert::ExpectException<std::exception>([&datum, &pointer1] {datum.Set(pointer1); });
+				datum.SetType(DatumType::Pointer);
+				datum.SetSize(3);
+				datum.Set(pointer1);
+				datum.Set(pointer2, 1);
+				Assert::AreEqual(datum.Size(), 3U);
+				Assert::AreEqual(datum.GetPointer(), pointer1);
+				Assert::AreEqual(datum.GetPointer(1), pointer2);
+
+				Datum datum2;
+				datum2.SetStorage(externalPointers, 3);
+				Assert::ExpectException<std::exception>([&datum2, &pointer1] {datum2.Set(pointer1); });
+			}
+		}
+
+		TEST_METHOD(Get)
+		{
+			CREATE_TEST_VARS
+
+			{
+				Datum d;
 			}
 		}
 
