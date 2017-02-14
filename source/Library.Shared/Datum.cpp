@@ -572,6 +572,111 @@ namespace FieaGameEngine
 		}
 	}
 
+	void Datum::SetFromString(const std::string& text, std::uint32_t index)
+	{
+		static const std::uint32_t VEC4_ELEMENTS = 4U;
+		static const std::uint32_t MAT4_ELEMENTS = 16U;
+
+		if (mType == DatumType::Unknown)
+		{
+			throw std::exception("Cannot SetFromString() on a datum with no associated type.");
+		}
+
+		if (mExternal)
+		{
+			throw std::exception("Cannot SetFromString() on an external storage datum.");
+		}
+
+		if (index >= mSize)
+		{
+			throw std::exception("Index out of bounds.");
+		}
+
+		switch (mType)
+		{
+		case DatumType::Integer:
+			mData.i[index] = std::stoi(text);
+			break;
+		case DatumType::Float:
+			mData.f[index] = std::stof(text);
+			break;
+		case DatumType::Vector:
+			float vectorValues[VEC4_ELEMENTS];
+			scanf_s(text.c_str(), "%f %f %f", vectorValues[0], vectorValues[1], vectorValues[2] ,vectorValues[3]);
+			mData.v[index] = glm::vec4(vectorValues[0], vectorValues[1], vectorValues[2], vectorValues[3]);
+			break;
+		case DatumType::Matrix:
+			float matrixValues[MAT4_ELEMENTS];
+			scanf_s(text.c_str(), "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f",
+				matrixValues[0], matrixValues[1], matrixValues[2], matrixValues[3],
+				matrixValues[4], matrixValues[5], matrixValues[6], matrixValues[7],
+				matrixValues[8], matrixValues[9], matrixValues[10], matrixValues[11],
+				matrixValues[12], matrixValues[13], matrixValues[14], matrixValues[15]);
+			mData.m[index] = glm::mat4(matrixValues[0], matrixValues[1], matrixValues[2], matrixValues[3],
+										matrixValues[4], matrixValues[5], matrixValues[6], matrixValues[7],
+										matrixValues[8], matrixValues[9], matrixValues[10], matrixValues[11],
+										matrixValues[12], matrixValues[13], matrixValues[14], matrixValues[15]);
+			break;
+		case DatumType::String:
+			mData.s[index] = text;
+			break;
+		case DatumType::Pointer:
+			mData.p[index] = nullptr;
+			break;
+		}
+	}
+
+	std::string Datum::ToString(std::uint32_t index) const
+	{
+		static const std::uint32_t VEC4_ELEMENTS = 4U;
+		static const std::uint32_t MAT4_ELEMENTS = 16U;
+
+		if (mType == DatumType::Unknown)
+		{
+			throw std::exception("Cannot SetFromString() on a datum with no associated type.");
+		}
+
+		if (index >= mSize)
+		{
+			throw std::exception("Index out of bounds.");
+		}
+
+		std::string returnString;
+
+		switch (mType)
+		{
+		case DatumType::Integer:
+			returnString = std::to_string(mData.i[index]);
+			break;
+		case DatumType::Float:
+			returnString = std::to_string(mData.f[index]);
+			break;
+		case DatumType::Vector:
+		{
+			float* floats = glm::value_ptr(mData.v[index]);
+			for (std::uint32_t i = 0; i < VEC4_ELEMENTS; i++)
+			{
+				returnString += std::to_string(floats[i]);
+			}
+			break;
+		}
+		case DatumType::Matrix:
+		{
+			float* floats = glm::value_ptr(mData.m[index]);
+			for (std::uint32_t i = 0; i < MAT4_ELEMENTS; i++)
+			{
+				returnString += std::to_string(floats[i]);
+			}
+			break;
+		}
+		case DatumType::String:
+			returnString = mData.s[index];
+			break;
+		}
+
+		return returnString;
+	}
+
 	void Datum::PushBack(std::int32_t value)
 	{
 		if (mExternal)
