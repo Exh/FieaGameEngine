@@ -3,10 +3,10 @@
 #include <string>
 #include <glm/glm.hpp>
 
-class RTTI;
-
 namespace FieaGameEngine
 {
+	class RTTI;
+
 	enum class DatumType
 	{
 		Unknown = 0,
@@ -58,7 +58,6 @@ namespace FieaGameEngine
 		bool operator==(const std::string& rhs) const;
 		bool operator==(const RTTI*& rhs) const;
 
-
 		bool operator!=(const Datum& rhs) const;
 		bool operator!=(const std::int32_t& rhs) const;
 		bool operator!=(const float& rhs) const;
@@ -67,19 +66,27 @@ namespace FieaGameEngine
 		bool operator!=(const std::string& rhs) const;
 		bool operator!=(const RTTI*& rhs) const;
 
-		void Set(std::int32_t& value, std::uint32_t index = 0);
-		void Set(float& value, std::uint32_t index = 0);
-		void Set(glm::vec4& value, std::uint32_t index = 0);
-		void Set(glm::mat4& value, std::uint32_t index = 0);
-		void Set(std::string& value, std::uint32_t index = 0);
+		void Set(std::int32_t value, std::uint32_t index = 0);
+		void Set(float value, std::uint32_t index = 0);
+		void Set(const glm::vec4& value, std::uint32_t index = 0);
+		void Set(const glm::mat4& value, std::uint32_t index = 0);
+		void Set(const std::string& value, std::uint32_t index = 0);
 		void Set(RTTI* value, std::uint32_t index = 0);
 
-		template<typename T>
-		T& Get(std::uint32_t index = 0);
+		std::int32_t& GetInteger(std::uint32_t index = 0);
+		float& GetFloat(std::uint32_t index = 0);
+		glm::vec4& GetVector(std::uint32_t index = 0);
+		glm::mat4& GetMatrix(std::uint32_t index = 0);
+		std::string& GetString(std::uint32_t index = 0);
+		RTTI*& GetPointer(std::uint32_t index = 0);
 
-		template<typename T>
-		const T& Get(std::uint32_t index = 0) const;
-		
+		const std::int32_t& GetInteger(std::uint32_t index = 0) const;
+		const float& GetFloat(std::uint32_t index = 0) const;
+		const glm::vec4& GetVector(std::uint32_t index = 0) const;
+		const glm::mat4& GetMatrix(std::uint32_t index = 0) const;
+		const std::string& GetString(std::uint32_t index = 0) const;
+		const RTTI* const& GetPointer(std::uint32_t index = 0) const;
+
 		void SetFromString(std::string& text, std::uint32_t index = 0);
 
 		std::string ToString() const;
@@ -92,6 +99,14 @@ namespace FieaGameEngine
 		void PushBack(RTTI* value);
 
 	private:
+
+		void PreAssignment(DatumType type);
+
+		void PreGet(std::uint32_t index, DatumType type) const;
+
+		void PreSetStorage();
+
+		void PreSet(std::uint32_t index, DatumType type);
 
 		void Reserve(std::uint32_t capacity);
 

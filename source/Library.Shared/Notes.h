@@ -538,6 +538,16 @@ d = 60; // overwrites the element at 0th index with 60.
 	Get<RTTI*>() should return a RTTI*&
 
 	If you Get<string>() of a vector, it should 
+
+	ToString for pointers, can return null string or something.
+
+	If you call SetStorage on something that already has a type assigned... exception?
+
+	Does Set() auto expand? design decision. i wouldn't
+
+	external/internal storage would not matter when comparing two datums
+
+	just show that you can store an RTTI*.
 */
 
 noexcept // Says that this function will not throw an exception

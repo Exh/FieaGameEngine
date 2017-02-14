@@ -2,6 +2,8 @@
 
 #pragma region FooMethods
 
+std::uint64_t Foo::sRunTimeTypeId = 0;
+
 Foo::Foo() :
     mData(0),
     mHeapData(nullptr)

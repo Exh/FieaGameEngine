@@ -1,7 +1,11 @@
 #pragma once
 
-class Foo
+#include "RTTI.h"
+
+class Foo : public FieaGameEngine::RTTI
 {
+	RTTI_DECLARATIONS(Foo, FieaGameEngine::RTTI)
+
 public:
 
     Foo();

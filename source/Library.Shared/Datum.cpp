@@ -2,7 +2,6 @@
 
 namespace FieaGameEngine
 {
-
 	Datum::Datum() :
 		mType(DatumType::Unknown),
 		mExternal(false),
@@ -42,6 +41,80 @@ namespace FieaGameEngine
 		return *this;
 	}
 
+	void Datum::PreAssignment(DatumType type)
+	{
+		if (mType == DatumType::Unknown)
+		{
+			mType = type;
+		}
+
+		if (mType != type)
+		{
+			throw std::exception("Invalid type assignment.");
+		}
+
+		if (mSize == 0)
+		{
+			Reserve(1);
+			
+			switch (type)
+			{
+			case DatumType::Vector:
+				new (mData.v) glm::vec4();
+				break;
+			case DatumType::Matrix:
+				new (mData.m) glm::mat4();
+				break;
+			case DatumType::String:
+				new (mData.s) std::string();
+				break;
+			}
+			mSize = 1;
+		}
+	}
+
+	Datum& Datum::operator=(std::int32_t rhs)
+	{
+		PreAssignment(DatumType::Integer);
+		mData.i[0] = rhs;
+		return *this;
+	}
+
+	Datum& Datum::operator=(float rhs)
+	{
+		PreAssignment(DatumType::Float);
+		mData.f[0] = rhs;
+		return *this;
+	}
+
+	Datum& Datum::operator=(const glm::vec4& rhs)
+	{
+		PreAssignment(DatumType::Vector);
+		mData.v[0] = rhs;
+		return *this;
+	}
+
+	Datum& Datum::operator=(const glm::mat4& rhs)
+	{
+		PreAssignment(DatumType::Matrix);
+		mData.m[0] = rhs;
+		return *this;
+	}
+
+	Datum& Datum::operator=(const std::string& rhs)
+	{
+		PreAssignment(DatumType::String);
+		mData.s[0] = rhs;
+		return *this;
+	}
+
+	Datum& Datum::operator=(RTTI* rhs)
+	{
+		PreAssignment(DatumType::Pointer);
+		mData.p[0] = rhs;
+		return *this;
+	}
+
 	DatumType Datum::Type() const
 	{
 		return mType;
@@ -49,6 +122,11 @@ namespace FieaGameEngine
 
 	void Datum::SetType(DatumType type)
 	{
+		if (type == DatumType::Unknown)
+		{
+			throw std::exception("Cannot set datum type to Unknown");
+		}
+
 		if (mType == DatumType::Unknown ||
 			mType == type)
 		{
@@ -134,6 +212,219 @@ namespace FieaGameEngine
 		}
 
 		mSize = size;
+	}
+
+	void Datum::Clear()
+	{
+		if (!mExternal)
+		{
+			for (std::uint32_t i = 0; i < mSize; i++)
+			{
+				switch (mType)
+				{
+				case DatumType::String:
+					mData.s[i].std::string::~string();
+					break;
+				}
+			}
+		}
+
+		mSize = 0;
+		mExternal = false;
+	}
+
+	void Datum::SetStorage(std::int32_t* data, std::uint32_t size)
+	{
+		PreSetStorage();
+		mData.i = data;
+		mSize = size;
+		mCapacity = size;
+	}
+
+	void Datum::SetStorage(float* data, std::uint32_t size)
+	{
+		PreSetStorage();
+		mData.f = data;
+		mSize = size;
+		mCapacity = size;
+	}
+
+	void Datum::SetStorage(glm::vec4* data, std::uint32_t size)
+	{
+		PreSetStorage();
+		mData.v = data;
+		mSize = size;
+		mCapacity = size;
+	}
+
+	void Datum::SetStorage(glm::mat4* data, std::uint32_t size)
+	{
+		PreSetStorage();
+		mData.m = data;
+		mSize = size;
+		mCapacity = size;
+	}
+
+	void Datum::SetStorage(std::string* data, std::uint32_t size)
+	{
+		PreSetStorage();
+		mData.s = data;
+		mSize = size;
+		mCapacity = size;
+	}
+
+	void Datum::SetStorage(RTTI** data, std::uint32_t size)
+	{
+		PreSetStorage();
+		mData.p = data;
+		mSize = size;
+		mCapacity = size;
+	}
+
+	void Datum::PreSetStorage()
+	{
+		if (mType != DatumType::Unknown)
+		{
+			throw std::exception("Invalid datum type.");
+		}
+
+		assert(mSize == 0);
+		assert(mCapacity == 0);
+		assert(mData.vp == nullptr);
+		assert(mExternal == false);
+	}
+
+	void Datum::Set(std::int32_t value, std::uint32_t index)
+	{
+		PreSet(index, DatumType::Integer);
+		mData.i[index] = value;
+	}
+
+	void Datum::Set(float value, std::uint32_t index)
+	{
+		PreSet(index, DatumType::Float);
+		mData.f[index] = value;
+	}
+
+	void Datum::Set(const glm::vec4& value, std::uint32_t index)
+	{
+		PreSet(index, DatumType::Vector);
+		mData.v[index] = value;
+	}
+
+	void Datum::Set(const glm::mat4& value, std::uint32_t index)
+	{
+		PreSet(index, DatumType::Matrix);
+		mData.m[index] = value;
+	}
+
+	void Datum::Set(const std::string& value, std::uint32_t index)
+	{
+		PreSet(index, DatumType::String);
+		mData.s[index] = value;
+	}
+
+	void Datum::Set(RTTI* value, std::uint32_t index)
+	{
+		PreSet(index, DatumType::Pointer);
+		mData.p[index] = value;
+	}
+
+	void Datum::PreSet(std::uint32_t index, DatumType type)
+	{
+		if (index >= mSize)
+		{
+			throw std::exception("Index out of bounds.");
+		}
+
+		if (mType != type)
+		{
+			throw std::exception("Invalid type on Set().");
+		}
+	}
+
+	std::int32_t& Datum::GetInteger(std::uint32_t index)
+	{
+		PreGet(index, DatumType::Integer);
+		return mData.i[index];
+	}
+
+	float& Datum::GetFloat(std::uint32_t index)
+	{
+		PreGet(index, DatumType::Float);
+		return mData.f[index];
+	}
+
+	glm::vec4& Datum::GetVector(std::uint32_t index)
+	{
+		PreGet(index, DatumType::Vector);
+		return mData.v[index];
+	}
+	glm::mat4& Datum::GetMatrix(std::uint32_t index)
+	{
+		PreGet(index, DatumType::Matrix);
+		return mData.m[index];
+	}
+
+	std::string& Datum::GetString(std::uint32_t index)
+	{
+		PreGet(index, DatumType::String);
+		return mData.s[index];
+	}
+
+	RTTI*& Datum::GetPointer(std::uint32_t index)
+	{
+		PreGet(index, DatumType::Pointer);
+		return mData.p[index];
+	}
+
+	const std::int32_t& Datum::GetInteger(std::uint32_t index) const
+	{
+		PreGet(index, DatumType::Integer);
+		return mData.i[index];
+	}
+
+	const float& Datum::GetFloat(std::uint32_t index) const
+	{
+		PreGet(index, DatumType::Float);
+		return mData.f[index];
+	}
+
+	const glm::vec4& Datum::GetVector(std::uint32_t index) const
+	{
+		PreGet(index, DatumType::Vector);
+		return mData.v[index];
+	}
+
+	const glm::mat4& Datum::GetMatrix(std::uint32_t index) const
+	{
+		PreGet(index, DatumType::Matrix);
+		return mData.m[index];
+	}
+
+	const std::string& Datum::GetString(std::uint32_t index) const
+	{
+		PreGet(index, DatumType::String);
+		return mData.s[index];
+	}
+
+	const RTTI* const& Datum::GetPointer(std::uint32_t index) const
+	{
+		PreGet(index, DatumType::Pointer);
+		return mData.p[index];
+	}
+
+	void Datum::PreGet(std::uint32_t index, DatumType type) const
+	{
+		if (index >= mSize)
+		{
+			throw std::exception("Index out of bounds.");
+		}
+
+		if (mType != type)
+		{
+			throw std::exception("Invalid type.");
+		}
 	}
 
 	void Datum::PushBack(std::int32_t value)
@@ -309,8 +600,16 @@ namespace FieaGameEngine
 			void* previousBuffer = mData.vp;
 
 			mCapacity = capacity;
+			std::int32_t typeSize = GetDatumTypeSize();
+			mData.vp = malloc(mCapacity * typeSize);
 
-			/*mData.vp = malloc()*/
+			if (previousBuffer != nullptr)
+			{
+				memcpy(mData.vp, previousBuffer, typeSize * mSize);
+
+				free(previousBuffer);
+				previousBuffer = nullptr;
+			}
 		}
 	}
 
@@ -329,7 +628,7 @@ namespace FieaGameEngine
 		{
 			Reserve(rhs.mCapacity);
 
-			for (std::uint32_t i = 0; i < mSize; i++)
+			for (std::uint32_t i = 0; i < rhs.mSize; i++)
 			{
 				switch (mType)
 				{
@@ -356,6 +655,9 @@ namespace FieaGameEngine
 				}
 			}
 		}
+
+		mSize = rhs.mSize;
+		mCapacity = rhs.mCapacity;
 	}
 
 	void Datum::ExpandInternalStorage()
@@ -393,5 +695,34 @@ namespace FieaGameEngine
 			mSize = 0;
 			mCapacity = 0;
 		}
+	}
+
+	std::uint32_t Datum::GetDatumTypeSize()
+	{
+		std::uint32_t size = 0;
+
+		switch (mType)
+		{
+		case DatumType::Integer:
+			size = sizeof(std::int32_t);
+			break;
+		case DatumType::Float:
+			size = sizeof(float);
+			break;
+		case DatumType::Vector:
+			size = sizeof(glm::vec4);
+			break;
+		case DatumType::Matrix:
+			size = sizeof(glm::mat4);
+			break;
+		case DatumType::String:
+			size = sizeof(std::string);
+			break;
+		case DatumType::Pointer:
+			size = sizeof(RTTI*);
+			break;
+		}
+
+		return size;
 	}
 }
