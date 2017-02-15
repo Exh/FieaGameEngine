@@ -800,6 +800,29 @@ namespace FieaGameEngine
 		}
 	}
 
+	bool Datum::Remove(std::uint32_t index)
+	{
+		return false;
+	}
+
+	std::uint32_t Datum::Remove(Scope* value)
+	{
+		if (mType != DatumType::Scope)
+		{
+			throw std::exception("Cannot remove a scope from a Non-Scope typed Datum.");
+		}
+
+		// Remove all instances of the scope from the datum.
+		for (std::uint32_t i = 0; i < mSize; i++)
+		{
+			if (mData.sc[i] == value)
+			{
+				memmove(mData.sc + i, mBuffer + i + 1, (mSize - i - 1) * sizeof(Scope*));
+			}
+			--i;
+		}
+	}
+
 	Scope& Datum::operator[](std::uint32_t index)
 	{
 		return *GetScope(index);

@@ -607,4 +607,5 @@ static const DeleteFunction DeleteFunctions[static_cast<int>(DatumType::End)];
 /** 
 	Scope TODOs:
 	[ ] Ensure Scope pointers cannot be nullptr in a Datum.
+	[ ] Is my deep copy correct? Does deep copy need to copy entire tree. What about the mParent pointer?
 */

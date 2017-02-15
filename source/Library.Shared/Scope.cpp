@@ -31,11 +31,36 @@ namespace FieaGameEngine
 	void Scope::Destroy()
 	{
 		// Find all child scopes and destroy them
+		for (auto entry : mVector)
+		{
+			Datum& datum = entry->second;
+
+			if (datum.Type() == DatumType:Scope)
+			{
+				for (std::uint32_t i = 0; i < datum.Size(); i++)
+				{
+					datum[i].Destroy();
+					datum[i] = nullptr;
+				}
+			}
+		}
 	}
 
 	void Scope::DeepCopy(const Scope& rhs)
 	{
+		// This will copy the datums between the vector/maps of each scope
+		for (auto& entry : rhs.mVector)
+		{
+			MapType::Iterator it = mMap.Insert(EntryType(entry->first, entry->second));
+			mVector.PushBack(&(*it));
+		}
 
+		// Scope pointers are shallow? Need to copy each child scope
+
+
+		// Parent should always be nullptr
+		mParent = nullptr;
+		
 	}
 
 	Datum* Scope::Find(const std::string& name)
@@ -105,8 +130,8 @@ namespace FieaGameEngine
 	Scope& Scope::AppendScope(const std::string& name)
 	{
 		bool inserted = false;
-
-		Datum& datum = mMap.Insert(EntryType(name, Datum()), &inserted);
+;
+		Datum& datum = Append(name);
 
 		if (datum.Type() == DatumType::Unknown)
 		{
@@ -124,11 +149,74 @@ namespace FieaGameEngine
 		scope->mParent = this;
 	}
 
-	void Scope::Adopt(Scope& scope, const std::string& name, std::uint32_t index)
+	void Scope::Adopt(Scope& scope, const std::string& name)
 	{
 		scope.Orphan();
 
-		mMap.Insert(EntryType(name, index));
+		Datum& datum = Append(name);
+
+		if (datum.Type() == DatumType::Unknown)
+		{
+			datum.SetType(DatumType::Scope);
+		}
+
+		if (datum.Type() != DatumType::Scope)
+		{
+			throw std::exception("Adopting a scope at a key that corresponds to a non-Scope Datum.");
+		}
+
+		datum.PushBack(scope);
+	}
+
+	Datum& Scope::operator[](const std::string& name)
+	{
+		return Append(name);
+	}
+
+	Datum& Scope::operator[](std::uint32_t index)
+	{
+		return const_cast<Datum&>(const_cast<const Scope*>(this)->operator[](index));
+	}
+
+	const Datum& operator[](std::uin32_t index)
+	{
+		if (index >= mVector.Size())
+		{
+			throw std::exception("Index out of bounds.");
+		}
+
+		return mVector[index]->second;
+	}
+
+	bool Scope::operator==(const Scope& rhs)
+	{
+		if (mVector.Size() != rhs.mVector.Size())
+		{
+			return false;
+		}
+
+		if (mVector.Size() == rhs.mVector.Size())
+		{
+			for (int i = 0; i < mVector.Size(); i++)
+			{
+				if (mVector[i]->second != rhs.mVector[i]->second)
+				{
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	bool Scope::operator!=(const Scope& rhs)
+	{
+		return !operator==(rhs);
+	}
+
+	Scope* Scope::GetParent()
+	{
+		return mParent;
 	}
 
 	void Scope::Orphan()
@@ -140,15 +228,10 @@ namespace FieaGameEngine
 				if (entry->second.Type() == DatumType::Scope)
 				{
 					entry->second.Remove(this);
-					//for (std::uint32_t i = 0; i < entry->second.Size(); i++)
-					//{
-					//	if (entry->second.GetScope(i) == this)
-					//	{
-					//		entry->second.Remove(i);
-					//	}
-					//}
 				}
 			}
+
+			mParent = nullptr;
 		}
 	}
 }

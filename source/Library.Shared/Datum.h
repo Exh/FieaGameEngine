@@ -329,6 +329,9 @@ namespace FieaGameEngine
 		void PushBack(RTTI* value);
 		void PushBack(Scope* value); 
 
+		bool Remove(std::uint32_t index);
+		std::uint32_t Remove(Scope* value);
+
 		Scope& operator[](std::uint32_t index);
 		const Scope& operator[](std::uint32_t index) const;
 

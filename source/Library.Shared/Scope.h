@@ -36,7 +36,7 @@ namespace FieaGameEngine
 
 		Scope& AppendScope(const std::string& name);
 
-		void Adopt(Scope& scope, const std::string& name, std::uint32_t index);
+		void Adopt(Scope& scope, const std::string& name);
 
 		Scope* GetParent();
 
@@ -50,7 +50,7 @@ namespace FieaGameEngine
 
 		bool operator!=(const Scope& rhs);
 
-		std::string FindName(const Scope* scope);
+		//std::string FindName(const Scope* scope);
 
 	private:
 
@@ -63,6 +63,5 @@ namespace FieaGameEngine
 		HashMap<std::string, Datum> mMap;
 		Vector<EntryType*> mVector;
 		Scope* mParent;
-
 	};
 }
