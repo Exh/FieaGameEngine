@@ -12,10 +12,11 @@ namespace FieaGameEngine
 		RTTI_DECLARATIONS(Scope, RTTI)
 
 		typedef std::pair<std::string, Datum> EntryType;
+		typedef HashMap<std::string, Datum> MapType;
 
 	public:
 
-		Scope(std::uint32_t capacity = 0);
+		Scope(std::uint32_t capacity = 0) explicit;
 
 		virtual ~Scope();
 
@@ -23,9 +24,9 @@ namespace FieaGameEngine
 
 		Scope& operator=(const Scope& rhs);
 
-		Scope* Find(const std::string& name);
+		Datum* Find(const std::string& name);
 
-		const Scope* Find(const std::string& name) const;
+		const Datum* Find(const std::string& name) const;
 
 		Datum* Search(const std::string& name, Scope** scope = nullptr);
 
@@ -33,7 +34,7 @@ namespace FieaGameEngine
 
 		Datum& Append(const std::string& name);
 
-		Scope& Append(const std::string& name);
+		Scope& AppendScope(const std::string& name);
 
 		void Adopt(Scope& scope, const std::string& name, std::uint32_t index);
 
@@ -57,8 +58,10 @@ namespace FieaGameEngine
 
 		void Destroy();
 
+		void DeepCopy(const Scope& rhs);
+
 		HashMap<std::string, Datum> mMap;
-		Vector<EntryType> mVector;
+		Vector<EntryType*> mVector;
 		Scope* mParent;
 
 	};

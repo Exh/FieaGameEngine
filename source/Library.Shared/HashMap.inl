@@ -77,7 +77,7 @@ namespace FieaGameEngine
 	}
 
 	template<typename TKey, typename TValue, typename THash>
-	typename HashMap<TKey, TValue, THash>::Iterator HashMap<TKey, TValue, THash>::Insert(const PairType& pair)
+	typename HashMap<TKey, TValue, THash>::Iterator HashMap<TKey, TValue, THash>::Insert(const PairType& pair, bool* inserted)
 	{
 		std::uint32_t index = mHash(pair.first) % mCapacity;
 
@@ -85,11 +85,19 @@ namespace FieaGameEngine
 		{
 			if ((*it).first == pair.first)
 			{
+				if (inserted != nullptr)
+				{
+					*inserted = false;
+				}
 				return Iterator(this, index, it);
 			}
 		}
 
 		// If the same key was not found, then we can add a new key.
+		if (inserted != nullptr)
+		{
+			*inserted = true;
+		}
 		mSize++;
 		return Iterator(this, index, mArray[index].PushBack(pair));
 	}

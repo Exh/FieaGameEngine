@@ -15,6 +15,7 @@
 // Project Header Files
 #include "SList.h"
 #include "Datum.h"
+#include "Scope.h"
 
 // GLM
 #include "glm/glm.hpp"

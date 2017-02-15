@@ -60,10 +60,12 @@ namespace FieaGameEngine
 			new pair is inserted.
 			@param pair Pair of values where first is a TKey value and second is
 				a TValue value.
+			@param inserted Output parameter that will be true if the pair was actually
+				inserted. False otherwise (same key already exists.)
 			@return an iterator that points to the newly inserted element, or the 
 				already existing pair with the same key. 
 		*/
-		Iterator Insert(const PairType& pair);
+		Iterator Insert(const PairType& pair, bool* inserted = nullptr);
 
 		/** Returns a reference to the value associated with the provided key.
 			If there is no key matching the provided key already in the hash map, 

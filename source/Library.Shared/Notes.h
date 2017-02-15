@@ -603,3 +603,8 @@ static const DeleteFunction DeleteFunctions[static_cast<int>(DatumType::End)];
 	std::make_shared 
 	Hides the "new" keyword.
 */
+
+/** 
+	Scope TODOs:
+	[ ] Ensure Scope pointers cannot be nullptr in a Datum.
+*/
