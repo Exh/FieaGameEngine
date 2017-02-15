@@ -115,6 +115,13 @@ namespace FieaGameEngine
 		return *this;
 	}
 
+	Datum& Datum::operator=(Scope* rhs)
+	{
+		PreAssignment(DatumType::Scope);
+		mData.sc[0] = rhs;
+		return *this;
+	}
+
 	DatumType Datum::Type() const
 	{
 		return mType;
@@ -206,6 +213,9 @@ namespace FieaGameEngine
 					break;
 				case DatumType::Pointer:
 					mData.p[i] = nullptr;
+					break;
+				case DatumType::Scope:
+					mData.sc[i] = nullptr;
 					break;
 				}
 			}
@@ -399,6 +409,17 @@ namespace FieaGameEngine
 		return mData.p[0] == rhs;
 	}
 
+	bool Datum::operator==(const Scope* const& rhs) const
+	{
+		if (mSize == 0 ||
+			mType != DatumType::Scope)
+		{
+			return false;
+		}
+
+		return mData.sc[0] == rhs;
+	}
+
 	bool Datum::operator!=(const Datum& rhs) const
 	{
 		return !operator==(rhs);
@@ -430,6 +451,11 @@ namespace FieaGameEngine
 	}
 
 	bool Datum::operator!=(const RTTI* const& rhs) const
+	{
+		return !operator==(rhs);
+	}
+
+	bool Datum::operator!=(const Scope* const& rhs) const
 	{
 		return !operator==(rhs);
 	}
@@ -470,6 +496,12 @@ namespace FieaGameEngine
 		mData.p[index] = value;
 	}
 
+	void Datum::Set(Scope* value, std::uint32_t index)
+	{
+		PreSet(index, DatumType::Scope);
+		mData.sc[index] = value;
+	}
+
 	void Datum::PreSet(std::uint32_t index, DatumType type)
 	{
 		if (index >= mSize)
@@ -481,11 +513,6 @@ namespace FieaGameEngine
 		{
 			throw std::exception("Invalid type on Set().");
 		}
-
-		//if (mExternal)
-		//{
-		//	throw std::exception("Cannot Set() on external storage datum.");
-		//}
 	}
 
 	std::int32_t& Datum::GetInteger(std::uint32_t index)
@@ -523,6 +550,12 @@ namespace FieaGameEngine
 		return mData.p[index];
 	}
 
+	Scope*& Datum::GetScope(std::uint32_t index)
+	{
+		PreGet(index, DatumType::Scope);
+		return mData.sc[index];
+	}
+
 	const std::int32_t& Datum::GetInteger(std::uint32_t index) const
 	{
 		PreGet(index, DatumType::Integer);
@@ -557,6 +590,12 @@ namespace FieaGameEngine
 	{
 		PreGet(index, DatumType::Pointer);
 		return mData.p[index];
+	}
+
+	const Scope* const& Datum::GetScope(std::uint32_t index) const
+	{
+		PreGet(index, DatumType::Scope);
+		return mData.sc[index];
 	}
 
 	void Datum::PreGet(std::uint32_t index, DatumType type) const
@@ -623,6 +662,9 @@ namespace FieaGameEngine
 		case DatumType::Pointer:
 			mData.p[index] = nullptr;
 			break;
+		case DatumType::Scope:
+			throw std::exception("Cannot interpret Scope from string.");
+			break;
 		}
 	}
 
@@ -681,25 +723,7 @@ namespace FieaGameEngine
 
 	void Datum::PushBack(std::int32_t value)
 	{
-		if (mExternal)
-		{
-			throw std::exception("Cannot PushBack on Datum with external storage.");
-		}
-
-		if (mType == DatumType::Unknown)
-		{
-			SetType(DatumType::Integer);
-		}
-
-		if (mType != DatumType::Integer)
-		{
-			throw std::exception("Invalid Datum type.");
-		}
-
-		if (mSize == mCapacity)
-		{
-			ExpandInternalStorage();
-		}
+		PrePushBack(DatumType::Integer);
 
 		new (mData.i + mSize) std::int32_t(value);
 		mSize++;
@@ -707,25 +731,7 @@ namespace FieaGameEngine
 
 	void Datum::PushBack(float value)
 	{
-		if (mExternal)
-		{
-			throw std::exception("Cannot PushBack on Datum with external storage.");
-		}
-
-		if (mType == DatumType::Unknown)
-		{
-			SetType(DatumType::Float);
-		}
-
-		if (mType != DatumType::Float)
-		{
-			throw std::exception("Invalid Datum type.");
-		}
-
-		if (mSize == mCapacity)
-		{
-			ExpandInternalStorage();
-		}
+		PrePushBack(DatumType::Float);
 
 		new (mData.f + mSize) float(value);
 		mSize++;
@@ -733,25 +739,7 @@ namespace FieaGameEngine
 
 	void Datum::PushBack(glm::vec4& value)
 	{
-		if (mExternal)
-		{
-			throw std::exception("Cannot PushBack on Datum with external storage.");
-		}
-
-		if (mType == DatumType::Unknown)
-		{
-			SetType(DatumType::Vector);
-		}
-
-		if (mType != DatumType::Vector)
-		{
-			throw std::exception("Invalid Datum type.");
-		}
-
-		if (mSize == mCapacity)
-		{
-			ExpandInternalStorage();
-		}
+		PrePushBack(DatumType::Vector);
 
 		new (mData.v + mSize) glm::vec4(value);
 		mSize++;
@@ -759,25 +747,7 @@ namespace FieaGameEngine
 
 	void Datum::PushBack(glm::mat4& value)
 	{
-		if (mExternal)
-		{
-			throw std::exception("Cannot PushBack on Datum with external storage.");
-		}
-
-		if (mType == DatumType::Unknown)
-		{
-			SetType(DatumType::Matrix);
-		}
-
-		if (mType != DatumType::Matrix)
-		{
-			throw std::exception("Invalid Datum type.");
-		}
-
-		if (mSize == mCapacity)
-		{
-			ExpandInternalStorage();
-		}
+		PrePushBack(DatumType::Matrix);
 
 		new (mData.m + mSize) glm::mat4(value);
 		mSize++;
@@ -785,31 +755,29 @@ namespace FieaGameEngine
 
 	void Datum::PushBack(std::string& value)
 	{
-		if (mExternal)
-		{
-			throw std::exception("Cannot PushBack on Datum with external storage.");
-		}
-
-		if (mType == DatumType::Unknown)
-		{
-			SetType(DatumType::String);
-		}
-
-		if (mType != DatumType::String)
-		{
-			throw std::exception("Invalid Datum type.");
-		}
-
-		if (mSize == mCapacity)
-		{
-			ExpandInternalStorage();
-		}
+		PrePushBack(DatumType::String);
 
 		new (mData.s + mSize) std::string(value);
 		mSize++;
 	}
 
 	void Datum::PushBack(RTTI* value)
+	{
+		PrePushBack(DatumType::Pointer);
+
+		new (mData.p + mSize) RTTI*(value);
+		mSize++;
+	}
+
+	void Datum::PushBack(Scope* value)
+	{
+		PrePushBack(DatumType::Scope);
+
+		new (mData.sc + mSize) Scope*(value);
+		mSize++;
+	}
+
+	void Datum::PrePushBack(DatumType type)
 	{
 		if (mExternal)
 		{
@@ -818,10 +786,10 @@ namespace FieaGameEngine
 
 		if (mType == DatumType::Unknown)
 		{
-			SetType(DatumType::Pointer);
+			SetType(type);
 		}
 
-		if (mType != DatumType::Pointer)
+		if (mType != type)
 		{
 			throw std::exception("Invalid Datum type.");
 		}
@@ -830,9 +798,16 @@ namespace FieaGameEngine
 		{
 			ExpandInternalStorage();
 		}
+	}
 
-		new (mData.p + mSize) RTTI*(value);
-		mSize++;
+	Scope& Datum::operator[](std::uint32_t index)
+	{
+		return *GetScope(index);
+	}
+
+	const Scope& Datum::operator[](std::uint32_t index) const
+	{
+		return *GetScope(index);
 	}
 
 	void Datum::Reserve(std::uint32_t capacity)
@@ -901,6 +876,9 @@ namespace FieaGameEngine
 					break;
 				case DatumType::Pointer:
 					PushBack(*(rhs.mData.p + i));
+					break;
+				case DatumType::Scope:
+					PushBack(*(rhs.mData.sc + i));
 					break;
 				default:
 					break;
@@ -972,6 +950,9 @@ namespace FieaGameEngine
 			break;
 		case DatumType::Pointer:
 			size = sizeof(RTTI*);
+			break;
+		case DatumType::Scope:
+			size = sizeof(Scope*);
 			break;
 		}
 

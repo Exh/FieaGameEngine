@@ -577,8 +577,29 @@ Should never be able to change the key of string,Datum pair.
 
 Search will be recursive and look up the tree.
 
-Most complilcated part of assignment:
+Most complicated part of assignment:
 When you have datums of type Table, all the pointers in there... you own them.
 Makse sure that two scopes dont think that they have the same child
 Scope** element in the Datum union
+
+When comparing two RTTI pointers, first you need to check to make sure that they are 
+non-null, and then you can dereference and use their comparison operators.
+
+Paul's scope pointer array in datum cannot contain any nullptrs.
+When calling SetSize()...?? Maybe don't allow set size on scope
+
+When destroying scopes, scopes must delete their child scopes
+scopes need to be able to be deep copied.
+
+*/
+
+typedef void(Datum::*DeleteFunction)();
+static const DeleteFunction DeleteFunctions[static_cast<int>(DatumType::End)];
+
+/*
+	Is RAII always best option? Allocating graphics memory in constructor?
+
+	std::make_unique
+	std::make_shared 
+	Hides the "new" keyword.
 */

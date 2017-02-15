@@ -5,6 +5,7 @@
 
 namespace FieaGameEngine
 {
+	class Scope;
 	class RTTI;
 
 	enum class DatumType
@@ -16,7 +17,8 @@ namespace FieaGameEngine
 		Matrix,
 		Table,
 		String,
-		Pointer
+		Pointer,
+		Scope
 	};
 
 	class Datum final
@@ -75,6 +77,12 @@ namespace FieaGameEngine
 		@except exception If the function parameter type does not match this Datum's type.
 		@param rhs Scalar value to assign at index 0*/
 		Datum& operator=(RTTI* rhs);
+
+		/** Assignment Operator for deep copying a single element. If the 
+		Datum's size is 0, this will increase its size to 1.
+		@except exception If the function parameter type does not match this Datum's type.
+		@param rhs Scalar value to assign at index 0*/
+		Datum& operator=(Scope* rhs);
 
 		/** Gets the type that is associated with this Datum. 
 		@return This Datum's type. */
@@ -188,6 +196,12 @@ namespace FieaGameEngine
 		@return True if first element is equivalent to rhs*/
 		bool operator==(const RTTI* const& rhs) const;
 
+		/** Scalar equality operator used to compare the first element 
+		stored by this Datum.
+		@param rhs Scalar value to compare against
+		@return True if first element is equivalent to rhs*/
+		bool operator==(const Scope* const& rhs) const;
+
 		/** Scalar inequality operator used to compare the first element 
 		stored by this Datum.
 		@param rhs Scalar value to compare against
@@ -229,6 +243,12 @@ namespace FieaGameEngine
 		@param rhs Scalar value to compare against
 		@return True if first element is not equivalent to rhs*/
 		bool operator!=(const RTTI* const& rhs) const;
+
+		/** Scalar inequality operator used to compare the first element 
+		stored by this Datum.
+		@param rhs Scalar value to compare against
+		@return True if first element is not equivalent to rhs*/
+		bool operator!=(const Scope* const& rhs) const;
 
 		/** Sets the value at a given index.
 		@param value Scalar value to assign
@@ -272,6 +292,13 @@ namespace FieaGameEngine
 		@except exception If there is a type mismatch*/
 		void Set(RTTI* value, std::uint32_t index = 0);
 
+		/** Sets the value at a given index.
+		@param value Scalar value to assign
+		@param index The index to assign
+		@except exception If the index is out of the Datum's bounds.
+		@except exception If there is a type mismatch*/
+		void Set(Scope* value, std::uint32_t index = 0);
+
 		/** Scalar getters */
 		std::int32_t& GetInteger(std::uint32_t index = 0);
 		float& GetFloat(std::uint32_t index = 0);
@@ -279,6 +306,7 @@ namespace FieaGameEngine
 		glm::mat4& GetMatrix(std::uint32_t index = 0);
 		std::string& GetString(std::uint32_t index = 0);
 		RTTI*& GetPointer(std::uint32_t index = 0);
+		Scope*& GetScope(std::uint32_t index = 0);
 
 		/** Const scalar getters */
 		const std::int32_t& GetInteger(std::uint32_t index = 0) const;
@@ -287,6 +315,7 @@ namespace FieaGameEngine
 		const glm::mat4& GetMatrix(std::uint32_t index = 0) const;
 		const std::string& GetString(std::uint32_t index = 0) const;
 		const RTTI* const& GetPointer(std::uint32_t index = 0) const;
+		const Scope* const& GetScope(std::uint32_t index = 0) const;
 
 		void SetFromString(const std::string& text, std::uint32_t index = 0);
 
@@ -298,6 +327,10 @@ namespace FieaGameEngine
 		void PushBack(glm::mat4& value);
 		void PushBack(std::string& value);
 		void PushBack(RTTI* value);
+		void PushBack(Scope* value); 
+
+		Scope& operator[](std::uint32_t index);
+		const Scope& operator[](std::uint32_t index) const;
 
 	private:
 
@@ -310,6 +343,8 @@ namespace FieaGameEngine
 		void PostSetStorage(DatumType type, std::uint32_t size);
 
 		void PreSet(std::uint32_t index, DatumType type);
+
+		void PrePushBack(DatumType type);
 
 		void Reserve(std::uint32_t capacity);
 
@@ -337,6 +372,7 @@ namespace FieaGameEngine
 			glm::mat4* m;
 			std::string* s;
 			RTTI** p;
+			Scope** sc;
 			void* vp;
 		} mData;
 	};
