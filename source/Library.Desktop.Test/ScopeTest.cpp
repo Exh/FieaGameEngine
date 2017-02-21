@@ -338,11 +338,13 @@ namespace LibraryDesktopTest
 
 		TEST_METHOD(GetParent)
 		{
-			Scope scope1;
+			CREATE_TEST_VARS
+
 			Scope scope2;
 
 			Scope& child1 = scope1.AppendScope(KEY_CHILD1);
 			Assert::IsTrue(child1.GetParent() == &scope1);
+			Assert::IsTrue(constScope1->GetParent() == nullptr);
 
 			Scope& child2 = child1.AppendScope(KEY_CHILD2);
 			Assert::IsTrue(child2.GetParent() == &child1);

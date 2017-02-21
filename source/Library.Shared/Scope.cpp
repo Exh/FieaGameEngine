@@ -269,6 +269,11 @@ namespace FieaGameEngine
 		return mParent;
 	}
 
+	const Scope* Scope::GetParent() const
+	{
+		return mParent;
+	}
+
 	void Scope::Orphan()
 	{
 		if (mParent != nullptr)
