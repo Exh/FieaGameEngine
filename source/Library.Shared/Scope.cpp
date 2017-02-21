@@ -3,7 +3,9 @@
 
 namespace FieaGameEngine
 {
-	Scope::Scope(std::uint32_t capacity = 0) :
+	RTTI_DEFINITIONS(Scope)
+
+	Scope::Scope(std::uint32_t capacity) :
 		mParent(nullptr)
 	{
 		mVector.Reserve(capacity);
@@ -14,7 +16,8 @@ namespace FieaGameEngine
 		Destroy();
 	}
 
-	Scope::Scope(const Scope& rhs)
+	Scope::Scope(const Scope& rhs) : 
+		mParent(nullptr)
 	{
 		DeepCopy(rhs);
 	}
@@ -24,23 +27,27 @@ namespace FieaGameEngine
 		if (this != &rhs)
 		{
 			Destroy();
-			DeepCopy();
+			DeepCopy(rhs);
 		}
+
+		return *this;
 	}
 
 	void Scope::Destroy()
 	{
+		Orphan();
+
 		// Find all child scopes and destroy them
 		for (auto entry : mVector)
 		{
 			Datum& datum = entry->second;
 
-			if (datum.Type() == DatumType:Scope)
+			if (datum.Type() == DatumType::Scope)
 			{
 				for (std::uint32_t i = 0; i < datum.Size(); i++)
 				{
-					datum[i].Destroy();
-					datum[i] = nullptr;
+					delete datum.GetScope(i);
+					--i;
 				}
 			}
 		}
@@ -53,14 +60,25 @@ namespace FieaGameEngine
 		{
 			MapType::Iterator it = mMap.Insert(EntryType(entry->first, entry->second));
 			mVector.PushBack(&(*it));
+			Datum& datum = (*it).second;
+
+			// Need to recursively copy scopes
+			if (datum.Type() == DatumType::Scope)
+			{
+				for (std::uint32_t i = 0; i < datum.Size(); i++)
+				{
+					Scope*& scope = datum.GetScope(i);
+					Scope*& rhsScope = entry->second.GetScope(i);
+					
+					scope = new Scope();
+					scope->DeepCopy(*rhsScope);
+					datum.GetScope(i)->mParent = this;
+				}
+			}
 		}
-
-		// Scope pointers are shallow? Need to copy each child scope
-
 
 		// Parent should always be nullptr
 		mParent = nullptr;
-		
 	}
 
 	Datum* Scope::Find(const std::string& name)
@@ -75,7 +93,7 @@ namespace FieaGameEngine
 
 		if (it != mMap.end())
 		{
-			datum = (*it).first;
+			datum = &((*it).second);
 		}
 
 		return datum;
@@ -86,24 +104,31 @@ namespace FieaGameEngine
 		return const_cast<Datum*>(const_cast<const Scope*>(this)->Search(name, scope));
 	}
 
-	const Datum* Scope::Search(const std::string& name, Scope** scope = nullptr) const
+	const Datum* Scope::Search(const std::string& name, Scope** scope) const
 	{
 		Datum* datum = nullptr;
+		bool found = false;
+
+		if (scope != nullptr)
+		{
+			*scope = nullptr;
+		}
 
 		for (auto value : mVector)
 		{
 			if (value->first == name)
 			{
 				datum = &value->second;
+				found = true;
 
 				if (scope != nullptr)
 				{
-					*scope = this;
+					*scope = const_cast<Scope*>(this);
 				}
 			}
 		}
 
-		if (foundScope == nullptr &&
+		if (!found &&
 			mParent != nullptr)
 		{
 			datum = mParent->Search(name, scope);
@@ -129,8 +154,6 @@ namespace FieaGameEngine
 
 	Scope& Scope::AppendScope(const std::string& name)
 	{
-		bool inserted = false;
-;
 		Datum& datum = Append(name);
 
 		if (datum.Type() == DatumType::Unknown)
@@ -147,25 +170,31 @@ namespace FieaGameEngine
 		datum.PushBack(scope);
 		
 		scope->mParent = this;
+
+		return *scope;
 	}
 
 	void Scope::Adopt(Scope& scope, const std::string& name)
 	{
-		scope.Orphan();
-
-		Datum& datum = Append(name);
-
-		if (datum.Type() == DatumType::Unknown)
+		if(this != &scope)
 		{
-			datum.SetType(DatumType::Scope);
-		}
+			Datum& datum = Append(name);
 
-		if (datum.Type() != DatumType::Scope)
-		{
-			throw std::exception("Adopting a scope at a key that corresponds to a non-Scope Datum.");
-		}
+			if (datum.Type() == DatumType::Unknown)
+			{
+				datum.SetType(DatumType::Scope);
+			}
 
-		datum.PushBack(scope);
+			if (datum.Type() != DatumType::Scope)
+			{
+				throw std::exception("Adopting a scope at a key that corresponds to a non-Scope Datum.");
+			}
+
+			scope.Orphan();
+			scope.mParent = this;
+
+			datum.PushBack(&scope);
+		}
 	}
 
 	Datum& Scope::operator[](const std::string& name)
@@ -178,7 +207,7 @@ namespace FieaGameEngine
 		return const_cast<Datum&>(const_cast<const Scope*>(this)->operator[](index));
 	}
 
-	const Datum& operator[](std::uin32_t index)
+	const Datum& Scope::operator[](std::uint32_t index) const
 	{
 		if (index >= mVector.Size())
 		{
@@ -188,20 +217,24 @@ namespace FieaGameEngine
 		return mVector[index]->second;
 	}
 
-	bool Scope::operator==(const Scope& rhs)
+	bool Scope::operator==(const Scope& rhs) const
 	{
-		if (mVector.Size() != rhs.mVector.Size())
+		if (this != &rhs)
 		{
-			return false;
-		}
-
-		if (mVector.Size() == rhs.mVector.Size())
-		{
-			for (int i = 0; i < mVector.Size(); i++)
+			if (mVector.Size() != rhs.mVector.Size())
 			{
-				if (mVector[i]->second != rhs.mVector[i]->second)
+				return false;
+			}
+
+			if (mVector.Size() == rhs.mVector.Size())
+			{
+				for (std::uint32_t i = 0; i < mVector.Size(); i++)
 				{
-					return false;
+					if (mVector[i]->first != rhs.mVector[i]->first ||
+						mVector[i]->second != rhs.mVector[i]->second)
+					{
+						return false;
+					}
 				}
 			}
 		}
@@ -209,7 +242,24 @@ namespace FieaGameEngine
 		return true;
 	}
 
-	bool Scope::operator!=(const Scope& rhs)
+	bool Scope::Equals(const RTTI* rhs) const
+	{
+		Scope* rhsScope = rhs->As<Scope>();
+
+		if (rhsScope != nullptr)
+		{
+			return operator==(*rhsScope);
+		}
+
+		return false;
+	}
+
+	std::string Scope::ToString() const
+	{
+		return std::to_string(mVector.Size());
+	}
+
+	bool Scope::operator!=(const Scope& rhs) const
 	{
 		return !operator==(rhs);
 	}
@@ -223,7 +273,7 @@ namespace FieaGameEngine
 	{
 		if (mParent != nullptr)
 		{
-			for (auto entry : mVector)
+			for (auto entry : mParent->mVector)
 			{
 				if (entry->second.Type() == DatumType::Scope)
 				{

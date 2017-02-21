@@ -2,83 +2,83 @@
 
 #pragma region FooMethods
 
-std::uint64_t Foo::sRunTimeTypeId = 0;
+RTTI_DEFINITIONS(Foo)
 
 Foo::Foo() :
-    mData(0),
-    mHeapData(nullptr)
+	mData(0),
+	mHeapData(nullptr)
 {
-    mHeapData = new int();
+	mHeapData = new int();
 }
 
 Foo::Foo(int data,
-         int heapData) :
-    mData(data),
-    mHeapData(nullptr)
+	int heapData) :
+	mData(data),
+	mHeapData(nullptr)
 {
-    mHeapData = new int(heapData);
+	mHeapData = new int(heapData);
 }
 
 Foo::~Foo()
 {
-    if (mHeapData != nullptr)
-    {
-        delete mHeapData;
-        mHeapData = nullptr;
-    }
+	if (mHeapData != nullptr)
+	{
+		delete mHeapData;
+		mHeapData = nullptr;
+	}
 }
 
 Foo::Foo(const Foo& rhs) :
-    mData(0),
-    mHeapData(nullptr)
+	mData(0),
+	mHeapData(nullptr)
 {
-    assert(rhs.mHeapData != nullptr);
+	assert(rhs.mHeapData != nullptr);
 
-    mData = rhs.mData;
-    mHeapData = new int(*rhs.mHeapData);
+	mData = rhs.mData;
+	mHeapData = new int(*rhs.mHeapData);
 }
 
 Foo& Foo::operator=(const Foo& rhs)
 {
-    if (this != &rhs)
-    {
-        assert(rhs.mHeapData != nullptr);
-        assert(mHeapData != nullptr);
-        mData = rhs.mData;
-        *mHeapData = *rhs.mHeapData;
-    }
+	if (this != &rhs)
+	{
+		assert(rhs.mHeapData != nullptr);
+		assert(mHeapData != nullptr);
+		mData = rhs.mData;
+		*mHeapData = *rhs.mHeapData;
+	}
 
-    return *this;
+	return *this;
 }
 
 bool Foo::operator==(const Foo& rhs) const
 {
-    assert(mHeapData != nullptr);
-    assert(rhs.mHeapData != nullptr);
+	assert(mHeapData != nullptr);
+	assert(rhs.mHeapData != nullptr);
 
-    return mData == rhs.mData &&
-            *mHeapData == *(rhs.mHeapData);
+	return mData == rhs.mData &&
+		*mHeapData == *(rhs.mHeapData);
 }
 
 int Foo::GetData() const
 {
-    return mData;
+	return mData;
 }
 
 int Foo::GetHeapData() const
 {
-    return *mHeapData;
+	return *mHeapData;
 }
 
 void Foo::SetData(int data)
 {
-    mData = data;
+	mData = data;
 }
 
 void Foo::SetHeapData(int data)
 {
-    assert(mHeapData != nullptr);
-    *mHeapData = data;
+	assert(mHeapData != nullptr);
+	*mHeapData = data;
 }
 
 #pragma endregion 

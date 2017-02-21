@@ -331,6 +331,18 @@ namespace FieaGameEngine
 					return false;
 				}
 				break;
+			case DatumType::Pointer:
+				if (!mData.p[i]->Equals(rhs.mData.p[i]))
+				{
+					return false;
+				}
+				break;
+			case DatumType::Scope:
+				if (!mData.p[i]->Equals(rhs.mData.p[i]))
+				{
+					return false;
+				}
+				break;
 			default:
 				if (memcmp(reinterpret_cast<char*>(mData.vp) + i, reinterpret_cast<char*>(rhs.mData.vp) + i, dataSize) != 0)
 				{
@@ -406,7 +418,7 @@ namespace FieaGameEngine
 			return false;
 		}
 
-		return mData.p[0] == rhs;
+		return mData.p[0]->Equals(rhs);
 	}
 
 	bool Datum::operator==(const Scope* const& rhs) const
@@ -417,7 +429,7 @@ namespace FieaGameEngine
 			return false;
 		}
 
-		return mData.sc[0] == rhs;
+		return mData.p[0]->Equals(rhs);
 	}
 
 	bool Datum::operator!=(const Datum& rhs) const
@@ -716,6 +728,9 @@ namespace FieaGameEngine
 		case DatumType::String:
 			returnString = mData.s[index];
 			break;
+		case DatumType::Scope:
+			//returnString = mData.sc[index]->();
+			break;
 		}
 
 		return returnString;
@@ -802,11 +817,14 @@ namespace FieaGameEngine
 
 	bool Datum::Remove(std::uint32_t index)
 	{
+		index;
 		return false;
 	}
 
 	std::uint32_t Datum::Remove(Scope* value)
 	{
+		std::uint32_t removeCount = 0;
+
 		if (mType != DatumType::Scope)
 		{
 			throw std::exception("Cannot remove a scope from a Non-Scope typed Datum.");
@@ -817,10 +835,14 @@ namespace FieaGameEngine
 		{
 			if (mData.sc[i] == value)
 			{
-				memmove(mData.sc + i, mBuffer + i + 1, (mSize - i - 1) * sizeof(Scope*));
+				removeCount++;
+				memmove(mData.sc + i, mData.sc + i + 1, (mSize - i - 1) * sizeof(Scope*));
+				--i;
+				mSize--;
 			}
-			--i;
 		}
+
+		return removeCount;
 	}
 
 	Scope& Datum::operator[](std::uint32_t index)
@@ -835,18 +857,18 @@ namespace FieaGameEngine
 
 	void Datum::Reserve(std::uint32_t capacity)
 	{
-		if (mExternal)
-		{
-			throw std::exception("Cannot reserve internal memory for an external Datum.");
-		}
-
-		if (mType == DatumType::Unknown)
-		{
-			throw std::exception("Cannot reserve internal memory for a typeless Datum.");
-		}
-
 		if (capacity > mCapacity)
 		{
+			if (mExternal)
+			{
+				throw std::exception("Cannot reserve internal memory for an external Datum.");
+			}
+
+			if (mType == DatumType::Unknown)
+			{
+				throw std::exception("Cannot reserve internal memory for a typeless Datum.");
+			}
+
 			void* previousBuffer = mData.vp;
 
 			mCapacity = capacity;

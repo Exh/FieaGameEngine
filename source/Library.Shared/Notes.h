@@ -607,5 +607,20 @@ static const DeleteFunction DeleteFunctions[static_cast<int>(DatumType::End)];
 /** 
 	Scope TODOs:
 	[ ] Ensure Scope pointers cannot be nullptr in a Datum.
-	[ ] Is my deep copy correct? Does deep copy need to copy entire tree. What about the mParent pointer?
+	[X] Is my deep copy correct? Does deep copy need to copy entire tree. What about the mParent pointer?
+	[X] Test RTTI methods for code coverage.
+	[X] ToString for a scope can be a dummy method.
+	[X] If a scope adopts itself, do nothing or throw exception.
+*/
+
+
+
+/* 
+	Attributed:
+
+	Keep an array of strings that are prescribed attributes?
+	
+	make a hash map of int, strings in static memory.
+	the int would be the RTTI class id, string is attribute name.
+
 */

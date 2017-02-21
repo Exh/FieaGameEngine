@@ -16,7 +16,7 @@ namespace FieaGameEngine
 
 	public:
 
-		Scope(std::uint32_t capacity = 0) explicit;
+		Scope(std::uint32_t capacity = 0);
 
 		virtual ~Scope();
 
@@ -44,13 +44,15 @@ namespace FieaGameEngine
 
 		Datum& operator[](std::uint32_t index);
 
-		const Datum& operator[](std::uin32_t index);
+		const Datum& operator[](std::uint32_t index) const;
 
-		bool operator==(const Scope& rhs);
+		bool operator==(const Scope& rhs) const;
 
-		bool operator!=(const Scope& rhs);
+		bool operator!=(const Scope& rhs) const;
 
-		//std::string FindName(const Scope* scope);
+		virtual bool Scope::Equals(const RTTI* rhs) const override;
+
+		virtual std::string ToString() const;
 
 	private:
 

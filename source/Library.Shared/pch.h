@@ -16,6 +16,7 @@
 #include "SList.h"
 #include "Datum.h"
 #include "Scope.h"
+#include "RTTI.h"
 
 // GLM
 #include "glm/glm.hpp"

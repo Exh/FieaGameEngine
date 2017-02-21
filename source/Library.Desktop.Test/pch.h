@@ -18,6 +18,8 @@
 #include "Vector.h"
 #include "HashMap.h"
 #include "Datum.h"
+#include "Scope.h"
+#include "RTTI.h"
 
 // Testing Headers
 #include "Foo.h"
