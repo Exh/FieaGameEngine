@@ -624,3 +624,60 @@ static const DeleteFunction DeleteFunctions[static_cast<int>(DatumType::End)];
 	the int would be the RTTI class id, string is attribute name.
 
 */
+
+
+/*
+	Single dispatch: implemented through the virtual table.
+*/
+
+class A
+{
+	int mInt;
+};
+
+class B
+{
+	float mFloat;
+};
+
+/* Replication is when class A and class B both derive from class Base
+
+"Write this down":
+Describe each of these four things:
+L-Value
+R-Value
+L-Value Reference
+R-Value Reference
+
+Also going to ask you about casting in C++.
+Four different types of casting.
+
+
+AddInternalSignature() - does datum creation when called.
+^ in the attributed class?
+Also make AddExternalAttribute()
+
+AddInternalAttribute
+
+^ 
+DO THIS METHOD INSTEAD. no signatures.
+Use protected helper methods for AddExternalAttribute and Add InternalAttribute.
+
+You can use a static hashmap in Attributed of unsigned int, Vector<std::string> that stores all prescribed attribute names
+
+Add a static function to clear the prescribed attribute cache hashmap.
+
+Cross cutting? Interdependency between software modules.
+
+Don't have a public interface for adding signatures to the Attributed class.
+
+Create a this pointer in Attributed class.
+
+Do move semantics last, least important.
+
+So apparently all of your classes need Move semantics. 
+Start with move semantics for SList, and test it first.
+And go one by one testing each move semantics.
+You should add an internal prescribed member to AttributedFoo.
+
+*/

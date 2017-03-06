@@ -139,6 +139,10 @@ namespace FieaGameEngine
 			@return The string version of this scope. */
 		virtual std::string ToString() const;
 
+	protected:
+
+		HashMap<std::string, Datum> mMap;
+
 	private:
 
 		void Orphan();
@@ -147,7 +151,6 @@ namespace FieaGameEngine
 
 		void DeepCopy(const Scope& rhs);
 
-		HashMap<std::string, Datum> mMap;
 		Vector<EntryType*> mVector;
 		Scope* mParent;
 	};

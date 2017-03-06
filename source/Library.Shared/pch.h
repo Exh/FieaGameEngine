@@ -14,9 +14,11 @@
 
 // Project Header Files
 #include "SList.h"
+#include "Vector.h"
 #include "Datum.h"
 #include "Scope.h"
 #include "RTTI.h"
+#include "Attributed.h"
 
 // GLM
 #include "glm/glm.hpp"
