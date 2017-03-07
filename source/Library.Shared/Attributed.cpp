@@ -8,7 +8,7 @@ namespace FieaGameEngine
 
 	Attributed::Attributed()
 	{
-	
+		Populate();
 	}
 
 	Attributed::~Attributed()
@@ -79,17 +79,17 @@ namespace FieaGameEngine
 		AppendPrescribedAttribute(key).PushBack(value);
 	}
 
-	void Attributed::AddInternalAttribute(const std::string& key, glm::vec4 value)
+	void Attributed::AddInternalAttribute(const std::string& key, const glm::vec4& value)
 	{
 		AppendPrescribedAttribute(key).PushBack(value);
 	}
 
-	void Attributed::AddInternalAttribute(const std::string& key, glm::mat4 value)
+	void Attributed::AddInternalAttribute(const std::string& key, const glm::mat4& value)
 	{
 		AppendPrescribedAttribute(key).PushBack(value);
 	}
 
-	void Attributed::AddInternalAttribute(const std::string& key, std::string value)
+	void Attributed::AddInternalAttribute(const std::string& key, const std::string& value)
 	{
 		AppendPrescribedAttribute(key).PushBack(value);
 	}

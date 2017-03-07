@@ -36,9 +36,9 @@ namespace FieaGameEngine
 
 		void AddInternalAttribute(const std::string& key, std::int32_t value);
 		void AddInternalAttribute(const std::string& key, float value);
-		void AddInternalAttribute(const std::string& key, glm::vec4 value);
-		void AddInternalAttribute(const std::string& key, glm::mat4 value);
-		void AddInternalAttribute(const std::string& key, std::string value);
+		void AddInternalAttribute(const std::string& key, const glm::vec4& value);
+		void AddInternalAttribute(const std::string& key, const glm::mat4& value);
+		void AddInternalAttribute(const std::string& key, const std::string& value);
 		void AddInternalAttribute(const std::string& key, RTTI* value);
 
 		void AddExternalAttribute(const std::string& key, std::int32_t* data, std::uint32_t size);

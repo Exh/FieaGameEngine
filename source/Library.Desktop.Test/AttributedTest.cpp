@@ -171,17 +171,18 @@ namespace LibraryDesktopTest
 
 		TEST_METHOD(Constructor)
 		{
-			Scope* scope = new Scope();
-			Scope* scope2 = new Scope(30);
+			CREATE_TEST_VARS
 
-			delete scope2;
-			delete scope;
+			AttributedFoo afoo;
+			afoo.IsAttribute(AttributedFoo::INTERNAL_INTEGER_KEY);
+			Assert::AreEqual(AttributedFoo::INTERNAL_INTEGER_DEFAULT, afoo[AttributedFoo::INTERNAL_INTEGER_KEY].GetInteger());
+
 		}
 
 		TEST_METHOD(CopySemantics)
 		{
 			CREATE_TEST_VARS
-				Scope scope2;
+
 		}
 
 

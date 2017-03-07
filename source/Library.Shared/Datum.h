@@ -323,9 +323,9 @@ namespace FieaGameEngine
 
 		void PushBack(std::int32_t value);
 		void PushBack(float value);
-		void PushBack(glm::vec4& value);
-		void PushBack(glm::mat4& value);
-		void PushBack(std::string& value);
+		void PushBack(const glm::vec4& value);
+		void PushBack(const glm::mat4& value);
+		void PushBack(const std::string& value);
 		void PushBack(RTTI* value);
 		void PushBack(Scope* value); 
 

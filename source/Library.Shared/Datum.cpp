@@ -752,7 +752,7 @@ namespace FieaGameEngine
 		mSize++;
 	}
 
-	void Datum::PushBack(glm::vec4& value)
+	void Datum::PushBack(const glm::vec4& value)
 	{
 		PrePushBack(DatumType::Vector);
 
@@ -760,7 +760,7 @@ namespace FieaGameEngine
 		mSize++;
 	}
 
-	void Datum::PushBack(glm::mat4& value)
+	void Datum::PushBack(const glm::mat4& value)
 	{
 		PrePushBack(DatumType::Matrix);
 
@@ -768,7 +768,7 @@ namespace FieaGameEngine
 		mSize++;
 	}
 
-	void Datum::PushBack(std::string& value)
+	void Datum::PushBack(const std::string& value)
 	{
 		PrePushBack(DatumType::String);
 
