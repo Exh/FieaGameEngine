@@ -8,7 +8,7 @@ namespace FieaGameEngine
 
 	Attributed::Attributed()
 	{
-		Populate();
+
 	}
 
 	Attributed::~Attributed()
@@ -27,11 +27,6 @@ namespace FieaGameEngine
 		return *this;
 	}
 
-	void Attributed::Populate()
-	{
-	
-	}
-
 	bool Attributed::IsPrescribedAttribute(const std::string& key) const
 	{
 		auto it = sPrescribedAttributeCache.Find(TypeIdInstance());
@@ -44,7 +39,7 @@ namespace FieaGameEngine
 		return false;
 	}
 
-	bool Attributed::IsAuxilaryAttribute(const std::string& key) const
+	bool Attributed::IsAuxiliaryAttribute(const std::string& key) const
 	{
 		return IsAttribute(key) && !IsPrescribedAttribute(key);
 	}
@@ -54,7 +49,7 @@ namespace FieaGameEngine
 		return (mMap.Find(key) != mMap.end());
 	}
 
-	Datum& Attributed::AddAuxilaryAttribute(const std::string& key)
+	Datum& Attributed::AddAuxiliaryAttribute(const std::string& key)
 	{
 		if (IsPrescribedAttribute(key))
 		{
@@ -133,7 +128,7 @@ namespace FieaGameEngine
 	{
 		Vector<std::string>& prescribedVector = sPrescribedAttributeCache[TypeIdInstance()];
 
-		if (prescribedVector.Find(key) != prescribedVector.end())
+		if (prescribedVector.Find(key) == prescribedVector.end())
 		{
 			prescribedVector.PushBack(key);
 		}

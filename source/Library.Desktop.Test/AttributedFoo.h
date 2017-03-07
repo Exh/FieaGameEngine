@@ -47,7 +47,7 @@ public:
 
 	bool operator==(const AttributedFoo& rhs) const;
 
-	virtual void Populate() override;
+	virtual void Populate();
 
 	class AttributedFooHashFunctor
 	{

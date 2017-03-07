@@ -6,6 +6,9 @@
 #define KEY_STRING1 "string1"
 #define KEY_CHILD1 "child1"
 #define KEY_CHILD2 "child2"
+#define AUXILIARY_KEY_1 "aux1"
+#define AUXILIARY_KEY_2 "aux2"
+#define AUXILIARY_KEY_3 "aux3"
 
 #define CREATE_TEST_VARS int32_t int1 = 10; \
 int32_t int2 = 20; \
@@ -174,7 +177,7 @@ namespace LibraryDesktopTest
 			CREATE_TEST_VARS
 
 			AttributedFoo afoo;
-			afoo.IsAttribute(AttributedFoo::INTERNAL_INTEGER_KEY);
+			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::INTERNAL_INTEGER_KEY));
 			Assert::AreEqual(AttributedFoo::INTERNAL_INTEGER_DEFAULT, afoo[AttributedFoo::INTERNAL_INTEGER_KEY].GetInteger());
 
 		}
@@ -183,6 +186,82 @@ namespace LibraryDesktopTest
 		{
 			CREATE_TEST_VARS
 
+		}
+
+		TEST_METHOD(IsAttributeMethods)
+		{
+			CREATE_TEST_VARS
+
+			AttributedFoo afoo;
+
+			// IsAttribute()
+			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::INTERNAL_INTEGER_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::INTERNAL_FLOAT_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::INTERNAL_VECTOR_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::INTERNAL_MATRIX_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::INTERNAL_STRING_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::INTERNAL_POINTER_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::EXTERNAL_INTEGER_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::EXTERNAL_FLOAT_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::EXTERNAL_VECTOR_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::EXTERNAL_MATRIX_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::EXTERNAL_STRING_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::EXTERNAL_POINTER_KEY));
+
+			// IsPrescribedAttribute()
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::INTERNAL_INTEGER_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::INTERNAL_FLOAT_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::INTERNAL_VECTOR_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::INTERNAL_MATRIX_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::INTERNAL_STRING_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::INTERNAL_POINTER_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::EXTERNAL_INTEGER_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::EXTERNAL_FLOAT_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::EXTERNAL_VECTOR_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::EXTERNAL_MATRIX_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::EXTERNAL_STRING_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::EXTERNAL_POINTER_KEY));
+
+			// IsAuxiliaryAttribute()
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::INTERNAL_INTEGER_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::INTERNAL_FLOAT_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::INTERNAL_VECTOR_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::INTERNAL_MATRIX_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::INTERNAL_STRING_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::INTERNAL_POINTER_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::EXTERNAL_INTEGER_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::EXTERNAL_FLOAT_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::EXTERNAL_VECTOR_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::EXTERNAL_MATRIX_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::EXTERNAL_STRING_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::EXTERNAL_POINTER_KEY));
+
+			// Test non existent keys
+			Assert::IsFalse(afoo.IsAttribute(AUXILIARY_KEY_1));
+			Assert::IsFalse(afoo.IsPrescribedAttribute(AUXILIARY_KEY_1));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AUXILIARY_KEY_1));
+			Assert::IsFalse(afoo.IsAttribute(AUXILIARY_KEY_2));
+			Assert::IsFalse(afoo.IsPrescribedAttribute(AUXILIARY_KEY_2));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AUXILIARY_KEY_2));
+			Assert::IsFalse(afoo.IsAttribute(AUXILIARY_KEY_3));
+			Assert::IsFalse(afoo.IsPrescribedAttribute(AUXILIARY_KEY_3));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AUXILIARY_KEY_3));
+
+			// Add auxiliary attributes
+			afoo.AddAuxiliaryAttribute(AUXILIARY_KEY_1);
+			afoo.AddAuxiliaryAttribute(AUXILIARY_KEY_2);
+			afoo.AddAuxiliaryAttribute(AUXILIARY_KEY_3);
+
+			// Test new auxiliary attributes
+			Assert::IsTrue(afoo.IsAttribute(AUXILIARY_KEY_1));
+			Assert::IsTrue(afoo.IsAttribute(AUXILIARY_KEY_2));
+			Assert::IsTrue(afoo.IsAttribute(AUXILIARY_KEY_3));
+			Assert::IsTrue(afoo.IsAuxiliaryAttribute(AUXILIARY_KEY_1));
+			Assert::IsTrue(afoo.IsAuxiliaryAttribute(AUXILIARY_KEY_2));
+			Assert::IsTrue(afoo.IsAuxiliaryAttribute(AUXILIARY_KEY_3));
+			Assert::IsFalse(afoo.IsPrescribedAttribute(AUXILIARY_KEY_1));
+			Assert::IsFalse(afoo.IsPrescribedAttribute(AUXILIARY_KEY_2));
+			Assert::IsFalse(afoo.IsPrescribedAttribute(AUXILIARY_KEY_3));
 		}
 
 

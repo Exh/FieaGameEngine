@@ -20,15 +20,13 @@ namespace FieaGameEngine
 
 		Attributed& operator=(const Attributed& rhs);
 
-		virtual void Populate();
-
 		bool IsPrescribedAttribute(const std::string& key) const;
 
-		bool IsAuxilaryAttribute(const std::string& key) const;
+		bool IsAuxiliaryAttribute(const std::string& key) const;
 
 		bool IsAttribute(const std::string& key) const;
 
-		Datum& AddAuxilaryAttribute(const std::string& key);
+		Datum& AddAuxiliaryAttribute(const std::string& key);
 
 		static void ClearPrescribedAttributeCache();
 
