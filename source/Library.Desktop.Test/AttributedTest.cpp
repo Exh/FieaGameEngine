@@ -207,6 +207,7 @@ namespace LibraryDesktopTest
 			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::EXTERNAL_MATRIX_KEY));
 			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::EXTERNAL_STRING_KEY));
 			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::EXTERNAL_POINTER_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::NESTED_SCOPE_KEY));
 
 			// IsPrescribedAttribute()
 			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::INTERNAL_INTEGER_KEY));
@@ -221,6 +222,7 @@ namespace LibraryDesktopTest
 			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::EXTERNAL_MATRIX_KEY));
 			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::EXTERNAL_STRING_KEY));
 			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::EXTERNAL_POINTER_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::NESTED_SCOPE_KEY));
 
 			// IsAuxiliaryAttribute()
 			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::INTERNAL_INTEGER_KEY));
@@ -235,16 +237,17 @@ namespace LibraryDesktopTest
 			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::EXTERNAL_MATRIX_KEY));
 			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::EXTERNAL_STRING_KEY));
 			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::EXTERNAL_POINTER_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::NESTED_SCOPE_KEY));
 
 			// Test non existent keys
 			Assert::IsFalse(afoo.IsAttribute(AUXILIARY_KEY_1));
-			Assert::IsFalse(afoo.IsPrescribedAttribute(AUXILIARY_KEY_1));
-			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AUXILIARY_KEY_1));
 			Assert::IsFalse(afoo.IsAttribute(AUXILIARY_KEY_2));
-			Assert::IsFalse(afoo.IsPrescribedAttribute(AUXILIARY_KEY_2));
-			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AUXILIARY_KEY_2));
 			Assert::IsFalse(afoo.IsAttribute(AUXILIARY_KEY_3));
+			Assert::IsFalse(afoo.IsPrescribedAttribute(AUXILIARY_KEY_1));
+			Assert::IsFalse(afoo.IsPrescribedAttribute(AUXILIARY_KEY_2));
 			Assert::IsFalse(afoo.IsPrescribedAttribute(AUXILIARY_KEY_3));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AUXILIARY_KEY_1));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AUXILIARY_KEY_2));
 			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AUXILIARY_KEY_3));
 
 			// Add auxiliary attributes
@@ -264,6 +267,56 @@ namespace LibraryDesktopTest
 			Assert::IsFalse(afoo.IsPrescribedAttribute(AUXILIARY_KEY_3));
 		}
 
+		TEST_METHOD(ExternalAssignment)
+		{
+			// Ensure that editing Datum assignment for external variables and c++ assignment
+			// both edit the same variables.
+			AttributedFoo afoo;
+
+			std::int32_t& value = afoo[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger();
+			Assert::AreEqual(afoo.mInteger, value);
+
+			value++;
+			Assert::AreEqual(afoo.mInteger, value);
+
+			afoo.mInteger++;
+			Assert::AreEqual(afoo.mInteger, value);
+		}
+
+		TEST_METHOD(TestRTTI)
+		{
+			Attributed* attributed = new Attributed();
+			Attributed* attributed2 = new Attributed();
+			AttributedFoo* afoo = new AttributedFoo();
+
+			Assert::IsTrue(attributed->Is(Attributed::TypeIdClass()));
+			Assert::IsTrue(attributed->Is("Attributed"));
+			Assert::IsFalse(attributed->Is(AttributedFoo::TypeIdClass()));
+			Assert::IsFalse(attributed->Is("AttributedFoo"));
+
+			Assert::IsTrue(attributed->As<Attributed>() != nullptr);
+			Assert::IsTrue(attributed->As<Scope>() != nullptr);
+			Assert::IsTrue(attributed->As<AttributedFoo>() == nullptr);
+
+			Assert::AreEqual(attributed->ToString(), std::string("0"));
+
+			Assert::IsTrue(attributed->Equals(attributed2));
+			Assert::IsFalse(attributed->Equals(afoo));
+
+			RTTI* result = attributed->QueryInterface(Attributed::TypeIdClass());
+			Assert::IsTrue(result != nullptr);
+			result = attributed->QueryInterface(AttributedFoo::TypeIdClass());
+			Assert::IsTrue(result == nullptr);
+			result = afoo->QueryInterface(Attributed::TypeIdClass());
+			Assert::IsTrue(result != nullptr);
+
+			delete attributed;
+			attributed = nullptr;
+			delete attributed2;
+			attributed2 = nullptr;
+			delete afoo;
+			afoo = nullptr;
+		}
 
 #pragma endregion
 

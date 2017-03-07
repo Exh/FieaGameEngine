@@ -131,27 +131,28 @@ namespace FieaGameEngine
 
 		/** Equals returns true if rhs is equivalent to this scope.
 			@param rhs RTTI object to compare against.
-			@return True if equivalent.
-		*/
+			@return True if equivalent. */
 		virtual bool Scope::Equals(const RTTI* rhs) const override;
 
 		/** Translates this scope into a string.
 			@return The string version of this scope. */
-		virtual std::string ToString() const;
+		virtual std::string ToString() const override;
 
 	protected:
-
-		HashMap<std::string, Datum> mMap;
-
-	private:
-
-		void Orphan();
 
 		void Destroy();
 
 		void DeepCopy(const Scope& rhs);
 
+		HashMap<std::string, Datum> mMap;
+
 		Vector<EntryType*> mVector;
+
 		Scope* mParent;
+
+	private:
+
+		void Orphan();
+
 	};
 }

@@ -6,7 +6,7 @@
 
 class AttributedFoo : public FieaGameEngine::Attributed
 {
-	RTTI_DECLARATIONS(AttributedFoo, FieaGameEngine::Scope)
+	RTTI_DECLARATIONS(AttributedFoo, FieaGameEngine::Attributed)
 
 public:
 
@@ -37,9 +37,11 @@ public:
 	static const std::string INTERNAL_STRING_KEY;
 	static const std::string INTERNAL_POINTER_KEY;
 
+	static const std::string NESTED_SCOPE_KEY;
+
 	AttributedFoo();
 
-	~AttributedFoo();
+	 virtual ~AttributedFoo();
 
 	AttributedFoo(const AttributedFoo& rhs) = default;
 
@@ -73,6 +75,7 @@ public:
 	std::string mString;
 	Foo mFoo;
 	RTTI* mPointer;
+	Scope* mNestedScope;
 };
 
 

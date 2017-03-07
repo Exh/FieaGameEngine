@@ -28,6 +28,8 @@ const std::string AttributedFoo::INTERNAL_MATRIX_KEY("InternalMatrix");
 const std::string AttributedFoo::INTERNAL_STRING_KEY("InternalString");
 const std::string AttributedFoo::INTERNAL_POINTER_KEY("InternalPointer");
 
+const std::string AttributedFoo::NESTED_SCOPE_KEY("NestedScope");
+
 RTTI_DEFINITIONS(AttributedFoo)
 
 AttributedFoo::AttributedFoo() :
@@ -58,6 +60,8 @@ bool AttributedFoo::operator==(const AttributedFoo& rhs) const
 
 void AttributedFoo::Populate()
 {
+	Attributed::Populate();
+
 	AddExternalAttribute(EXTERNAL_INTEGER_KEY, &mInteger, 1U);
 	AddExternalAttribute(EXTERNAL_FLOAT_KEY, &mFloat, 1U);
 	AddExternalAttribute(EXTERNAL_VECTOR_KEY, &mVector, 1U);
@@ -71,6 +75,9 @@ void AttributedFoo::Populate()
 	AddInternalAttribute(INTERNAL_MATRIX_KEY, INTERNAL_MATRIX_DEFAULT);
 	AddInternalAttribute(INTERNAL_STRING_KEY, INTERNAL_STRING_DEFAULT);
 	AddInternalAttribute(INTERNAL_POINTER_KEY, &mFoo);
+
+	mNestedScope = new Scope();
+	AddNestedScopeAttribute(NESTED_SCOPE_KEY, *mNestedScope);
 }
 
 #pragma endregion 

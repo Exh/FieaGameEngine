@@ -16,6 +16,8 @@ namespace FieaGameEngine
 
 		virtual ~Attributed();
 
+		void Populate();
+
 		Attributed(const Attributed& rhs);
 
 		Attributed& operator=(const Attributed& rhs);
@@ -29,6 +31,19 @@ namespace FieaGameEngine
 		Datum& AddAuxiliaryAttribute(const std::string& key);
 
 		static void ClearPrescribedAttributeCache();
+
+		/** Equals returns true if rhs is equivalent to this scope.
+			@param rhs RTTI object to compare against.
+			@return True if equivalent. */
+		virtual bool Equals(const RTTI* rhs) const override;
+
+		/** Translates this scope into a string.
+			@return The string version of this scope. */
+		virtual std::string ToString() const override;
+
+		bool operator==(const Attributed& rhs) const;
+
+		bool operator!=(const Attributed& rhs) const;
 
 	protected:
 
@@ -46,9 +61,16 @@ namespace FieaGameEngine
 		void AddExternalAttribute(const std::string& key, std::string* data, std::uint32_t size);
 		void AddExternalAttribute(const std::string& key, RTTI** data, std::uint32_t size);
 
+		Scope& AddNestedScopeAttribute(const std::string& key);
+		void AddNestedScopeAttribute(const std::string& key, Scope& scope);
+
 	private:
 
 		Datum& AppendPrescribedAttribute(const std::string& key);
+
+		void RegisterPrescribedAttribute(const std::string& key);
+
+		//void DeepCopy(const Attributed& rhs);
 
 		static HashMap<std::uint64_t, Vector<std::string>> sPrescribedAttributeCache;
 	};
