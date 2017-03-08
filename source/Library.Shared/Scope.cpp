@@ -110,6 +110,9 @@ namespace FieaGameEngine
 				}
 			}
 		}
+
+		mVector.Destroy();
+		mMap.Clear();
 	}
 
 	void Scope::DeepCopy(const Scope& rhs)

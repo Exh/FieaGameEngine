@@ -36,7 +36,7 @@ namespace FieaGameEngine
 		{
 			(*this)["this"] = static_cast<RTTI*>(this);
 
-			//FixNativePointers();
+			FixNativePointers();
 		}
 
 		return *this;
@@ -44,17 +44,15 @@ namespace FieaGameEngine
 
 	Attributed::Attributed(Attributed&& rhs)
 	{
-		operator=(rhs);
+		operator=(std::move(rhs));
 	}
 
 	Attributed& Attributed::operator=(Attributed&& rhs)
 	{
-		Scope::operator=(rhs);
-
 		if (this != &rhs)
 		{
+			Scope::operator=(std::move(rhs));
 			(*this)["this"] = static_cast<RTTI*>(this);
-
 			FixNativePointers();
 		}
 
@@ -210,11 +208,13 @@ namespace FieaGameEngine
 		return Append(key);
 	}
 
-	void Attributed::RegisterNativeOffset(const std::string& key, std::uint32_t bytes)
+	void Attributed::RegisterNativeOffset(const std::string& key, std::int64_t bytes)
 	{
+		assert(bytes > 0);
+
 		if (!IsPrescribedAttribute(key))
 		{
-			sNativeMemberOffsets[TypeIdInstance()].PushBack(bytes);
+			sNativeMemberOffsets[TypeIdInstance()].PushBack(static_cast<std::uint32_t>(bytes));
 		}
 	}
 

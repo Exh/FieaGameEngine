@@ -43,9 +43,13 @@ public:
 
 	 virtual ~AttributedFoo();
 
-	AttributedFoo(const AttributedFoo& rhs) = default;
+	 AttributedFoo(const AttributedFoo& rhs);
 
-	AttributedFoo& operator=(const AttributedFoo& rhs) = default;
+	 AttributedFoo& operator=(const AttributedFoo& rhs);
+
+	 AttributedFoo(AttributedFoo&& rhs);
+
+	 AttributedFoo& operator=(AttributedFoo&& rhs);
 
 	bool operator==(const AttributedFoo& rhs) const;
 

@@ -67,14 +67,13 @@ namespace FieaGameEngine
 
 		Scope& AddNestedScopeAttribute(const std::string& key);
 		void AddNestedScopeAttribute(const std::string& key, Scope& scope);
+		void FixNativePointers();
 
 	private:
 
 		Datum& AppendPrescribedAttribute(const std::string& key);
 
-		void RegisterNativeOffset(const std::string& key, std::uint32_t bytes);
-
-		void FixNativePointers();
+		void RegisterNativeOffset(const std::string& key, std::int64_t bytes);
 
 		static HashMap<std::uint64_t, Vector<std::string>> sPrescribedAttributeCache;
 		static HashMap<std::uint64_t, Vector<std::uint32_t>> sNativeMemberOffsets;

@@ -195,16 +195,36 @@ namespace LibraryDesktopTest
 			a1.AddAuxiliaryAttribute(AUXILIARY_KEY_2);
 			Assert::IsFalse(a1 == a2);
 
+			// Test external fix ups
 			AttributedFoo afoo1;
+			afoo1.mInteger = 9;
+			Assert::IsTrue(afoo1.mInteger == afoo1[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger());
+
 			AttributedFoo afoo2;
+			afoo2 = afoo1;
+			Assert::IsTrue(afoo2.mInteger == afoo2[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger());
 
-			Assert::IsTrue(afoo1 == afoo2);
+			afoo1.mInteger = 5;
+			Assert::IsTrue(afoo2[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger() != afoo1[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger());
+			Assert::IsTrue(afoo2.mInteger != afoo1.mInteger);
+			Assert::IsTrue(&(afoo2[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger()) == &(afoo2.mInteger));
 
-			afoo1.mInteger++;
-			Assert::IsFalse(afoo1 == afoo2);
+			Assert::IsTrue(*(afoo1.mNestedScope) == *(afoo2.mNestedScope));
+			Assert::IsTrue(afoo1.mNestedScope != afoo2.mNestedScope);
+			(*afoo1.mNestedScope)["nested1"] = 0;
+			Assert::IsTrue(afoo1.mNestedScope != afoo2.mNestedScope);
+			Assert::IsTrue(afoo1[AttributedFoo::NESTED_SCOPE_KEY] != afoo2[AttributedFoo::NESTED_SCOPE_KEY]);
 
-			afoo2[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger()++;
-			Assert::IsTrue(afoo1 == afoo2);
+			AttributedFoo afoo3;
+			AttributedFoo afoo4;
+
+			Assert::IsTrue(afoo3 == afoo4);
+
+			afoo3.mInteger++;
+			Assert::IsFalse(afoo3 == afoo4);
+
+			afoo4[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger()++;
+			Assert::IsTrue(afoo3 == afoo4);
 		}
 
 		TEST_METHOD(IsAttributeMethods)
@@ -304,6 +324,8 @@ namespace LibraryDesktopTest
 
 			Assert::IsTrue(afoo1 != afoo2);
 			Assert::IsTrue(afoo1[AUXILIARY_KEY_1] == float1);
+
+			Assert::ExpectException<std::exception>([&afoo1]{afoo1.AddAuxiliaryAttribute(AttributedFoo::INTERNAL_INTEGER_KEY);});
 		}
 
 		TEST_METHOD(ExternalAssignment)
@@ -324,6 +346,8 @@ namespace LibraryDesktopTest
 
 		TEST_METHOD(TestRTTI)
 		{
+			CREATE_TEST_VARS
+
 			Attributed* attributed = new Attributed();
 			Attributed* attributed2 = new Attributed();
 			AttributedFoo* afoo = new AttributedFoo();
@@ -349,6 +373,8 @@ namespace LibraryDesktopTest
 			result = afoo->QueryInterface(Attributed::TypeIdClass());
 			Assert::IsTrue(result != nullptr);
 
+			Assert::IsFalse(attributed->Equals(&foo1));
+
 			delete attributed;
 			attributed = nullptr;
 			delete attributed2;
@@ -360,15 +386,39 @@ namespace LibraryDesktopTest
 		TEST_METHOD(MoveSemantics)
 		{
 			AttributedFoo afoo1;
-			afoo1.mInteger = 9;
-			Assert::IsTrue(afoo1.mInteger == afoo1[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger());
+			afoo1.mInteger = 0;
+			afoo1[AttributedFoo::INTERNAL_FLOAT_KEY] = 0.0f;
 
-			AttributedFoo afoo2;
-			afoo2 = afoo1;
-			Assert::IsTrue(afoo2.mInteger == afoo2[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger());
-			afoo1.mInteger = 5;
-			Assert::IsTrue(afoo2[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger() != afoo1.mInteger);
-			Assert::IsTrue(afoo2.mInteger != afoo1.mInteger);
+			AttributedFoo afoo2(std::move(afoo1));
+			Assert::IsTrue(afoo2.mInteger == 0);
+			Assert::IsTrue(afoo2.mFloat == AttributedFoo::EXTERNAL_FLOAT_DEFAULT);
+			Assert::IsTrue(afoo2[AttributedFoo::INTERNAL_INTEGER_KEY] == AttributedFoo::INTERNAL_INTEGER_DEFAULT);
+			Assert::IsTrue(afoo2[AttributedFoo::INTERNAL_FLOAT_KEY] == 0.0f);
+			Assert::IsTrue(afoo2.mNestedScope == afoo2[AttributedFoo::NESTED_SCOPE_KEY].GetScope());
+		
+			// Check pointer fix-up
+			Assert::IsTrue(&afoo2.mInteger == &(afoo2[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger()));
+		}
+
+		TEST_METHOD(ExtraEquality)
+		{
+			CREATE_TEST_VARS
+
+			Attributed a1;
+			Attributed a2;
+
+			a1.AddAuxiliaryAttribute("Beep") = 1;
+			a2.AddAuxiliaryAttribute("Boop") = 1;
+
+			Assert::IsTrue(a1 != a2);
+
+			Attributed a3;
+			Attributed a4;
+
+			a3.AddAuxiliaryAttribute("Beep") = 1;
+			a4.AddAuxiliaryAttribute("Boop") = 2;
+
+			Assert::IsTrue(a3 != a4);
 		}
 
 #pragma endregion

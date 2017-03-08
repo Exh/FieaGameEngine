@@ -518,10 +518,6 @@ namespace LibraryDesktopTest
 				Assert::ExpectException<std::exception>([&datum, &externalFloats] {datum.SetStorage(externalFloats, 3);});
 				Assert::ExpectException<std::exception>([&datum] {datum.Clear();});
 				Assert::ExpectException<std::exception>([&datum, &int1] {datum.PushBack(int1);});
-
-				Datum datum2;
-				datum2.PushBack(int1);
-				Assert::ExpectException<std::exception>([&datum2, &externalInts] {datum2.SetStorage(externalInts, 3);});
 			}
 
 			{
@@ -534,10 +530,6 @@ namespace LibraryDesktopTest
 				Assert::ExpectException<std::exception>([&datum, &externalFloats] {datum.SetStorage(externalFloats, 3); });
 				Assert::ExpectException<std::exception>([&datum] {datum.Clear(); });
 				Assert::ExpectException<std::exception>([&datum, &float1] {datum.PushBack(float1); });
-
-				Datum datum2;
-				datum2.PushBack(float1);
-				Assert::ExpectException<std::exception>([&datum2, &externalFloats] {datum2.SetStorage(externalFloats, 3); });
 			}
 
 			{
@@ -550,10 +542,6 @@ namespace LibraryDesktopTest
 				Assert::ExpectException<std::exception>([&datum, &externalFloats] {datum.SetStorage(externalFloats, 3); });
 				Assert::ExpectException<std::exception>([&datum] {datum.Clear(); });
 				Assert::ExpectException<std::exception>([&datum, &vector1] {datum.PushBack(vector1); });
-
-				Datum datum2;
-				datum2.PushBack(vector1);
-				Assert::ExpectException<std::exception>([&datum2, &externalVectors] {datum2.SetStorage(externalVectors, 3); });
 			}
 
 			{
@@ -566,10 +554,6 @@ namespace LibraryDesktopTest
 				Assert::ExpectException<std::exception>([&datum, &externalFloats] {datum.SetStorage(externalFloats, 3); });
 				Assert::ExpectException<std::exception>([&datum] {datum.Clear(); });
 				Assert::ExpectException<std::exception>([&datum, &matrix1] {datum.PushBack(matrix1); });
-
-				Datum datum2;
-				datum2.PushBack(matrix1);
-				Assert::ExpectException<std::exception>([&datum2, &externalMatrices] {datum2.SetStorage(externalMatrices, 3); });
 			}
 
 			{
@@ -582,10 +566,6 @@ namespace LibraryDesktopTest
 				Assert::ExpectException<std::exception>([&datum, &externalFloats] {datum.SetStorage(externalFloats, 3); });
 				Assert::ExpectException<std::exception>([&datum] {datum.Clear(); });
 				Assert::ExpectException<std::exception>([&datum, &string1] {datum.PushBack(string1); });
-
-				Datum datum2;
-				datum2.PushBack(string1);
-				Assert::ExpectException<std::exception>([&datum2, &externalStrings] {datum2.SetStorage(externalStrings, 3); });
 			}
 
 			{
@@ -598,10 +578,6 @@ namespace LibraryDesktopTest
 				Assert::ExpectException<std::exception>([&datum, &externalFloats] {datum.SetStorage(externalFloats, 3); });
 				Assert::ExpectException<std::exception>([&datum] {datum.Clear(); });
 				Assert::ExpectException<std::exception>([&datum, &pointer1] {datum.PushBack(pointer1); });
-
-				Datum datum2;
-				datum2.PushBack(pointer1);
-				Assert::ExpectException<std::exception>([&datum2, &externalPointers] {datum2.SetStorage(externalPointers, 3); });
 			}
 		}
 

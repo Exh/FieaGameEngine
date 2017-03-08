@@ -681,3 +681,22 @@ And go one by one testing each move semantics.
 You should add an internal prescribed member to AttributedFoo.
 
 */
+
+/* 
+	HandlerInterface should have to pure virtual functions.
+	StartElementHandler
+	EndElementHandler
+
+	and a non-pure virtual method 
+	CharDataHandler
+
+	SharedData is intended to be derived.
+	SharedData keeps a Depth value and has functions:
+	IncrementDepth() and
+	DecrementDepth()
+	
+	increment depth at StartElement.
+
+	SharedData is an RTTI managing depth of descent.
+	Share
+*/

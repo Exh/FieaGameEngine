@@ -308,10 +308,12 @@ namespace FieaGameEngine
 			throw std::exception("Invalid datum type.");
 		}
 
-		assert(mSize == 0);
-		assert(mCapacity == 0);
-		assert(mData.vp == nullptr);
-		assert(mExternal == false);
+		if (!mExternal &&
+			mCapacity > 0 ||
+			mSize > 0)
+		{
+			throw std::exception("Cannot set storage on datum with internal storage already allocated.");
+		}
 	}
 
 	void Datum::PostSetStorage(DatumType type, std::uint32_t size)

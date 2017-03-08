@@ -37,7 +37,8 @@ AttributedFoo::AttributedFoo() :
 	mFloat(EXTERNAL_FLOAT_DEFAULT),
 	mVector(EXTERNAL_VECTOR_DEFAULT),
 	mMatrix(EXTERNAL_MATRIX_DEFAULT),
-	mPointer(&mFoo)
+	mPointer(&mFoo),
+	mNestedScope(nullptr)
 {
 	Populate();
 }
@@ -45,6 +46,72 @@ AttributedFoo::AttributedFoo() :
 AttributedFoo::~AttributedFoo()
 {
 
+}
+
+AttributedFoo::AttributedFoo(const AttributedFoo& rhs)
+{
+	operator=(rhs);
+}
+
+AttributedFoo& AttributedFoo::operator=(const AttributedFoo& rhs)
+{
+	if (this != &rhs)
+	{
+		Attributed::operator=(rhs);
+
+		mInteger = rhs.mInteger;
+		mFloat = rhs.mFloat;
+		mVector = rhs.mVector;
+		mMatrix = rhs.mMatrix;
+		mString = rhs.mString;
+		mFoo = rhs.mFoo;
+		mPointer = &mFoo;
+
+		// Scope pointed to by mNestedScope was deleted in Attributed's operator=
+		mNestedScope = (*this)[AttributedFoo::NESTED_SCOPE_KEY].GetScope();
+	}
+
+	return *this;
+}
+
+AttributedFoo::AttributedFoo(AttributedFoo&& rhs) :
+	Attributed(std::move(rhs)),
+	mInteger(rhs.mInteger),
+	mFloat(rhs.mFloat),
+	mVector(std::move(rhs.mVector)),
+	mMatrix(std::move(rhs.mMatrix)),
+	mString(std::move(rhs.mString)),
+	mFoo(rhs.mFoo),
+	mPointer(&mFoo),
+	mNestedScope(rhs.mNestedScope)
+
+{
+	rhs.mPointer = nullptr;
+	rhs.mNestedScope = nullptr;
+
+	FixNativePointers();
+}
+
+AttributedFoo& AttributedFoo::operator=(AttributedFoo&& rhs)
+{
+	if (this != &rhs)
+	{
+		Attributed::operator=(std::move(rhs));
+
+		mInteger = rhs.mInteger;
+		mFloat = rhs.mFloat;
+		mVector = rhs.mVector;
+		mMatrix = rhs.mMatrix;
+		mString = rhs.mString;
+		mFoo = rhs.mFoo;
+		mPointer = &mFoo;
+		mNestedScope = rhs.mNestedScope;
+
+		rhs.mPointer = nullptr;
+		rhs.mNestedScope = nullptr;
+	}
+
+	return *this;
 }
 
 bool AttributedFoo::operator==(const AttributedFoo& rhs) const
