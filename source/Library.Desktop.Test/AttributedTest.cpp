@@ -186,6 +186,25 @@ namespace LibraryDesktopTest
 		{
 			CREATE_TEST_VARS
 
+			Attributed a1;
+			a1.AddAuxiliaryAttribute(AUXILIARY_KEY_1);
+			a1[AUXILIARY_KEY_1] = int1;
+			Attributed a2(a1);
+			Assert::IsTrue(a1 == a2);
+
+			a1.AddAuxiliaryAttribute(AUXILIARY_KEY_2);
+			Assert::IsFalse(a1 == a2);
+
+			AttributedFoo afoo1;
+			AttributedFoo afoo2;
+
+			Assert::IsTrue(afoo1 == afoo2);
+
+			afoo1.mInteger++;
+			Assert::IsFalse(afoo1 == afoo2);
+
+			afoo2[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger()++;
+			Assert::IsTrue(afoo1 == afoo2);
 		}
 
 		TEST_METHOD(IsAttributeMethods)
@@ -267,6 +286,26 @@ namespace LibraryDesktopTest
 			Assert::IsFalse(afoo.IsPrescribedAttribute(AUXILIARY_KEY_3));
 		}
 
+		TEST_METHOD(AddAuxiliaryAttribute)
+		{
+			CREATE_TEST_VARS
+
+			AttributedFoo afoo1;
+			AttributedFoo afoo2;
+			Assert::IsTrue(afoo1.IsPrescribedAttribute(AttributedFoo::INTERNAL_FLOAT_KEY));
+			Assert::IsTrue(afoo1 == afoo2);
+
+			afoo1.AddAuxiliaryAttribute(AUXILIARY_KEY_1);
+			afoo1[AUXILIARY_KEY_1] = float1;
+
+			Assert::IsTrue(afoo1.IsAttribute(AUXILIARY_KEY_1));
+			Assert::IsFalse(afoo1.IsPrescribedAttribute(AUXILIARY_KEY_1));
+			Assert::IsTrue(afoo1.IsAuxiliaryAttribute(AUXILIARY_KEY_1));
+
+			Assert::IsTrue(afoo1 != afoo2);
+			Assert::IsTrue(afoo1[AUXILIARY_KEY_1] == float1);
+		}
+
 		TEST_METHOD(ExternalAssignment)
 		{
 			// Ensure that editing Datum assignment for external variables and c++ assignment
@@ -298,7 +337,7 @@ namespace LibraryDesktopTest
 			Assert::IsTrue(attributed->As<Scope>() != nullptr);
 			Assert::IsTrue(attributed->As<AttributedFoo>() == nullptr);
 
-			Assert::AreEqual(attributed->ToString(), std::string("0"));
+			Assert::AreEqual(attributed->ToString(), std::string("1"));
 
 			Assert::IsTrue(attributed->Equals(attributed2));
 			Assert::IsFalse(attributed->Equals(afoo));

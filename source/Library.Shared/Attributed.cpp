@@ -8,7 +8,7 @@ namespace FieaGameEngine
 
 	Attributed::Attributed()
 	{
-
+		Populate();
 	}
 
 	Attributed::~Attributed()
@@ -23,16 +23,16 @@ namespace FieaGameEngine
 
 	Attributed::Attributed(const Attributed& rhs)
 	{
-		rhs;
+		DeepCopy(rhs);
+
+		(*this)["this"] = static_cast<RTTI*>(this);
 	}
 
 	Attributed& Attributed::operator=(const Attributed& rhs)
 	{
-		if (this != &rhs)
-		{
-			Destroy();
-			DeepCopy(rhs);
-		}
+		Scope::operator=(rhs);
+
+		(*this)["this"] = static_cast<RTTI*>(this);
 
 		return *this;
 	}
@@ -154,11 +154,9 @@ namespace FieaGameEngine
 
 	void Attributed::RegisterPrescribedAttribute(const std::string& key)
 	{
-		Vector<std::string>& prescribedVector = sPrescribedAttributeCache[TypeIdInstance()];
-
-		if (prescribedVector.Find(key) == prescribedVector.end())
+		if (!IsPrescribedAttribute(key))
 		{
-			prescribedVector.PushBack(key);
+			sPrescribedAttributeCache[TypeIdInstance()].PushBack(key);
 		}
 	}
 
@@ -192,7 +190,7 @@ namespace FieaGameEngine
 			{
 				for (std::uint32_t i = 0; i < mVector.Size(); i++)
 				{
-					if (mVector[i]->first == rhs.mVector[i]->first)
+					if (mVector[i]->first != rhs.mVector[i]->first)
 					{
 						return false;
 					}
@@ -213,32 +211,4 @@ namespace FieaGameEngine
 	{
 		return !operator==(rhs);
 	}
-
-	//void Attributed::DeepCopy(const Attributed& rhs)
-	//{
-		//// This will copy the datums between the vector/maps of each scope
-		//for (auto& entry : rhs.mVector)
-		//{
-		//	MapType::Iterator it = mMap.Insert(EntryType(entry->first, entry->second));
-		//	mVector.PushBack(&(*it));
-		//	Datum& datum = (*it).second;
-
-		//	// Need to recursively copy scopes
-		//	if (datum.Type() == DatumType::Scope)
-		//	{
-		//		for (std::uint32_t i = 0; i < datum.Size(); i++)
-		//		{
-		//			Scope*& scope = datum.GetScope(i);
-		//			Scope*& rhsScope = entry->second.GetScope(i);
-
-		//			scope = new Scope();
-		//			scope->DeepCopy(*rhsScope);
-		//			datum.GetScope(i)->mParent = this;
-		//		}
-		//	}
-		//}
-
-		//// Parent should always be nullptr
-		//mParent = nullptr;
-	//}
 }
