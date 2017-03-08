@@ -246,49 +246,64 @@ namespace FieaGameEngine
 
 	void Datum::SetStorage(std::int32_t* data, std::uint32_t size)
 	{
-		PreSetStorage();
+		PreSetStorage(DatumType::Integer);
 		mData.i = data;
 		PostSetStorage(DatumType::Integer, size);
 	}
 
 	void Datum::SetStorage(float* data, std::uint32_t size)
 	{
-		PreSetStorage();
+		PreSetStorage(DatumType::Float);
 		mData.f = data;
 		PostSetStorage(DatumType::Float, size);
 	}
 
 	void Datum::SetStorage(glm::vec4* data, std::uint32_t size)
 	{
-		PreSetStorage();
+		PreSetStorage(DatumType::Vector);
 		mData.v = data;
 		PostSetStorage(DatumType::Vector, size);
 	}
 
 	void Datum::SetStorage(glm::mat4* data, std::uint32_t size)
 	{
-		PreSetStorage();
+		PreSetStorage(DatumType::Matrix);
 		mData.m = data;
 		PostSetStorage(DatumType::Matrix, size);
 	}
 
 	void Datum::SetStorage(std::string* data, std::uint32_t size)
 	{
-		PreSetStorage();
+		PreSetStorage(DatumType::String);
 		mData.s = data;
 		PostSetStorage(DatumType::String, size);
 	}
 
 	void Datum::SetStorage(RTTI** data, std::uint32_t size)
 	{
-		PreSetStorage();
+		PreSetStorage(DatumType::Pointer);
 		mData.p = data;
 		PostSetStorage(DatumType::Pointer, size);
 	}
 
-	void Datum::PreSetStorage()
+	void Datum::SetStorage(void* data, std::uint32_t size)
 	{
-		if (mType != DatumType::Unknown)
+		if (mExternal)
+		{
+			mData.vp = data;
+			mSize = size;
+			mCapacity = size;
+		}
+	}
+
+	void Datum::PreSetStorage(DatumType type)
+	{
+		if (mType == DatumType::Unknown)
+		{
+			mType = type;
+		}
+
+		if (mType != type)
 		{
 			throw std::exception("Invalid datum type.");
 		}
@@ -1002,5 +1017,10 @@ namespace FieaGameEngine
 		}
 
 		return size;
+	}
+
+	bool Datum::IsExternal() const
+	{
+		return mExternal;
 	}
 }

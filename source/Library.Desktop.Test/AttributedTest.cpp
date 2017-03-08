@@ -357,6 +357,20 @@ namespace LibraryDesktopTest
 			afoo = nullptr;
 		}
 
+		TEST_METHOD(MoveSemantics)
+		{
+			AttributedFoo afoo1;
+			afoo1.mInteger = 9;
+			Assert::IsTrue(afoo1.mInteger == afoo1[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger());
+
+			AttributedFoo afoo2;
+			afoo2 = afoo1;
+			Assert::IsTrue(afoo2.mInteger == afoo2[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger());
+			afoo1.mInteger = 5;
+			Assert::IsTrue(afoo2[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger() != afoo1.mInteger);
+			Assert::IsTrue(afoo2.mInteger != afoo1.mInteger);
+		}
+
 #pragma endregion
 
 	private:

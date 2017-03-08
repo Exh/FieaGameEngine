@@ -45,6 +45,10 @@ namespace FieaGameEngine
 			@param rhs Reference of HashMap to copy from.*/
 		HashMap(const HashMap& rhs) = default;
 
+		HashMap(HashMap&& rhs);
+
+		HashMap& operator=(HashMap&& rhs);
+
 		/** Default assignment operator.
 			@param rhs Other HashMap to copy.
 			@return reference to new hashmap.*/

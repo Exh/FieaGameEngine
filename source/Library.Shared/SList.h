@@ -29,6 +29,18 @@ namespace FieaGameEngine
         /************************************************************************/
         SList(const SList& rhs);
 
+		/************************************************************************/
+		/** Move constructor.                                                   */
+		/** @param rhs Source SList.                                            */
+		/************************************************************************/
+		SList(SList&& rhs);
+
+		/************************************************************************/
+		/** Move assignment operator.                                           */
+		/** @param rhs Source SList.                                            */
+		/************************************************************************/
+		SList& operator=(SList&& rhs);
+
         /************************************************************************/
         /** Inserts the given item before the front of the list.                */
         /** @param item The new item that will be added to the list by value.   */

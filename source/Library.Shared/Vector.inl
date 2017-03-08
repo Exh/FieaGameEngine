@@ -16,6 +16,36 @@ namespace FieaGameEngine
 
     }
 
+	template<typename T>
+	Vector<T>::Vector(Vector&& rhs) :
+		mBuffer(rhs.mBuffer),
+		mSize(rhs.mSize),
+		mCapacity(rhs.mCapacity)
+	{
+		rhs.mBuffer = nullptr;
+		rhs.mSize = 0U;
+		rhs.mCapacity = 0U;
+	}
+
+	template<typename T>
+	Vector<T>& Vector<T>::operator=(Vector&& rhs)
+	{
+		if (this != &rhs)
+		{
+			Destroy();
+
+			mBuffer = rhs.mBuffer;
+			mSize = rhs.mSize;
+			mCapacity = rhs.mCapacity;
+
+			rhs.mBuffer = nullptr;
+			rhs.mSize = 0U;
+			rhs.mCapacity = 0U;
+		}
+
+		return *this;
+	}
+
     template<typename T>
     T& Vector<T>::operator[](std::uint32_t index)
     {

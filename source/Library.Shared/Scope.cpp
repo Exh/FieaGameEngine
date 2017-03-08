@@ -33,6 +33,65 @@ namespace FieaGameEngine
 		return *this;
 	}
 
+	Scope::Scope(Scope&& rhs)
+	{
+		operator=(rhs);
+	}
+
+	Scope& Scope::operator=(Scope&& rhs)
+	{
+		if (this != &rhs)
+		{
+
+			Destroy();
+
+			// Firstly, go through the rhs's parent and update all references to
+			// rhs with this instead, as all of rhs's data is moving to this.
+			if (rhs.mParent != nullptr)
+			{
+				for (EntryType* entry : rhs.mParent->mVector)
+				{
+					if (entry->second.Type() == DatumType::Scope)
+					{
+						Datum& d = entry->second;
+						for (std::uint32_t i = 0; i < d.Size(); i++)
+						{
+							if (&(d[i]) == &rhs)
+							{
+								d.Set(this, i);
+							}
+						}
+					}
+				}
+			}
+
+			// Now go through rhs's contained datums. Change parent from rhs to this.
+			for (EntryType* entry : rhs.mVector)
+			{
+				if (entry->second.Type() == DatumType::Scope)
+				{
+					Datum& d = entry->second;
+					for (std::uint32_t i = 0; i < d.Size(); i++)
+					{
+						if (d[i].mParent == &rhs)
+						{
+							d[i].mParent = this;
+						}
+					}
+				}
+			}
+
+			// Now perform the move
+			mVector = std::move(rhs.mVector);
+			mMap = std::move(rhs.mMap);
+			mParent = rhs.mParent;
+
+			rhs.mParent = nullptr;
+		}
+
+		return *this;
+	}
+
 	void Scope::Destroy()
 	{
 		Orphan();

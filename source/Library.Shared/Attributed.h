@@ -22,6 +22,10 @@ namespace FieaGameEngine
 
 		Attributed& operator=(const Attributed& rhs);
 
+		Attributed(Attributed&& rhs);
+
+		Attributed& operator=(Attributed&& rhs);
+
 		bool IsPrescribedAttribute(const std::string& key) const;
 
 		bool IsAuxiliaryAttribute(const std::string& key) const;
@@ -68,10 +72,11 @@ namespace FieaGameEngine
 
 		Datum& AppendPrescribedAttribute(const std::string& key);
 
-		void RegisterPrescribedAttribute(const std::string& key);
+		void RegisterNativeOffset(const std::string& key, std::uint32_t bytes);
 
-		//void DeepCopy(const Attributed& rhs);
+		void FixNativePointers();
 
 		static HashMap<std::uint64_t, Vector<std::string>> sPrescribedAttributeCache;
+		static HashMap<std::uint64_t, Vector<std::uint32_t>> sNativeMemberOffsets;
 	};
 }

@@ -155,6 +155,8 @@ namespace FieaGameEngine
 		*/
 		void SetStorage(RTTI** data, std::uint32_t size);
 
+		void SetStorage(void* data, std::uint32_t size);
+
 		/** Equality operator between two Datums.
 		@param rhs The other datum to compare against.
 		@return True if they are equivalent.*/
@@ -335,13 +337,15 @@ namespace FieaGameEngine
 		Scope& operator[](std::uint32_t index);
 		const Scope& operator[](std::uint32_t index) const;
 
+		bool IsExternal() const;
+
 	private:
 
 		void PreAssignment(DatumType type);
 
 		void PreGet(std::uint32_t index, DatumType type) const;
 
-		void PreSetStorage();
+		void PreSetStorage(DatumType type);
 
 		void PostSetStorage(DatumType type, std::uint32_t size);
 

@@ -61,6 +61,32 @@ namespace FieaGameEngine
 	}
 
 	template<typename TKey, typename TValue, typename THash>
+	HashMap<TKey, TValue, THash>::HashMap(HashMap&& rhs) :
+		mArray(std::move(rhs.mArray)),
+		mSize(rhs.mSize),
+		mCapacity(rhs.mCapacity)
+	{
+		rhs.mSize = 0U;
+		rhs.mCapacity = 0U;
+	}
+
+	template<typename TKey, typename TValue, typename THash>
+	HashMap<TKey, TValue, THash>& HashMap<TKey, TValue, THash>::operator=(HashMap&& rhs)
+	{
+		if (this != &rhs)
+		{
+			mArray = std::move(rhs.mArray);
+			mSize = rhs.mSize;
+			mCapacity = rhs.mCapacity;
+
+			rhs.mSize = 0U;
+			rhs.mCapacity = 0U;
+		}
+
+		return *this;
+	}
+
+	template<typename TKey, typename TValue, typename THash>
 	typename HashMap<TKey, TValue, THash>::Iterator HashMap<TKey, TValue, THash>::Find(const TKey& key) const
 	{
 		std::uint32_t index = mHash(key) % mCapacity;

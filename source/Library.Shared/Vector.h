@@ -14,6 +14,10 @@ namespace FieaGameEngine
 
         Vector();
 
+		Vector(Vector&& rhs);
+
+		Vector& operator=(Vector&& rhs);
+
         T& operator[](std::uint32_t index);
 
         const T& operator[](std::uint32_t index) const;

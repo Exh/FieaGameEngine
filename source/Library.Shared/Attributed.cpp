@@ -5,6 +5,8 @@ namespace FieaGameEngine
 	RTTI_DEFINITIONS(Attributed)
 
 	HashMap<std::uint64_t, Vector<std::string>> Attributed::sPrescribedAttributeCache;
+	HashMap<std::uint64_t, Vector<std::uint32_t>> Attributed::sNativeMemberOffsets;
+
 
 	Attributed::Attributed()
 	{
@@ -23,18 +25,58 @@ namespace FieaGameEngine
 
 	Attributed::Attributed(const Attributed& rhs)
 	{
-		DeepCopy(rhs);
-
-		(*this)["this"] = static_cast<RTTI*>(this);
+		operator=(rhs);
 	}
 
 	Attributed& Attributed::operator=(const Attributed& rhs)
 	{
 		Scope::operator=(rhs);
 
-		(*this)["this"] = static_cast<RTTI*>(this);
+		if (this != &rhs)
+		{
+			(*this)["this"] = static_cast<RTTI*>(this);
+
+			//FixNativePointers();
+		}
 
 		return *this;
+	}
+
+	Attributed::Attributed(Attributed&& rhs)
+	{
+		operator=(rhs);
+	}
+
+	Attributed& Attributed::operator=(Attributed&& rhs)
+	{
+		Scope::operator=(rhs);
+
+		if (this != &rhs)
+		{
+			(*this)["this"] = static_cast<RTTI*>(this);
+
+			FixNativePointers();
+		}
+
+		return *this;
+	}
+
+	void Attributed::FixNativePointers()
+	{
+		// Update all references to native members in the order that they 
+		// were added to the PrescribedAttributeCache when the first instance
+		// was populated.
+		std::uint32_t i = 0;
+		for (std::string& key : sPrescribedAttributeCache[TypeIdInstance()])
+		{
+			if ((*this)[key].IsExternal())
+			{
+				std::uint32_t offset = sNativeMemberOffsets[TypeIdInstance()][i];
+				(*this)[key].SetStorage(reinterpret_cast<char*>(this) + offset,
+					(*this)[key].Size());
+				i++;
+			}
+		}
 	}
 
 	bool Attributed::IsPrescribedAttribute(const std::string& key) const
@@ -72,6 +114,7 @@ namespace FieaGameEngine
 	void Attributed::ClearPrescribedAttributeCache()
 	{
 		sPrescribedAttributeCache.Clear();
+		sNativeMemberOffsets.Clear();
 	}
 
 	void Attributed::AddInternalAttribute(const std::string& key, std::int32_t value)
@@ -106,57 +149,72 @@ namespace FieaGameEngine
 
 	void Attributed::AddExternalAttribute(const std::string& key,  std::int32_t* data, std::uint32_t size)
 	{
+		RegisterNativeOffset(key, reinterpret_cast<char*>(data) - reinterpret_cast<char*>(this));
 		AppendPrescribedAttribute(key).SetStorage(data, size);
 	}
 
 	void Attributed::AddExternalAttribute(const std::string& key, float* data, std::uint32_t size)
 	{
+		RegisterNativeOffset(key, reinterpret_cast<char*>(data) - reinterpret_cast<char*>(this));
 		AppendPrescribedAttribute(key).SetStorage(data, size);
 	}
 
 	void Attributed::AddExternalAttribute(const std::string& key, glm::vec4* data, std::uint32_t size)
 	{
+		RegisterNativeOffset(key, reinterpret_cast<char*>(data) - reinterpret_cast<char*>(this));
 		AppendPrescribedAttribute(key).SetStorage(data, size);
 	}
 
 	void Attributed::AddExternalAttribute(const std::string& key, glm::mat4* data, std::uint32_t size)
 	{
+		RegisterNativeOffset(key, reinterpret_cast<char*>(data) - reinterpret_cast<char*>(this));
 		AppendPrescribedAttribute(key).SetStorage(data, size);
 	}
 
 	void Attributed::AddExternalAttribute(const std::string& key, std::string* data, std::uint32_t size)
 	{
+		RegisterNativeOffset(key, reinterpret_cast<char*>(data) - reinterpret_cast<char*>(this));
 		AppendPrescribedAttribute(key).SetStorage(data, size);
 	}
 
 	void Attributed::AddExternalAttribute(const std::string& key, RTTI** data, std::uint32_t size)
 	{
+		RegisterNativeOffset(key, reinterpret_cast<char*>(data) - reinterpret_cast<char*>(this));
 		AppendPrescribedAttribute(key).SetStorage(data, size);
 	}
 
 	Scope& Attributed::AddNestedScopeAttribute(const std::string& key)
 	{
-		RegisterPrescribedAttribute(key);
+		if (!IsPrescribedAttribute(key))
+		{
+			sPrescribedAttributeCache[TypeIdInstance()].PushBack(key);
+		}
 		return AppendScope(key);
 	}
 
 	void Attributed::AddNestedScopeAttribute(const std::string& key, Scope& scope)
 	{
-		RegisterPrescribedAttribute(key);
+		if (!IsPrescribedAttribute(key))
+		{
+			sPrescribedAttributeCache[TypeIdInstance()].PushBack(key);
+		}
 		Adopt(scope, key);
 	}
 
 	Datum& Attributed::AppendPrescribedAttribute(const std::string& key)
 	{
-		RegisterPrescribedAttribute(key);
-		return Append(key);
-	}
-
-	void Attributed::RegisterPrescribedAttribute(const std::string& key)
-	{
 		if (!IsPrescribedAttribute(key))
 		{
 			sPrescribedAttributeCache[TypeIdInstance()].PushBack(key);
+		}
+		return Append(key);
+	}
+
+	void Attributed::RegisterNativeOffset(const std::string& key, std::uint32_t bytes)
+	{
+		if (!IsPrescribedAttribute(key))
+		{
+			sNativeMemberOffsets[TypeIdInstance()].PushBack(bytes);
 		}
 	}
 

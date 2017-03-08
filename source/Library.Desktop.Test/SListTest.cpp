@@ -1141,6 +1141,17 @@ namespace LibraryDesktopTest
             Assert::AreEqual<Foo>(*constItFoo, foo3);
         }
 
+		TEST_METHOD(MoveSemantics)
+		{
+			SList<Foo> list1;
+			list1.PushBack(Foo(1,2));
+			list1.PushBack(Foo(2,3));
+
+			SList<Foo> list2(std::move(list1));
+			Assert::IsTrue(list1.Size() == 0U);
+			Assert::IsTrue(list2.Size() == 2U);
+		}
+
     private:
         static _CrtMemState sStartMemState;
     };

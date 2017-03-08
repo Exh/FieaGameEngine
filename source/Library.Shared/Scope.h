@@ -34,6 +34,14 @@ namespace FieaGameEngine
 			@param rhs The scope to copy from. */
 		Scope(const Scope& rhs);
 
+		/** Move constructor.
+			@param rhs Source scope. */
+		Scope(Scope&& rhs);
+
+		/** Move assignment.
+			@param rhs Source scope. */
+		Scope& operator=(Scope&& rhs);
+
 		/** Assignment operator for deep copying another scope to this scope.
 			Child scopes will also be copied recursively (thus, deep copy).
 			@param rhs Scope to copy from.

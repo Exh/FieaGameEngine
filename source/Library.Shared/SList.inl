@@ -27,6 +27,31 @@ namespace FieaGameEngine
         DeepCopy(rhs);
     }
 
+	template<typename T>
+	SList<T>::SList(SList&& rhs) :
+		mFront(rhs.mFront),
+		mBack(rhs.mBack),
+		mSize(rhs.mSize)
+	{
+		rhs.mFront = nullptr;
+		rhs.mBack = nullptr;
+		rhs.mSize = 0U;
+	}
+
+	template<typename T>
+	SList<T>& SList<T>::operator=(SList<T>&& rhs)
+	{
+		Clear();
+
+		mFront = rhs.mFront;
+		mBack = rhs.mBack;
+		mSize = rhs.mSize;
+
+		mFront = nullptr;
+		mBack = nullptr;
+		mSize = 0U;
+	}
+
     template<typename T>
     typename SList<T>::Iterator SList<T>::PushFront(const T& item)
     {
