@@ -309,8 +309,8 @@ namespace FieaGameEngine
 		}
 
 		if (!mExternal &&
-			mCapacity > 0 ||
-			mSize > 0)
+			(mCapacity > 0 ||
+			mSize > 0))
 		{
 			throw std::exception("Cannot set storage on datum with internal storage already allocated.");
 		}

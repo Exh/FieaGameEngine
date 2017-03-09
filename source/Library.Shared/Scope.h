@@ -146,9 +146,11 @@ namespace FieaGameEngine
 			@return The string version of this scope. */
 		virtual std::string ToString() const override;
 
-	protected:
+		void Orphan();
 
 		void Destroy();
+
+	protected:
 
 		void DeepCopy(const Scope& rhs);
 
@@ -157,10 +159,5 @@ namespace FieaGameEngine
 		Vector<EntryType*> mVector;
 
 		Scope* mParent;
-
-	private:
-
-		void Orphan();
-
 	};
 }

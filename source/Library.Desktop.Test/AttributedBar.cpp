@@ -57,9 +57,9 @@ AttributedBar& AttributedBar::operator=(AttributedBar&& rhs)
 		AttributedFoo::operator=(std::move(rhs));
 
 		mBarInteger = rhs.mBarInteger;
-		mNestedScope = rhs.mNestedScope;
+		mBarScope = rhs.mBarScope;
 
-		rhs.mNestedScope = nullptr;
+		rhs.mBarScope = nullptr;
 	}
 	
 	return *this;

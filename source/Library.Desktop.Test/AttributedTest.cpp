@@ -176,9 +176,9 @@ namespace LibraryDesktopTest
 		{
 			CREATE_TEST_VARS
 
-			AttributedFoo afoo;
-			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::INTERNAL_INTEGER_KEY));
-			Assert::AreEqual(AttributedFoo::INTERNAL_INTEGER_DEFAULT, afoo[AttributedFoo::INTERNAL_INTEGER_KEY].GetInteger());
+			AttributedBar afoo;
+			Assert::IsTrue(afoo.IsAttribute(AttributedBar::INTERNAL_INTEGER_KEY));
+			Assert::AreEqual(AttributedBar::INTERNAL_INTEGER_DEFAULT, afoo[AttributedBar::INTERNAL_INTEGER_KEY].GetInteger());
 
 		}
 
@@ -196,34 +196,34 @@ namespace LibraryDesktopTest
 			Assert::IsFalse(a1 == a2);
 
 			// Test external fix ups
-			AttributedFoo afoo1;
+			AttributedBar afoo1;
 			afoo1.mInteger = 9;
-			Assert::IsTrue(afoo1.mInteger == afoo1[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger());
+			Assert::IsTrue(afoo1.mInteger == afoo1[AttributedBar::EXTERNAL_INTEGER_KEY].GetInteger());
 
-			AttributedFoo afoo2;
+			AttributedBar afoo2;
 			afoo2 = afoo1;
-			Assert::IsTrue(afoo2.mInteger == afoo2[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger());
+			Assert::IsTrue(afoo2.mInteger == afoo2[AttributedBar::EXTERNAL_INTEGER_KEY].GetInteger());
 
 			afoo1.mInteger = 5;
-			Assert::IsTrue(afoo2[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger() != afoo1[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger());
+			Assert::IsTrue(afoo2[AttributedBar::EXTERNAL_INTEGER_KEY].GetInteger() != afoo1[AttributedBar::EXTERNAL_INTEGER_KEY].GetInteger());
 			Assert::IsTrue(afoo2.mInteger != afoo1.mInteger);
-			Assert::IsTrue(&(afoo2[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger()) == &(afoo2.mInteger));
+			Assert::IsTrue(&(afoo2[AttributedBar::EXTERNAL_INTEGER_KEY].GetInteger()) == &(afoo2.mInteger));
 
 			Assert::IsTrue(*(afoo1.mNestedScope) == *(afoo2.mNestedScope));
 			Assert::IsTrue(afoo1.mNestedScope != afoo2.mNestedScope);
 			(*afoo1.mNestedScope)["nested1"] = 0;
 			Assert::IsTrue(afoo1.mNestedScope != afoo2.mNestedScope);
-			Assert::IsTrue(afoo1[AttributedFoo::NESTED_SCOPE_KEY] != afoo2[AttributedFoo::NESTED_SCOPE_KEY]);
+			Assert::IsTrue(afoo1[AttributedBar::NESTED_SCOPE_KEY] != afoo2[AttributedBar::NESTED_SCOPE_KEY]);
 
-			AttributedFoo afoo3;
-			AttributedFoo afoo4;
+			AttributedBar afoo3;
+			AttributedBar afoo4;
 
 			Assert::IsTrue(afoo3 == afoo4);
 
 			afoo3.mInteger++;
 			Assert::IsFalse(afoo3 == afoo4);
 
-			afoo4[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger()++;
+			afoo4[AttributedBar::EXTERNAL_INTEGER_KEY].GetInteger()++;
 			Assert::IsTrue(afoo3 == afoo4);
 		}
 
@@ -231,52 +231,61 @@ namespace LibraryDesktopTest
 		{
 			CREATE_TEST_VARS
 
-			AttributedFoo afoo;
+			AttributedBar afoo;
 
 			// IsAttribute()
-			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::INTERNAL_INTEGER_KEY));
-			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::INTERNAL_FLOAT_KEY));
-			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::INTERNAL_VECTOR_KEY));
-			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::INTERNAL_MATRIX_KEY));
-			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::INTERNAL_STRING_KEY));
-			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::INTERNAL_POINTER_KEY));
-			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::EXTERNAL_INTEGER_KEY));
-			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::EXTERNAL_FLOAT_KEY));
-			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::EXTERNAL_VECTOR_KEY));
-			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::EXTERNAL_MATRIX_KEY));
-			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::EXTERNAL_STRING_KEY));
-			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::EXTERNAL_POINTER_KEY));
-			Assert::IsTrue(afoo.IsAttribute(AttributedFoo::NESTED_SCOPE_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedBar::INTERNAL_INTEGER_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedBar::INTERNAL_FLOAT_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedBar::INTERNAL_VECTOR_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedBar::INTERNAL_MATRIX_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedBar::INTERNAL_STRING_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedBar::INTERNAL_POINTER_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedBar::EXTERNAL_INTEGER_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedBar::EXTERNAL_FLOAT_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedBar::EXTERNAL_VECTOR_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedBar::EXTERNAL_MATRIX_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedBar::EXTERNAL_STRING_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedBar::EXTERNAL_POINTER_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedBar::NESTED_SCOPE_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedBar::INTEGER_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedBar::FLOAT_KEY));
+			Assert::IsTrue(afoo.IsAttribute(AttributedBar::SCOPE_KEY));
 
 			// IsPrescribedAttribute()
-			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::INTERNAL_INTEGER_KEY));
-			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::INTERNAL_FLOAT_KEY));
-			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::INTERNAL_VECTOR_KEY));
-			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::INTERNAL_MATRIX_KEY));
-			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::INTERNAL_STRING_KEY));
-			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::INTERNAL_POINTER_KEY));
-			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::EXTERNAL_INTEGER_KEY));
-			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::EXTERNAL_FLOAT_KEY));
-			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::EXTERNAL_VECTOR_KEY));
-			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::EXTERNAL_MATRIX_KEY));
-			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::EXTERNAL_STRING_KEY));
-			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::EXTERNAL_POINTER_KEY));
-			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedFoo::NESTED_SCOPE_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::INTERNAL_INTEGER_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::INTERNAL_FLOAT_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::INTERNAL_VECTOR_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::INTERNAL_MATRIX_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::INTERNAL_STRING_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::INTERNAL_POINTER_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::EXTERNAL_INTEGER_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::EXTERNAL_FLOAT_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::EXTERNAL_VECTOR_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::EXTERNAL_MATRIX_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::EXTERNAL_STRING_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::EXTERNAL_POINTER_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::NESTED_SCOPE_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::INTEGER_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::FLOAT_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::SCOPE_KEY));
 
 			// IsAuxiliaryAttribute()
-			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::INTERNAL_INTEGER_KEY));
-			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::INTERNAL_FLOAT_KEY));
-			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::INTERNAL_VECTOR_KEY));
-			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::INTERNAL_MATRIX_KEY));
-			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::INTERNAL_STRING_KEY));
-			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::INTERNAL_POINTER_KEY));
-			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::EXTERNAL_INTEGER_KEY));
-			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::EXTERNAL_FLOAT_KEY));
-			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::EXTERNAL_VECTOR_KEY));
-			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::EXTERNAL_MATRIX_KEY));
-			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::EXTERNAL_STRING_KEY));
-			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::EXTERNAL_POINTER_KEY));
-			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedFoo::NESTED_SCOPE_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::INTERNAL_INTEGER_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::INTERNAL_FLOAT_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::INTERNAL_VECTOR_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::INTERNAL_MATRIX_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::INTERNAL_STRING_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::INTERNAL_POINTER_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::EXTERNAL_INTEGER_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::EXTERNAL_FLOAT_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::EXTERNAL_VECTOR_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::EXTERNAL_MATRIX_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::EXTERNAL_STRING_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::EXTERNAL_POINTER_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::NESTED_SCOPE_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::INTEGER_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::FLOAT_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::SCOPE_KEY));
 
 			// Test non existent keys
 			Assert::IsFalse(afoo.IsAttribute(AUXILIARY_KEY_1));
@@ -310,9 +319,9 @@ namespace LibraryDesktopTest
 		{
 			CREATE_TEST_VARS
 
-			AttributedFoo afoo1;
-			AttributedFoo afoo2;
-			Assert::IsTrue(afoo1.IsPrescribedAttribute(AttributedFoo::INTERNAL_FLOAT_KEY));
+			AttributedBar afoo1;
+			AttributedBar afoo2;
+			Assert::IsTrue(afoo1.IsPrescribedAttribute(AttributedBar::INTERNAL_FLOAT_KEY));
 			Assert::IsTrue(afoo1 == afoo2);
 
 			afoo1.AddAuxiliaryAttribute(AUXILIARY_KEY_1);
@@ -325,16 +334,16 @@ namespace LibraryDesktopTest
 			Assert::IsTrue(afoo1 != afoo2);
 			Assert::IsTrue(afoo1[AUXILIARY_KEY_1] == float1);
 
-			Assert::ExpectException<std::exception>([&afoo1]{afoo1.AddAuxiliaryAttribute(AttributedFoo::INTERNAL_INTEGER_KEY);});
+			Assert::ExpectException<std::exception>([&afoo1]{afoo1.AddAuxiliaryAttribute(AttributedBar::INTERNAL_INTEGER_KEY);});
 		}
 
 		TEST_METHOD(ExternalAssignment)
 		{
 			// Ensure that editing Datum assignment for external variables and c++ assignment
 			// both edit the same variables.
-			AttributedFoo afoo;
+			AttributedBar afoo;
 
-			std::int32_t& value = afoo[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger();
+			std::int32_t& value = afoo[AttributedBar::EXTERNAL_INTEGER_KEY].GetInteger();
 			Assert::AreEqual(afoo.mInteger, value);
 
 			value++;
@@ -350,16 +359,16 @@ namespace LibraryDesktopTest
 
 			Attributed* attributed = new Attributed();
 			Attributed* attributed2 = new Attributed();
-			AttributedFoo* afoo = new AttributedFoo();
+			AttributedBar* afoo = new AttributedBar();
 
 			Assert::IsTrue(attributed->Is(Attributed::TypeIdClass()));
 			Assert::IsTrue(attributed->Is("Attributed"));
-			Assert::IsFalse(attributed->Is(AttributedFoo::TypeIdClass()));
-			Assert::IsFalse(attributed->Is("AttributedFoo"));
+			Assert::IsFalse(attributed->Is(AttributedBar::TypeIdClass()));
+			Assert::IsFalse(attributed->Is("AttributedBar"));
 
 			Assert::IsTrue(attributed->As<Attributed>() != nullptr);
 			Assert::IsTrue(attributed->As<Scope>() != nullptr);
-			Assert::IsTrue(attributed->As<AttributedFoo>() == nullptr);
+			Assert::IsTrue(attributed->As<AttributedBar>() == nullptr);
 
 			Assert::AreEqual(attributed->ToString(), std::string("1"));
 
@@ -368,7 +377,7 @@ namespace LibraryDesktopTest
 
 			RTTI* result = attributed->QueryInterface(Attributed::TypeIdClass());
 			Assert::IsTrue(result != nullptr);
-			result = attributed->QueryInterface(AttributedFoo::TypeIdClass());
+			result = attributed->QueryInterface(AttributedBar::TypeIdClass());
 			Assert::IsTrue(result == nullptr);
 			result = afoo->QueryInterface(Attributed::TypeIdClass());
 			Assert::IsTrue(result != nullptr);
@@ -385,19 +394,19 @@ namespace LibraryDesktopTest
 
 		TEST_METHOD(MoveSemantics)
 		{
-			AttributedFoo afoo1;
+			AttributedBar afoo1;
 			afoo1.mInteger = 0;
-			afoo1[AttributedFoo::INTERNAL_FLOAT_KEY] = 0.0f;
+			afoo1[AttributedBar::INTERNAL_FLOAT_KEY] = 0.0f;
 
-			AttributedFoo afoo2(std::move(afoo1));
+			AttributedBar afoo2(std::move(afoo1));
 			Assert::IsTrue(afoo2.mInteger == 0);
-			Assert::IsTrue(afoo2.mFloat == AttributedFoo::EXTERNAL_FLOAT_DEFAULT);
-			Assert::IsTrue(afoo2[AttributedFoo::INTERNAL_INTEGER_KEY] == AttributedFoo::INTERNAL_INTEGER_DEFAULT);
-			Assert::IsTrue(afoo2[AttributedFoo::INTERNAL_FLOAT_KEY] == 0.0f);
-			Assert::IsTrue(afoo2.mNestedScope == afoo2[AttributedFoo::NESTED_SCOPE_KEY].GetScope());
+			Assert::IsTrue(afoo2.mFloat == AttributedBar::EXTERNAL_FLOAT_DEFAULT);
+			Assert::IsTrue(afoo2[AttributedBar::INTERNAL_INTEGER_KEY] == AttributedBar::INTERNAL_INTEGER_DEFAULT);
+			Assert::IsTrue(afoo2[AttributedBar::INTERNAL_FLOAT_KEY] == 0.0f);
+			Assert::IsTrue(afoo2.mNestedScope == afoo2[AttributedBar::NESTED_SCOPE_KEY].GetScope());
 		
 			// Check pointer fix-up
-			Assert::IsTrue(&afoo2.mInteger == &(afoo2[AttributedFoo::EXTERNAL_INTEGER_KEY].GetInteger()));
+			Assert::IsTrue(&afoo2.mInteger == &(afoo2[AttributedBar::EXTERNAL_INTEGER_KEY].GetInteger()));
 		}
 
 		TEST_METHOD(ExtraEquality)

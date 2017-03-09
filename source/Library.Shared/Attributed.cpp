@@ -187,6 +187,12 @@ namespace FieaGameEngine
 		{
 			sPrescribedAttributeCache[TypeIdInstance()].PushBack(key);
 		}
+
+		// Only allow 1 scope to be added when adding prescribed attributes.
+		if (IsAttribute(key))
+		{
+			return *(mMap[key].GetScope());
+		}
 		return AppendScope(key);
 	}
 
@@ -195,6 +201,14 @@ namespace FieaGameEngine
 		if (!IsPrescribedAttribute(key))
 		{
 			sPrescribedAttributeCache[TypeIdInstance()].PushBack(key);
+		}
+
+		// Only allow 1 scope to be added when adding prescribed attributes at provided key.
+		// With the Adopt case, overwrite old scope with new scope. This feels wrong.
+		if (IsAttribute(key))
+		{
+			delete mMap[key].GetScope();
+			mMap[key].Remove(&scope);
 		}
 		Adopt(scope, key);
 	}
