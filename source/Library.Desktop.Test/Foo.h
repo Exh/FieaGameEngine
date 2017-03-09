@@ -29,6 +29,8 @@ public:
 
     void SetHeapData(int data);
 
+	bool Equals(const RTTI* rhs) const override;
+
 	class FooHashFunctor
 	{
 	public:

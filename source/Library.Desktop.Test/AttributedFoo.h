@@ -52,6 +52,7 @@ public:
 	 AttributedFoo& operator=(AttributedFoo&& rhs);
 
 	bool operator==(const AttributedFoo& rhs) const;
+	bool operator!=(const AttributedFoo& rhs) const;
 
 	virtual void Populate();
 

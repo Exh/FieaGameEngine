@@ -117,12 +117,18 @@ AttributedFoo& AttributedFoo::operator=(AttributedFoo&& rhs)
 bool AttributedFoo::operator==(const AttributedFoo& rhs) const
 {
 
-	return mInteger == rhs.mInteger &&
+	return Attributed::operator==(rhs) &&
+		mInteger == rhs.mInteger &&
 		mFloat == rhs.mFloat &&
 		mVector == rhs.mVector &&
 		mMatrix == rhs.mMatrix &&
 		mString == rhs.mString &&
 		mFoo == rhs.mFoo;
+}
+
+bool AttributedFoo::operator!=(const AttributedFoo& rhs) const
+{
+	return !operator==(rhs);
 }
 
 void AttributedFoo::Populate()

@@ -81,6 +81,18 @@ void Foo::SetHeapData(int data)
 	*mHeapData = data;
 }
 
+bool Foo::Equals(const RTTI* rhs) const
+{
+	Foo* rhsFoo = rhs->As<Foo>();
+
+	if (rhsFoo != nullptr)
+	{
+		return operator==(*rhsFoo);
+	}
+
+	return false;
+}
+
 #pragma endregion 
 
 #pragma region FooHashFunctorMethods
