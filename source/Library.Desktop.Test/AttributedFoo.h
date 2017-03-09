@@ -75,7 +75,7 @@ public:
 
 	std::int32_t mInteger;
 	float mFloat;
-	glm::vec4 mVector;
+	glm::vec4 mGlmVector;
 	glm::mat4 mMatrix;
 	std::string mString;
 	Foo mFoo;

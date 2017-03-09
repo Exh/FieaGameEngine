@@ -83,4 +83,7 @@ void AttributedBar::Populate()
 	AddExternalAttribute(INTEGER_KEY, &mBarInteger, 1U);
 	AddInternalAttribute(FLOAT_KEY, FLOAT_DEFAULT);
 	mBarScope = &AddNestedScopeAttribute(SCOPE_KEY);
+
+	// Just for testing that only 1 scope can be prescribed per key.
+	AddNestedScopeAttribute(SCOPE_KEY);
 }

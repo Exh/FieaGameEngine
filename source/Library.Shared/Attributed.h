@@ -12,6 +12,8 @@ namespace FieaGameEngine
 
 	public:
 
+		/** Default constructor. Creates an attributed with a this pointer.
+		*/
 		Attributed();
 
 		virtual ~Attributed();

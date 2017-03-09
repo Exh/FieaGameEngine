@@ -35,7 +35,7 @@ RTTI_DEFINITIONS(AttributedFoo)
 AttributedFoo::AttributedFoo() :
 	mInteger(EXTERNAL_INTEGER_DEFAULT),
 	mFloat(EXTERNAL_FLOAT_DEFAULT),
-	mVector(EXTERNAL_VECTOR_DEFAULT),
+	mGlmVector(EXTERNAL_VECTOR_DEFAULT),
 	mMatrix(EXTERNAL_MATRIX_DEFAULT),
 	mPointer(&mFoo),
 	mNestedScope(nullptr)
@@ -61,7 +61,7 @@ AttributedFoo& AttributedFoo::operator=(const AttributedFoo& rhs)
 
 		mInteger = rhs.mInteger;
 		mFloat = rhs.mFloat;
-		mVector = rhs.mVector;
+		mGlmVector = rhs.mGlmVector;
 		mMatrix = rhs.mMatrix;
 		mString = rhs.mString;
 		mFoo = rhs.mFoo;
@@ -78,7 +78,7 @@ AttributedFoo::AttributedFoo(AttributedFoo&& rhs) :
 	Attributed(std::move(rhs)),
 	mInteger(rhs.mInteger),
 	mFloat(rhs.mFloat),
-	mVector(std::move(rhs.mVector)),
+	mGlmVector(std::move(rhs.mGlmVector)),
 	mMatrix(std::move(rhs.mMatrix)),
 	mString(std::move(rhs.mString)),
 	mFoo(rhs.mFoo),
@@ -100,7 +100,7 @@ AttributedFoo& AttributedFoo::operator=(AttributedFoo&& rhs)
 
 		mInteger = rhs.mInteger;
 		mFloat = rhs.mFloat;
-		mVector = rhs.mVector;
+		mGlmVector = rhs.mGlmVector;
 		mMatrix = rhs.mMatrix;
 		mString = rhs.mString;
 		mFoo = rhs.mFoo;
@@ -120,7 +120,7 @@ bool AttributedFoo::operator==(const AttributedFoo& rhs) const
 	return Attributed::operator==(rhs) &&
 		mInteger == rhs.mInteger &&
 		mFloat == rhs.mFloat &&
-		mVector == rhs.mVector &&
+		mGlmVector == rhs.mGlmVector &&
 		mMatrix == rhs.mMatrix &&
 		mString == rhs.mString &&
 		mFoo == rhs.mFoo;
@@ -137,7 +137,7 @@ void AttributedFoo::Populate()
 
 	AddExternalAttribute(EXTERNAL_INTEGER_KEY, &mInteger, 1U);
 	AddExternalAttribute(EXTERNAL_FLOAT_KEY, &mFloat, 1U);
-	AddExternalAttribute(EXTERNAL_VECTOR_KEY, &mVector, 1U);
+	AddExternalAttribute(EXTERNAL_VECTOR_KEY, &mGlmVector, 1U);
 	AddExternalAttribute(EXTERNAL_MATRIX_KEY, &mMatrix, 1U);
 	AddExternalAttribute(EXTERNAL_STRING_KEY, &mString, 1U);
 	AddExternalAttribute(EXTERNAL_POINTER_KEY, &mPointer, 1U);

@@ -250,6 +250,7 @@ namespace LibraryDesktopTest
 			Assert::IsTrue(afoo.IsAttribute(AttributedBar::INTEGER_KEY));
 			Assert::IsTrue(afoo.IsAttribute(AttributedBar::FLOAT_KEY));
 			Assert::IsTrue(afoo.IsAttribute(AttributedBar::SCOPE_KEY));
+			Assert::IsTrue(afoo.IsAttribute("this"));
 
 			// IsPrescribedAttribute()
 			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::INTERNAL_INTEGER_KEY));
@@ -268,6 +269,7 @@ namespace LibraryDesktopTest
 			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::INTEGER_KEY));
 			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::FLOAT_KEY));
 			Assert::IsTrue(afoo.IsPrescribedAttribute(AttributedBar::SCOPE_KEY));
+			Assert::IsTrue(afoo.IsPrescribedAttribute("this"));
 
 			// IsAuxiliaryAttribute()
 			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::INTERNAL_INTEGER_KEY));
@@ -286,6 +288,7 @@ namespace LibraryDesktopTest
 			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::INTEGER_KEY));
 			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::FLOAT_KEY));
 			Assert::IsFalse(afoo.IsAuxiliaryAttribute(AttributedBar::SCOPE_KEY));
+			Assert::IsFalse(afoo.IsAuxiliaryAttribute("this"));
 
 			// Test non existent keys
 			Assert::IsFalse(afoo.IsAttribute(AUXILIARY_KEY_1));

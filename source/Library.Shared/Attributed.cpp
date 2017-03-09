@@ -20,7 +20,7 @@ namespace FieaGameEngine
 
 	void Attributed::Populate()
 	{
-		(*this)["this"] = static_cast<RTTI*>(this);
+		AddInternalAttribute("this", this);
 	}
 
 	Attributed::Attributed(const Attributed& rhs)
