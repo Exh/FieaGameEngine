@@ -527,7 +527,7 @@ namespace LibraryDesktopTest
 				Assert::AreEqual(datum.Type(), DatumType::Float);
 				datum.GetFloat(2) = float1;
 				Assert::AreEqual(datum.GetFloat(2), float1);
-				Assert::ExpectException<std::exception>([&datum, &externalFloats] {datum.SetStorage(externalFloats, 3); });
+				Assert::ExpectException<std::exception>([&datum, &externalInts] {datum.SetStorage(externalInts, 3); });
 				Assert::ExpectException<std::exception>([&datum] {datum.Clear(); });
 				Assert::ExpectException<std::exception>([&datum, &float1] {datum.PushBack(float1); });
 			}
