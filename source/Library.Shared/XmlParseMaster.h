@@ -11,6 +11,8 @@ namespace FieaGameEngine
 	{
 		class SharedData
 		{
+		public:
+
 			SharedData();
 
 			virtual ~SharedData();
@@ -38,7 +40,7 @@ namespace FieaGameEngine
 
 	public:
 
-		XmlParseMaster(SharedData* sharedData = nullptr) explicit;
+		explicit XmlParseMaster(SharedData* sharedData = nullptr);
 		~XmlParseMaster();
 
 		XmlParseMaster(const XmlParseMaster& rhs) = delete;
@@ -51,8 +53,8 @@ namespace FieaGameEngine
 		void RemoveHelper(IXmlParseHelper& helper);
 
 		void Parse(const char* buffer,
-				   std::uint32 length,
-				   bool lastChunk);
+				   std::int32_t length,
+				   bool isFinal);
 
 		void ParseFromFile(const char* filename);
 

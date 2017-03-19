@@ -21,6 +21,6 @@ namespace FieaGameEngine
 		bool CharDataHandler(const char* data,
 							 std::int32_t length);
 
-		virtual IXmlParseHelper& Clone() = 0;
+		virtual IXmlParseHelper* Clone() = 0;
 	};
 }

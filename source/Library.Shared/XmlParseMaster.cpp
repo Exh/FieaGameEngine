@@ -1,6 +1,4 @@
-#include "XmlParseMaster.h"
-#include "expat.h"
-#include <assert.h>
+#include "pch.h"
 
 namespace FieaGameEngine
 {
@@ -24,6 +22,8 @@ namespace FieaGameEngine
 		SharedData* clone = new SharedData();
 		clone->mDepth = 0;
 		clone->mParseMaster = nullptr;
+
+		return clone;
 	}
 
 	void XmlParseMaster::SharedData::SetXmlParseMaster(XmlParseMaster* parseMaster)
@@ -36,7 +36,7 @@ namespace FieaGameEngine
 		return mParseMaster;
 	}
 
-	const XmlParseMaster* XmlParseMaster::SharedData::GetXmlParseMaster()
+	const XmlParseMaster* XmlParseMaster::SharedData::GetXmlParseMaster() const
 	{
 		return mParseMaster;
 	}
@@ -80,7 +80,7 @@ namespace FieaGameEngine
 		if (mCloned)
 		{
 			delete mSharedData;
-			mSharedData = nulltr;
+			mSharedData = nullptr;
 
 			for (IXmlParseHelper* helper : mParseHelpers)
 			{
@@ -114,6 +114,8 @@ namespace FieaGameEngine
 				clone->mParseHelpers.PushBack(helper->Clone());
 			}
 		}
+
+		return clone;
 	}
 
 	void XmlParseMaster::AddHelper(IXmlParseHelper& helper)
@@ -126,5 +128,60 @@ namespace FieaGameEngine
 		mParseHelpers.Remove(&helper);
 	}
 
+	void XmlParseMaster::Parse(const char* buffer,
+							   std::int32_t length,
+							   bool isFinal)
+	{
+		XML_Parse(mParser, buffer, length, isFinal);
+	}
 
+	void XmlParseMaster::ParseFromFile(const char* filename)
+	{
+		assert(filename != nullptr);
+
+		FILE* file = nullptr;
+		fopen_s(&file, filename, "r");
+
+		if (file == nullptr)
+		{
+			throw std::exception("Invalid file path.");
+		}
+
+		mFilename = filename;
+
+		fseek(file, 0, SEEK_END);
+		std::int32_t length = ftell(file);
+		fseek(file, 0, SEEK_SET);
+
+		char* buffer = reinterpret_cast<char*>(malloc(length));
+		fread(buffer, 1, length, file);
+
+		Parse(buffer, length, true);
+
+		free(buffer);
+		buffer = nullptr;
+
+		fclose(file);
+		file = nullptr;
+	}
+
+	const char* XmlParseMaster::GetFileName() const
+	{
+		return mFilename;
+	}
+
+	XmlParseMaster::SharedData* XmlParseMaster::GetSharedData()
+	{
+		return mSharedData;
+	}
+
+	const XmlParseMaster::SharedData* XmlParseMaster::GetSharedData() const
+	{
+		return mSharedData;	
+	}
+
+	void XmlParseMaster::SetSharedData(SharedData* sharedData)
+	{
+		mSharedData = sharedData;
+	}
 }

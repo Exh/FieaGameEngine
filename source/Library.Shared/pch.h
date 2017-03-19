@@ -19,6 +19,8 @@
 #include "Scope.h"
 #include "RTTI.h"
 #include "Attributed.h"
+#include "IXmlParseHelper.h"
+#include "XmlParseMaster.h"
 
 // GLM
 #include "glm/glm.hpp"
@@ -26,3 +28,6 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+// Expat 
+#include "expat.h"

@@ -1,4 +1,4 @@
-#include "IXmlParseHelper.h"
+#include "pch.h"
 
 namespace FieaGameEngine
 {
@@ -7,25 +7,33 @@ namespace FieaGameEngine
 
 	}
 
-	IXmlParseHelper::Initialize()
+	void IXmlParseHelper::Initialize()
 	{
 	
 	}
 
-	IXmlParseHelper::StartElementHandler(const std::string& elementName,
-										 const HashMap<std::string, std::string>& attributes)
+	bool IXmlParseHelper::StartElementHandler(const std::string& elementName,
+											  const HashMap<std::string, std::string>& attributes)
 	{
-	
+		elementName;
+		attributes;
+
+		return false;
 	}
 
-	IXmlParseHelper::EndElementHandler(const std::string& elementName)
+	bool IXmlParseHelper::EndElementHandler(const std::string& elementName)
 	{
-	
+		elementName;
+
+		return false;
 	}
 
 	bool IXmlParseHelper::CharDataHandler(const char* data,
 										  std::int32_t length)
 	{
-	
+		data;
+		length;
+
+		return false;
 	}
 }
