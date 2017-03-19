@@ -66,7 +66,7 @@ namespace FieaGameEngine
 
         void Clear();
 
-		bool Remove(const T& item);
+		//bool Remove(const T& item);
 
         void Remove(std::uint32_t index);
 

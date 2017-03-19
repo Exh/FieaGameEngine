@@ -125,13 +125,21 @@ namespace FieaGameEngine
 
 	void XmlParseMaster::RemoveHelper(IXmlParseHelper& helper)
 	{
-		mParseHelpers.Remove(&helper);
+		mParseHelpers.Remove(mParseHelpers.Find(&helper));
 	}
 
 	void XmlParseMaster::Parse(const char* buffer,
 							   std::int32_t length,
 							   bool isFinal)
 	{
+		for (IXmlParseHelper* helper : mParseHelpers)
+		{
+			if (helper != nullptr)
+			{
+				helper->Initialize();
+			}
+		}
+
 		XML_Parse(mParser, buffer, length, isFinal);
 	}
 
@@ -183,5 +191,85 @@ namespace FieaGameEngine
 	void XmlParseMaster::SetSharedData(SharedData* sharedData)
 	{
 		mSharedData = sharedData;
+	}
+
+	void XmlParseMaster::StartElementHandler(void* userData,
+											 const XML_Char* elementName,
+											 const XML_Char** attributes)
+	{
+		SharedData* sharedData = reinterpret_cast<SharedData*>(userData);
+		HashMap<std::string, std::string> attributeMap;
+
+		if (sharedData != nullptr)
+		{
+			sharedData->IncrementDepth();
+
+			GenerateAttributeMap(attributeMap, attributes);
+
+			for (IXmlParseHelper* helper : mParseHelpers)
+			{
+				if (helper != nullptr)
+				{
+					if (helper->StartElementHandler(elementName, attributeMap))
+					{
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	static void XmlParseMaster::EndElementHandler(void* userData,
+												  const XML_Char* elementName)
+	{
+		SharedData* sharedData = reinterpret_cast<SharedData*>(userData);
+
+		if (sharedData != nullptr)
+		{
+			sharedData->DecrementDepth();
+
+			for (IXmlParseHelper* helper : mParseHelpers)
+			{
+				if (helper != nullptr)
+				{
+					if (helper->EndElementHandler(elementName))
+					{
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	static void XmlParseMaster::CharDataHandler(void* userData,
+												const XML_Char* charString,
+												int32_t length)
+	{
+		SharedData* sharedData = reinterpret_cast<SharedData*>(userData);
+
+		if (sharedData != nullptr)
+		{
+			for (IXmlParseHelper* helper : mParseHelpers)
+			{
+				if (helper != nullptr)
+				{
+					if (helper->CharDataHandler(charString, length))
+					{
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	void XmlParseMaster::GenerateAttributeMap(HashMap<std::string, std::string>& attributeMap,
+													  const char** attributes)
+	{
+		assert(attributes != nullptr);
+
+		for (std::int32_t i = 0; attributes[i] != nullptr; i += 2)
+		{
+			attributeMap.Insert(std::pair<std::string, std::string>(attributes[i], attributes[i+1]));
+		}
 	}
 }

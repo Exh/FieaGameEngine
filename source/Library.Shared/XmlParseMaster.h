@@ -79,6 +79,9 @@ namespace FieaGameEngine
 									const XML_Char* charString,
 									int32_t length);
 
+		void GenerateAttributeMap(HashMap<std::string, std::string>& attributeMap,
+								  const char** attributes);
+
 	private:
 
 		XML_Parser mParser;

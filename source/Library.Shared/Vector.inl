@@ -282,11 +282,11 @@ namespace FieaGameEngine
         mSize--;
     }
 
-	template<typename T>
-	bool Vector<T>::Remove(const T& item)
-	{
-		return Remove(Find(item));
-	}
+	//template<typename T>
+	//bool Vector<T>::Remove(const T& item)
+	//{
+	//	return Remove(Find(item));
+	//}
 
     template<typename T>
     bool Vector<T>::Remove(Iterator it)
