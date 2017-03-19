@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstdint>
+#include "expat.h"
+#include "IXmlParseHelper.h"
 
 namespace FieaGameEngine
 {
@@ -11,7 +13,9 @@ namespace FieaGameEngine
 		{
 			SharedData();
 
-			virtual SharedData& Clone() const;
+			virtual ~SharedData();
+
+			virtual SharedData* Clone() const;
 
 			void SetXmlParseMaster(XmlParseMaster* parseMaster);
 
@@ -28,14 +32,19 @@ namespace FieaGameEngine
 		protected:
 
 			std::uint32_t mDepth;
+
+			XmlParseMaster* mParseMaster;
 		};
 
 	public:
 
-		XmlParseMaster(SharedData& sharedData);
+		XmlParseMaster(SharedData* sharedData = nullptr) explicit;
 		~XmlParseMaster();
 
-		XmlParseMaster& Clone() const;
+		XmlParseMaster(const XmlParseMaster& rhs) = delete;
+		XmlParseMaster& operator=(const XmlParseMaster& rhs) = delete;
+
+		XmlParseMaster* Clone() const;
 
 		void AddHelper(IXmlParseHelper& helper);
 
@@ -57,12 +66,23 @@ namespace FieaGameEngine
 
 	private:
 
-		//StartElementHandler
-		//EndElementHandler
-		//CharDataHandler
+		static void StartElementHandler(void* userData,
+										const XML_Char* elementName,
+										const XML_Char** attributes);
 
+		static void EndElementHandler(void* userData,
+									  const XML_Char* elementName);
+
+		static void CharDataHandler(void* userData,
+									const XML_Char* charString,
+									int32_t length);
+
+	private:
+
+		XML_Parser mParser;
 		SharedData* mSharedData;
-
 		bool mCloned;
+		const char* mFilename;
+		Vector<IXmlParseHelper*> mParseHelpers;
 	};
 }

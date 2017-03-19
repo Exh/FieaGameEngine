@@ -14,7 +14,7 @@ namespace FieaGameEngine
 		void Initialize();
 
 		bool StartElementHandler(const std::string& elementName,
-								 HashMap<std::string, std::string>& attributes);
+								 const HashMap<std::string, std::string>& attributes);
 
 		bool EndElementHandler(const std::string& elementName);
 
