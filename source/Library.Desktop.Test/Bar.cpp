@@ -13,20 +13,20 @@ Bar::~Bar()
 
 }
 
-void Bar::PrintString(std::int32_t index)
+void Bar::PrintStringToFile(FILE* file, std::int32_t index) const
 {
 	for (std::int32_t i = 0; i < index; i++)
 	{
-		printf("    ");
+		fprintf(file, "    ");
 	}
 
-	printf("Bar %d: ", index);
-	printf("mIntValue = %d, ", mIntValue);
-	printf("mFloatValue = %f,", mFloatValue);
-	printf("mString = %s\n", mString.c_str());
+	fprintf(file,"Bar %d: ", index);
+	fprintf(file, "mIntValue = %d, ", mIntValue);
+	fprintf(file, "mFloatValue = %f,", mFloatValue);
+	fprintf(file, "mString = %s\n", mString.c_str());
 
 	for (Bar& bar : mChildren)
 	{
-		bar.PrintString(index + 1);
+		bar.PrintStringToFile(file, index + 1);
 	}
 }

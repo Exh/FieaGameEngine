@@ -60,7 +60,7 @@ namespace FieaGameEngine
 
 	XmlParseMaster::XmlParseMaster(SharedData* sharedData) :
 		mParser(nullptr),
-		mSharedData(sharedData),
+		mSharedData(nullptr),
 		mCloned(false),
 		mFilename(nullptr)
 	{
@@ -73,7 +73,7 @@ namespace FieaGameEngine
 
 		XML_SetCharacterDataHandler(mParser, &XmlParseMaster::CharDataHandler);
 
-		XML_SetUserData(mParser, sharedData);
+		SetSharedData(sharedData);
 	}
 
 	XmlParseMaster::~XmlParseMaster()
@@ -121,18 +121,22 @@ namespace FieaGameEngine
 
 	void XmlParseMaster::AddHelper(IXmlParseHelper& helper)
 	{
-		if (!mCloned)
+		if (mCloned)
 		{
-			mParseHelpers.PushBack(&helper);
+			throw std::exception("Cannot add helper to cloned XmlParseMaster");
 		}
+
+		mParseHelpers.PushBack(&helper);
 	}
 
 	void XmlParseMaster::RemoveHelper(IXmlParseHelper& helper)
 	{
-		if (!mCloned)
+		if (mCloned)
 		{
-			mParseHelpers.Remove(mParseHelpers.Find(&helper));
+			throw std::exception("Cannot add helper to cloned XmlParseMaster");
 		}
+
+		mParseHelpers.Remove(mParseHelpers.Find(&helper));
 	}
 
 	void XmlParseMaster::Parse(const char* buffer,
@@ -147,7 +151,11 @@ namespace FieaGameEngine
 			}
 		}
 
-		XML_Parse(mParser, buffer, length, isFinal);
+		XML_Status status = XML_Parse(mParser, buffer, length, isFinal);
+		status;
+		XML_Error error = XML_GetErrorCode(mParser);
+		const char* errorString = XML_ErrorString(error);
+		errorString;
 	}
 
 	void XmlParseMaster::ParseFromFile(const char* filename)
@@ -169,7 +177,7 @@ namespace FieaGameEngine
 		fseek(file, 0, SEEK_SET);
 
 		char* buffer = reinterpret_cast<char*>(malloc(length));
-		fread(buffer, 1, length, file);
+		length = fread(buffer, 1, length, file);
 
 		Parse(buffer, length, true);
 
@@ -199,7 +207,14 @@ namespace FieaGameEngine
 
 	void XmlParseMaster::SetSharedData(SharedData* sharedData)
 	{
+		assert(mParser != nullptr);
 		mSharedData = sharedData;
+		XML_SetUserData(mParser, mSharedData);
+
+		if (sharedData != nullptr)
+		{
+			mSharedData->SetXmlParseMaster(this);
+		}
 	}
 
 	void XmlParseMaster::StartElementHandler(void* userData,

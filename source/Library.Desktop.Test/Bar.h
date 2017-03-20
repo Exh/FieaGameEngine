@@ -7,7 +7,7 @@ struct Bar
 	Bar();
 	~Bar();
 
-	void PrintString(std::int32_t index);
+	void PrintStringToFile(FILE* file, std::int32_t index) const;
 
 	Bar* mParent;
 	FieaGameEngine::Vector<Bar> mChildren;

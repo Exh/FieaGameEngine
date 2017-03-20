@@ -105,6 +105,9 @@
       <AdditionalDependencies>Expat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)../external/lib/Win32/Debug/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
+    <PreLinkEvent>
+      <Command>copy "$(SolutionDir)..\external\lib\$(Platform)\$(Configuration)\Expat.pdb" "$(SolutionDir)..\source\Library.Desktop\bin\$(Platform)\$(Configuration)"</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -124,6 +127,9 @@
       <AdditionalDependencies>Expat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)../external/lib/x64/Debug/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
+    <PreLinkEvent>
+      <Command>copy "$(SolutionDir)..\external\lib\$(Platform)\$(Configuration)\Expat.pdb" "$(SolutionDir)..\source\Library.Desktop\bin\$(Platform)\$(Configuration)"</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -147,6 +153,9 @@
       <AdditionalDependencies>Expat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)../external/lib/Win32/Release/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
+    <PreLinkEvent>
+      <Command>copy "$(SolutionDir)..\external\lib\$(Platform)\$(Configuration)\Expat.pdb" "$(SolutionDir)..\source\Library.Desktop\bin\$(Platform)\$(Configuration)"</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -170,6 +179,9 @@
       <AdditionalDependencies>Expat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)../external/lib/x64/Release/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
+    <PreLinkEvent>
+      <Command>copy "$(SolutionDir)..\external\lib\$(Platform)\$(Configuration)\Expat.pdb" "$(SolutionDir)..\source\Library.Desktop\bin\$(Platform)\$(Configuration)"</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -13,6 +13,7 @@
     <ClCompile Include="AttributedBar.cpp" />
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="BarParseHelper.cpp" />
+    <ClCompile Include="XmlParseMasterTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

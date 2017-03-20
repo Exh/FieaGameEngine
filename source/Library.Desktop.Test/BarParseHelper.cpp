@@ -123,8 +123,7 @@ bool BarParseHelper::CharDataHandler(void* userData,
 	if (barSharedData != nullptr &&
 		barSharedData->mCurrentBar != nullptr)
 	{
-		//barSharedData->mCurrentBar->mString.append(,std::string().assign(length, data));
-		//barSharedData->mCurrentBar->mString = std::string()
+		barSharedData->mCurrentBar->mString.append(data, static_cast<size_t>(length));
 		data;
 		length;
 
