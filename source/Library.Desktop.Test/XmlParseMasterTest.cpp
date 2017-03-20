@@ -55,13 +55,13 @@ namespace LibraryDesktopTest
 			parseMaster.SetSharedData(&sharedData1);
 			parseMaster.AddHelper(barParseHelper);
 
-			parseMaster.ParseFromFile("C:/Users/mholtkamp/Desktop/barTestChar.xml");
-			WriteParseResults(sharedData1, "resultsChar.txt");
+			parseMaster.ParseFromFile("../../../files/BarTestAttributes.xml");
+			WriteParseResults(sharedData1, "BarTestAttributesResults.txt");
 
 			BarSharedData sharedData2;
 			parseMaster.SetSharedData(&sharedData2);
-			parseMaster.ParseFromFile("C:/Users/mholtkamp/Desktop/barTest.xml");
-			WriteParseResults(sharedData2, "results.txt");
+			parseMaster.ParseFromFile("../../../files/BarTestCharData.xml");
+			WriteParseResults(sharedData2, "BarTestCharDataResults.txt");
 
 			Assert::IsTrue(*(sharedData1.mRootBar) == *(sharedData2.mRootBar));
 		}

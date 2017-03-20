@@ -1,0 +1,17 @@
+<Bar>
+    <intValue>10</intValue>
+    <floatValue>1.0f</floatValue>
+    <Bar>
+        <intValue>20</intValue>
+        <floatValue>2.0f</floatValue>
+        <Bar>
+            <intValue>40</intValue>
+            <floatValue>4.0f</floatValue>
+        </Bar>
+    </Bar>
+    <Bar>
+        <intValue>30</intValue>
+        <floatValue>3.0f</floatValue>
+        Bar 30 Character Data!
+    </Bar>
+</Bar>
