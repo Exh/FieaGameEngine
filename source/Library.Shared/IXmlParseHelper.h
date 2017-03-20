@@ -15,10 +15,10 @@ namespace FieaGameEngine
 
 		virtual bool StartElementHandler(void* userData,
 										 const std::string& elementName,
-										 const HashMap<std::string, std::string>& attributes);
+										 const HashMap<std::string, std::string>& attributes) = 0;
 
 		virtual bool EndElementHandler(void* sharedData,
-									   const std::string& elementName);
+									   const std::string& elementName) = 0;
 
 		virtual bool CharDataHandler(void* sharedData,
 									 const char* data,
