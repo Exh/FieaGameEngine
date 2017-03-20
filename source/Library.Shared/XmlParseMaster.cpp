@@ -18,6 +18,11 @@ namespace FieaGameEngine
 	
 	}
 
+	void XmlParseMaster::SharedData::Initialize()
+	{
+		mDepth = 0U;
+	}
+
 	XmlParseMaster::SharedData* XmlParseMaster::SharedData::Clone() const
 	{
 		SharedData* clone = new SharedData();
@@ -143,6 +148,11 @@ namespace FieaGameEngine
 							   std::int32_t length,
 							   bool isFinal)
 	{
+		if (mSharedData != nullptr)
+		{
+			mSharedData->Initialize();
+		}
+
 		for (IXmlParseHelper* helper : mParseHelpers)
 		{
 			if (helper != nullptr)
@@ -193,6 +203,8 @@ namespace FieaGameEngine
 	void XmlParseMaster::ParseFromString(const char* stringArray)
 	{
 		Parse(stringArray, strlen(stringArray), true);
+
+		RecreateXmlParser();
 	}
 
 	const char* XmlParseMaster::GetFileName() const
@@ -314,7 +326,15 @@ namespace FieaGameEngine
 		mParser = nullptr;
 
 		mParser = XML_ParserCreate(nullptr);
-
 		assert(mParser != nullptr);
+
+		XML_SetElementHandler(mParser,
+							  &XmlParseMaster::StartElementHandler,
+							  &XmlParseMaster::EndElementHandler);
+
+		XML_SetCharacterDataHandler(mParser,
+									&XmlParseMaster::CharDataHandler);
+
+		SetSharedData(mSharedData);
 	}
 }

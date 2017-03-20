@@ -13,11 +13,18 @@ BarSharedData::BarSharedData() :
 
 BarSharedData::~BarSharedData()
 {
-	if (mRootBar != nullptr)
-	{
-		delete mRootBar;
-		mRootBar = nullptr;
-	}
+	delete mRootBar;
+	mRootBar = nullptr;
+}
+
+void BarSharedData::Initialize()
+{
+	SharedData::Initialize();
+
+	delete mRootBar;
+	mRootBar = nullptr;
+
+	mCurrentBar = nullptr;
 }
 
 #pragma endregion
@@ -36,7 +43,9 @@ BarParseHelper::~BarParseHelper()
 
 void BarParseHelper::Initialize()
 {
-
+	IXmlParseHelper::Initialize();
+	mCharData.clear();
+	mBarDepthStack.Clear();
 }
 
 bool BarParseHelper::StartElementHandler(void* userData,

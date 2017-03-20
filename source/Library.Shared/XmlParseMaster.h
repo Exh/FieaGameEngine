@@ -36,6 +36,8 @@ namespace FieaGameEngine
 
 			virtual ~SharedData();
 
+			virtual void Initialize();
+
 			virtual SharedData* Clone() const;
 
 			void SetXmlParseMaster(XmlParseMaster* parseMaster);
@@ -69,10 +71,6 @@ namespace FieaGameEngine
 
 		void RemoveHelper(IXmlParseHelper& helper);
 
-		void Parse(const char* buffer,
-				   std::int32_t length,
-				   bool isFinal);
-
 		void ParseFromFile(const char* filename);
 
 		void ParseFromString(const char* stringArray);
@@ -86,6 +84,10 @@ namespace FieaGameEngine
 		void SetSharedData(SharedData* sharedData);
 
 	private:
+
+		void Parse(const char* buffer,
+				   std::int32_t length,
+				   bool isFinal);
 
 		static void StartElementHandler(void* userData,
 										const XML_Char* elementName,

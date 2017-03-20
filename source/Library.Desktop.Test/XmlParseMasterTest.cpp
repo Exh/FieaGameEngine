@@ -46,18 +46,24 @@ namespace LibraryDesktopTest
 			}
 		}
 
-		TEST_METHOD(GeneralParseTest)
+		TEST_METHOD(GenericParseTest)
 		{
 			XmlParseMaster parseMaster;
-			BarSharedData sharedData;
+			BarSharedData sharedData1;
 			BarParseHelper barParseHelper;
 
-			parseMaster.SetSharedData(&sharedData);
+			parseMaster.SetSharedData(&sharedData1);
 			parseMaster.AddHelper(barParseHelper);
 
 			parseMaster.ParseFromFile("C:/Users/mholtkamp/Desktop/barTestChar.xml");
-			WriteParseResults(sharedData, "results.txt");
-			__nop();
+			WriteParseResults(sharedData1, "resultsChar.txt");
+
+			BarSharedData sharedData2;
+			parseMaster.SetSharedData(&sharedData2);
+			parseMaster.ParseFromFile("C:/Users/mholtkamp/Desktop/barTest.xml");
+			WriteParseResults(sharedData2, "results.txt");
+
+			Assert::IsTrue(*(sharedData1.mRootBar) == *(sharedData2.mRootBar));
 		}
 
 

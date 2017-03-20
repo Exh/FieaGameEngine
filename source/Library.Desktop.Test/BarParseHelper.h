@@ -12,6 +12,8 @@ public:
 
 	BarSharedData();
 	~BarSharedData();
+
+	virtual void Initialize() override;
 	
 	Bar* mRootBar;
 	Bar* mCurrentBar;
