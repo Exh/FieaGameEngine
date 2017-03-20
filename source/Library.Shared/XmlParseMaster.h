@@ -1,9 +1,24 @@
 #pragma once
 
 #include <cstdint>
-#include "expat.h"
 #include "IXmlParseHelper.h"
 #include "RTTI.h"
+
+struct XML_ParserStruct;
+typedef XML_ParserStruct* XML_Parser;
+
+#ifdef XML_UNICODE     /* Information is UTF-16 encoded. */
+#ifdef XML_UNICODE_WCHAR_T
+typedef wchar_t XML_Char;
+typedef wchar_t XML_LChar;
+#else
+typedef unsigned short XML_Char;
+typedef char XML_LChar;
+#endif /* XML_UNICODE_WCHAR_T */
+#else                  /* Information is UTF-8 encoded. */
+typedef char XML_Char;
+typedef char XML_LChar;
+#endif /* XML_UNICODE */
 
 namespace FieaGameEngine
 {

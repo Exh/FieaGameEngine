@@ -700,3 +700,7 @@ You should add an internal prescribed member to AttributedFoo.
 	SharedData is an RTTI managing depth of descent.
 	Share
 */
+
+/* 
+	Possibly, for TestSharedData, add 
+*/

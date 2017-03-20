@@ -3,8 +3,9 @@
 #include "IXmlParseHelper.h"
 #include "XmlParseMaster.h"
 #include "Bar.h"
+#include <string>
 
-class BarSharedData : public FieaGameEngine::XmlParseMaster::SharedData final
+class BarSharedData final : public FieaGameEngine::XmlParseMaster::SharedData
 {
 public:
 
@@ -15,7 +16,7 @@ public:
 	Bar* mCurrentBar;
 };
 
-class BarParseHelper : public FieaGameEngine::IXmlParseHelper final
+class BarParseHelper final : public FieaGameEngine::IXmlParseHelper
 {
 public:
 
@@ -23,13 +24,13 @@ public:
 	~BarParseHelper();
 
 	BarParseHelper(const BarParseHelper& rhs) = delete;
-	BarParseHelper& BarParseHelper(const BarParseHelper& rhs) = delete;
+	BarParseHelper& operator=(const BarParseHelper& rhs) = delete;
 
 	virtual void Initialize() override;
 
 	virtual bool StartElementHandler(void* userData,
 									 const std::string& elementName,
-									 const HashMap<std::string, std::string>& attributes) override;
+									 const FieaGameEngine::HashMap<std::string, std::string>& attributes) override;
 
 	virtual bool EndElementHandler(void* userData,
 								   const std::string& elementName) override;

@@ -13,7 +13,7 @@ namespace FieaGameEngine
 
 		virtual void Initialize();
 
-		virtual bool StartElementHandler(void* sharedData,
+		virtual bool StartElementHandler(void* userData,
 										 const std::string& elementName,
 										 const HashMap<std::string, std::string>& attributes);
 

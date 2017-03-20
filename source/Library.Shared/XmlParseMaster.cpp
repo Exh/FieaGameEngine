@@ -121,12 +121,18 @@ namespace FieaGameEngine
 
 	void XmlParseMaster::AddHelper(IXmlParseHelper& helper)
 	{
-		mParseHelpers.PushBack(&helper);
+		if (!mCloned)
+		{
+			mParseHelpers.PushBack(&helper);
+		}
 	}
 
 	void XmlParseMaster::RemoveHelper(IXmlParseHelper& helper)
 	{
-		mParseHelpers.Remove(mParseHelpers.Find(&helper));
+		if (!mCloned)
+		{
+			mParseHelpers.Remove(mParseHelpers.Find(&helper));
+		}
 	}
 
 	void XmlParseMaster::Parse(const char* buffer,

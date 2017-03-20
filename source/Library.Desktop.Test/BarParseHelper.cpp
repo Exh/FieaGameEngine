@@ -34,7 +34,7 @@ BarParseHelper::~BarParseHelper()
 
 }
 
-BarParseHelper::Initialize()
+void BarParseHelper::Initialize()
 {
 
 }
@@ -101,7 +101,11 @@ bool BarParseHelper::EndElementHandler(void* userData,
 		assert(barSharedData->mCurrentBar != nullptr);
 
 		barSharedData->mCurrentBar = barSharedData->mCurrentBar->mParent;
+
+		return true;
 	}
+
+	return false;
 }
 
 bool BarParseHelper::CharDataHandler(void* userData,
@@ -116,12 +120,23 @@ bool BarParseHelper::CharDataHandler(void* userData,
 		barSharedData = sharedData->As<BarSharedData>();
 	}
 
-	if (barSharedData != nullptr)
+	if (barSharedData != nullptr &&
+		barSharedData->mCurrentBar != nullptr)
 	{
+		//barSharedData->mCurrentBar->mString.append(,std::string().assign(length, data));
+		//barSharedData->mCurrentBar->mString = std::string()
+		data;
+		length;
 
+		return true;
 	}
 
 	return false;
+}
+
+IXmlParseHelper* BarParseHelper::Clone()
+{
+	return new BarParseHelper();
 }
 
 #pragma endregion

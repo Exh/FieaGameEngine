@@ -22,7 +22,11 @@ void Bar::PrintString(std::int32_t index)
 
 	printf("Bar %d: ", index);
 	printf("mIntValue = %d, ", mIntValue);
-	printf("mFloatValue = %f," mFloatValue);
+	printf("mFloatValue = %f,", mFloatValue);
 	printf("mString = %s\n", mString.c_str());
-	PrintString(index + 1);
+
+	for (Bar& bar : mChildren)
+	{
+		bar.PrintString(index + 1);
+	}
 }
