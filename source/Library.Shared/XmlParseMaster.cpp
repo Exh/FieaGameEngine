@@ -190,6 +190,11 @@ namespace FieaGameEngine
 		file = nullptr;
 	}
 
+	void XmlParseMaster::ParseFromString(const char* stringArray)
+	{
+		Parse(stringArray, strlen(stringArray), true);
+	}
+
 	const char* XmlParseMaster::GetFileName() const
 	{
 		return mFilename;

@@ -47,6 +47,8 @@ bool BarParseHelper::StartElementHandler(void* userData,
 	XmlParseMaster::SharedData* sharedData = reinterpret_cast<XmlParseMaster::SharedData*>(userData);
 	BarSharedData* barSharedData = nullptr;
 
+	mCharData.clear();
+
 	if (sharedData != nullptr)
 	{
 		barSharedData = sharedData->As<BarSharedData>();
@@ -56,13 +58,15 @@ bool BarParseHelper::StartElementHandler(void* userData,
 		elementName == "Bar")
 	{
 		Bar* parent = barSharedData->mCurrentBar;
+		mBarDepthStack.PushFront(barSharedData->Depth());
 
 		if (parent != nullptr)
 		{
 			Bar newBar;
 			newBar.mParent = parent;
-			newBar.mIntValue = std::stoi(attributes["intValue"]);
-			newBar.mFloatValue = std::stof(attributes["floatValue"]);
+
+			AssignAttributes(newBar, attributes);
+			
 			parent->mChildren.PushBack(newBar);
 
 			barSharedData->mCurrentBar = &(parent->mChildren[parent->mChildren.Size() - 1]);
@@ -72,10 +76,9 @@ bool BarParseHelper::StartElementHandler(void* userData,
 			assert(barSharedData->mRootBar == nullptr);
 
 			barSharedData->mRootBar = new Bar();
-			barSharedData->mCurrentBar= barSharedData->mRootBar;
+			barSharedData->mCurrentBar = barSharedData->mRootBar;
 
-			barSharedData->mRootBar->mIntValue = std::stoi(attributes["intValue"]);
-			barSharedData->mRootBar->mFloatValue = std::stof(attributes["floatValue"]);
+			AssignAttributes(*barSharedData->mRootBar, attributes);
 		}
 
 		return true;
@@ -84,30 +87,67 @@ bool BarParseHelper::StartElementHandler(void* userData,
 	return false;
 }
 
+void BarParseHelper::AssignAttributes(Bar& bar, const HashMap<std::string, std::string>& attributes)
+{
+	if (attributes.ContainsKey("intValue"))
+	{
+		bar.mIntValue = std::stoi(attributes["intValue"]);
+	}
+
+	if (attributes.ContainsKey("floatValue"))
+	{
+		bar.mFloatValue = std::stof(attributes["floatValue"]);
+	}
+}
+
 bool BarParseHelper::EndElementHandler(void* userData,
 									   const std::string& elementName)
 {
 	XmlParseMaster::SharedData* sharedData = reinterpret_cast<XmlParseMaster::SharedData*>(userData);
 	BarSharedData* barSharedData = nullptr;
 
+	std::string thisCharData = mCharData;
+	mCharData.clear();
+
 	if (sharedData != nullptr)
 	{
 		barSharedData = sharedData->As<BarSharedData>();
 	}
 
-	if (barSharedData != nullptr &&
-		elementName == "Bar")
+	if (barSharedData != nullptr)
 	{
-		assert(barSharedData->mCurrentBar != nullptr);
-
-		if (barSharedData->mCurrentBar->mString.size() > 0U)
+		if(elementName == "Bar")
 		{
-			barSharedData->mCurrentBar->mString = IXmlParseHelper::TrimCharData(barSharedData->mCurrentBar->mString);
+			assert(barSharedData->mCurrentBar != nullptr);
+
+			if (barSharedData->mCurrentBar->mString.size() > 0U)
+			{
+				barSharedData->mCurrentBar->mString = IXmlParseHelper::TrimCharData(barSharedData->mCurrentBar->mString);
+			}
+
+			mBarDepthStack.PopFront();
+			barSharedData->mCurrentBar = barSharedData->mCurrentBar->mParent;
+
+			return true;
 		}
+		else if (elementName == "intValue")
+		{
+			if (barSharedData->mCurrentBar != nullptr)
+			{
+				barSharedData->mCurrentBar->mIntValue = std::stoi(thisCharData);
+			}
 
-		barSharedData->mCurrentBar = barSharedData->mCurrentBar->mParent;
+			return true;
+		}
+		else if (elementName == "floatValue")
+		{
+			if (barSharedData->mCurrentBar != nullptr)
+			{
+				barSharedData->mCurrentBar->mFloatValue = std::stof(thisCharData);
+			}
 
-		return true;
+			return true;
+		}
 	}
 
 	return false;
@@ -119,13 +159,16 @@ bool BarParseHelper::CharDataHandler(void* userData,
 	XmlParseMaster::SharedData* sharedData = reinterpret_cast<XmlParseMaster::SharedData*>(userData);
 	BarSharedData* barSharedData = nullptr;
 
+	mCharData.append(charData);
+
 	if (sharedData != nullptr)
 	{
 		barSharedData = sharedData->As<BarSharedData>();
 	}
 
 	if (barSharedData != nullptr &&
-		barSharedData->mCurrentBar != nullptr)
+		barSharedData->mCurrentBar != nullptr &&
+		barSharedData->Depth() == mBarDepthStack.Front())
 	{
 		barSharedData->mCurrentBar->mString.append(charData);
 		return true;

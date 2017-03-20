@@ -3,6 +3,7 @@
 #include "IXmlParseHelper.h"
 #include "XmlParseMaster.h"
 #include "Bar.h"
+#include "SList.h"
 #include <string>
 
 class BarSharedData final : public FieaGameEngine::XmlParseMaster::SharedData
@@ -39,4 +40,11 @@ public:
 								 const std::string& charData) override;
 
 	virtual IXmlParseHelper* Clone() override;
+
+private:
+
+	void AssignAttributes(Bar& bar, const FieaGameEngine::HashMap<std::string, std::string>& attributes);
+
+	std::string mCharData;
+	FieaGameEngine::SList<std::uint32_t> mBarDepthStack;
 };

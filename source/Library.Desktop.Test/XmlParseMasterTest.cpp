@@ -55,7 +55,7 @@ namespace LibraryDesktopTest
 			parseMaster.SetSharedData(&sharedData);
 			parseMaster.AddHelper(barParseHelper);
 
-			parseMaster.ParseFromFile("C:/Users/mholtkamp/Desktop/barTest.xml");
+			parseMaster.ParseFromFile("C:/Users/mholtkamp/Desktop/barTestChar.xml");
 			WriteParseResults(sharedData, "results.txt");
 			__nop();
 		}

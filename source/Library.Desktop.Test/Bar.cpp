@@ -20,10 +20,10 @@ void Bar::PrintStringToFile(FILE* file, std::int32_t index) const
 		fprintf(file, "    ");
 	}
 
-	fprintf(file,"Bar %d: ", index);
+	fprintf(file,"[Bar Depth %d: ", index);
 	fprintf(file, "mIntValue = %d, ", mIntValue);
 	fprintf(file, "mFloatValue = %f, ", mFloatValue);
-	fprintf(file, "mString = %s\n", mString.c_str());
+	fprintf(file, "mString = %s]\n", mString.c_str());
 
 	for (Bar& bar : mChildren)
 	{

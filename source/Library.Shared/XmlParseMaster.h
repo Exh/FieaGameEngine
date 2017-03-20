@@ -75,6 +75,8 @@ namespace FieaGameEngine
 
 		void ParseFromFile(const char* filename);
 
+		void ParseFromString(const char* stringArray);
+
 		const char* GetFileName() const;
 
 		SharedData* GetSharedData();
