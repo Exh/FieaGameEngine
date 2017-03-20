@@ -6,9 +6,10 @@
 
 namespace FieaGameEngine
 {
-
 	class XmlParseMaster final
 	{
+		public:
+
 		class SharedData
 		{
 		public:
@@ -37,8 +38,6 @@ namespace FieaGameEngine
 
 			XmlParseMaster* mParseMaster;
 		};
-
-	public:
 
 		explicit XmlParseMaster(SharedData* sharedData = nullptr);
 		~XmlParseMaster();
@@ -79,8 +78,10 @@ namespace FieaGameEngine
 									const XML_Char* charString,
 									int32_t length);
 
-		void GenerateAttributeMap(HashMap<std::string, std::string>& attributeMap,
-								  const char** attributes);
+		static void GenerateAttributeMap(HashMap<std::string, std::string>& attributeMap,
+										 const char** attributes);
+
+		void RecreateXmlParser();
 
 	private:
 

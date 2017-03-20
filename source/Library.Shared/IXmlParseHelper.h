@@ -13,12 +13,15 @@ namespace FieaGameEngine
 
 		void Initialize();
 
-		bool StartElementHandler(const std::string& elementName,
+		bool StartElementHandler(void* sharedData,
+								 const std::string& elementName,
 								 const HashMap<std::string, std::string>& attributes);
 
-		bool EndElementHandler(const std::string& elementName);
+		bool EndElementHandler(void* sharedData,
+							   const std::string& elementName);
 
-		bool CharDataHandler(const char* data,
+		bool CharDataHandler(void* sharedData,
+							 const char* data,
 							 std::int32_t length);
 
 		virtual IXmlParseHelper* Clone() = 0;

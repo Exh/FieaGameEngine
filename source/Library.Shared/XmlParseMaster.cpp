@@ -166,6 +166,8 @@ namespace FieaGameEngine
 
 		Parse(buffer, length, true);
 
+		RecreateXmlParser();
+
 		free(buffer);
 		buffer = nullptr;
 
@@ -203,14 +205,15 @@ namespace FieaGameEngine
 		if (sharedData != nullptr)
 		{
 			sharedData->IncrementDepth();
+			Vector<IXmlParseHelper*> parseHelpers = sharedData->GetXmlParseMaster()->mParseHelpers;
 
 			GenerateAttributeMap(attributeMap, attributes);
 
-			for (IXmlParseHelper* helper : mParseHelpers)
+			for (IXmlParseHelper* helper : parseHelpers)
 			{
 				if (helper != nullptr)
 				{
-					if (helper->StartElementHandler(elementName, attributeMap))
+					if (helper->StartElementHandler(sharedData, elementName, attributeMap))
 					{
 						break;
 					}
@@ -219,7 +222,7 @@ namespace FieaGameEngine
 		}
 	}
 
-	static void XmlParseMaster::EndElementHandler(void* userData,
+	void XmlParseMaster::EndElementHandler(void* userData,
 												  const XML_Char* elementName)
 	{
 		SharedData* sharedData = reinterpret_cast<SharedData*>(userData);
@@ -227,12 +230,13 @@ namespace FieaGameEngine
 		if (sharedData != nullptr)
 		{
 			sharedData->DecrementDepth();
+			Vector<IXmlParseHelper*> parseHelpers = sharedData->GetXmlParseMaster()->mParseHelpers;
 
-			for (IXmlParseHelper* helper : mParseHelpers)
+			for (IXmlParseHelper* helper : parseHelpers)
 			{
 				if (helper != nullptr)
 				{
-					if (helper->EndElementHandler(elementName))
+					if (helper->EndElementHandler(sharedData, elementName))
 					{
 						break;
 					}
@@ -241,7 +245,7 @@ namespace FieaGameEngine
 		}
 	}
 
-	static void XmlParseMaster::CharDataHandler(void* userData,
+	void XmlParseMaster::CharDataHandler(void* userData,
 												const XML_Char* charString,
 												int32_t length)
 	{
@@ -249,11 +253,13 @@ namespace FieaGameEngine
 
 		if (sharedData != nullptr)
 		{
-			for (IXmlParseHelper* helper : mParseHelpers)
+			Vector<IXmlParseHelper*> parseHelpers = sharedData->GetXmlParseMaster()->mParseHelpers;
+
+			for (IXmlParseHelper* helper : parseHelpers)
 			{
 				if (helper != nullptr)
 				{
-					if (helper->CharDataHandler(charString, length))
+					if (helper->CharDataHandler(sharedData, charString, length))
 					{
 						break;
 					}
@@ -271,5 +277,17 @@ namespace FieaGameEngine
 		{
 			attributeMap.Insert(std::pair<std::string, std::string>(attributes[i], attributes[i+1]));
 		}
+	}
+
+	void XmlParseMaster::RecreateXmlParser()
+	{
+		assert(mParser != nullptr);
+
+		XML_ParserFree(mParser);
+		mParser = nullptr;
+
+		mParser = XML_ParserCreate(nullptr);
+
+		assert(mParser != nullptr);
 	}
 }
