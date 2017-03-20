@@ -3,6 +3,7 @@
 #include <cstdint>
 #include "expat.h"
 #include "IXmlParseHelper.h"
+#include "RTTI.h"
 
 namespace FieaGameEngine
 {
@@ -10,8 +11,10 @@ namespace FieaGameEngine
 	{
 		public:
 
-		class SharedData
+		class SharedData : public RTTI
 		{
+			RTTI_DECLARATIONS(SharedData, RTTI)
+
 		public:
 
 			SharedData();

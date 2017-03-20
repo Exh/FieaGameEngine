@@ -2,8 +2,9 @@
 
 namespace FieaGameEngine
 {
-
 #pragma region SharedDataMethods
+
+	RTTI_DEFINITIONS(XmlParseMaster::SharedData)
 
 	XmlParseMaster::SharedData::SharedData() :
 		mDepth(0),

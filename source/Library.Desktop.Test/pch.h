@@ -21,11 +21,16 @@
 #include "Scope.h"
 #include "RTTI.h"
 #include "Attributed.h"
+#include "IXmlParseHelper.h"
 
 // Testing Headers
 #include "Foo.h"
 #include "AttributedFoo.h"
 #include "AttributedBar.h"
+#include "Bar.h"
+#include "BarParseHelper.h"
+
+// Glm headers
 #include "glm/glm.hpp"
 #include <glm/vec4.hpp>
 #include <glm/mat4x4.hpp>

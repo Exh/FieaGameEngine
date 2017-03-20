@@ -17,5 +17,6 @@
     <ClInclude Include="Foo.h" />
     <ClInclude Include="AttributedFoo.h" />
     <ClInclude Include="AttributedBar.h" />
+    <ClInclude Include="Bar.h" />
   </ItemGroup>
 </Project>

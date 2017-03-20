@@ -9,10 +9,10 @@ namespace FieaGameEngine
 
 	void IXmlParseHelper::Initialize()
 	{
-	
+		mDepth = nullptr;
 	}
 
-	bool IXmlParseHelper::StartElementHandler(void* sharedData,
+	bool IXmlParseHelper::StartElementHandler(void* userData,
 											  const std::string& elementName,
 											  const HashMap<std::string, std::string>& attributes)
 	{
@@ -23,7 +23,7 @@ namespace FieaGameEngine
 		return false;
 	}
 
-	bool IXmlParseHelper::EndElementHandler(void* sharedData,
+	bool IXmlParseHelper::EndElementHandler(void* userData,
 											const std::string& elementName)
 	{
 		sharedData;
@@ -32,7 +32,7 @@ namespace FieaGameEngine
 		return false;
 	}
 
-	bool IXmlParseHelper::CharDataHandler(void* sharedData,
+	bool IXmlParseHelper::CharDataHandler(void* userData,
 										  const char* data,
 										  std::int32_t length)
 	{
