@@ -36,8 +36,7 @@ public:
 								   const std::string& elementName) override;
 
 	virtual bool CharDataHandler(void* userData,
-								 const char* data,
-								 std::int32_t length) override;
+								 const std::string& charData) override;
 
 	virtual IXmlParseHelper* Clone() override;
 };

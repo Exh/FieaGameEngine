@@ -21,9 +21,12 @@ namespace FieaGameEngine
 									   const std::string& elementName) = 0;
 
 		virtual bool CharDataHandler(void* sharedData,
-									 const char* data,
-									 std::int32_t length);
+									 const std::string& charData);
 
 		virtual IXmlParseHelper* Clone() = 0;
+
+	protected:
+
+		static std::string TrimCharData(const std::string& charData);
 	};
 }

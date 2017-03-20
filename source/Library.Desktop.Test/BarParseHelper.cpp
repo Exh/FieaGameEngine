@@ -100,6 +100,11 @@ bool BarParseHelper::EndElementHandler(void* userData,
 	{
 		assert(barSharedData->mCurrentBar != nullptr);
 
+		if (barSharedData->mCurrentBar->mString.size() > 0U)
+		{
+			barSharedData->mCurrentBar->mString = IXmlParseHelper::TrimCharData(barSharedData->mCurrentBar->mString);
+		}
+
 		barSharedData->mCurrentBar = barSharedData->mCurrentBar->mParent;
 
 		return true;
@@ -109,8 +114,7 @@ bool BarParseHelper::EndElementHandler(void* userData,
 }
 
 bool BarParseHelper::CharDataHandler(void* userData,
-									 const char* data,
-									 std::int32_t length)
+									 const std::string& charData)
 {
 	XmlParseMaster::SharedData* sharedData = reinterpret_cast<XmlParseMaster::SharedData*>(userData);
 	BarSharedData* barSharedData = nullptr;
@@ -123,10 +127,7 @@ bool BarParseHelper::CharDataHandler(void* userData,
 	if (barSharedData != nullptr &&
 		barSharedData->mCurrentBar != nullptr)
 	{
-		barSharedData->mCurrentBar->mString.append(data, static_cast<size_t>(length));
-		data;
-		length;
-
+		barSharedData->mCurrentBar->mString.append(charData);
 		return true;
 	}
 

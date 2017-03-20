@@ -281,7 +281,7 @@ namespace FieaGameEngine
 			{
 				if (helper != nullptr)
 				{
-					if (helper->CharDataHandler(sharedData, charString, length))
+					if (helper->CharDataHandler(sharedData, std::string(charString, length)))
 					{
 						break;
 					}
