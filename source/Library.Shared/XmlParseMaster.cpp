@@ -23,13 +23,10 @@ namespace FieaGameEngine
 		mDepth = 0U;
 	}
 
-	XmlParseMaster::SharedData* XmlParseMaster::SharedData::Clone() const
+	void XmlParseMaster::SharedData::Reset()
 	{
-		SharedData* clone = new SharedData();
-		clone->mDepth = 0;
-		clone->mParseMaster = nullptr;
-
-		return clone;
+		mDepth = 0U;
+		mParseMaster = nullptr;
 	}
 
 	void XmlParseMaster::SharedData::SetXmlParseMaster(XmlParseMaster* parseMaster)
@@ -54,6 +51,11 @@ namespace FieaGameEngine
 
 	void XmlParseMaster::SharedData::DecrementDepth()
 	{
+		if (mDepth == 0)
+		{
+			throw std::exception("DecrementDepth called when at 0 depth.");
+		}
+
 		--mDepth;
 	}
 

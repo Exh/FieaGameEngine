@@ -14,9 +14,15 @@ public:
 	~BarSharedData();
 
 	virtual void Initialize() override;
+
+	virtual SharedData* Clone() const override;
 	
 	Bar* mRootBar;
 	Bar* mCurrentBar;
+
+protected:
+
+	BarSharedData(const BarSharedData& rhs);
 };
 
 class BarParseHelper final : public FieaGameEngine::IXmlParseHelper

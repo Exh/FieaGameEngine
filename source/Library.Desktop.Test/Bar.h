@@ -6,6 +6,7 @@ struct Bar
 {
 	Bar();
 	~Bar();
+	Bar(const Bar& rhs);
 
 	bool operator==(const Bar& rhs) const;
 

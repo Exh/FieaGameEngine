@@ -13,6 +13,16 @@ Bar::~Bar()
 
 }
 
+Bar::Bar(const Bar& rhs) :
+	mIntValue(rhs.mIntValue),
+	mFloatValue(rhs.mFloatValue),
+	mString(rhs.mString),
+	mChildren(rhs.mChildren),
+	mParent(nullptr)
+{
+
+}
+
 bool Bar::operator==(const Bar& rhs) const
 {
 	if (mIntValue != rhs.mIntValue ||

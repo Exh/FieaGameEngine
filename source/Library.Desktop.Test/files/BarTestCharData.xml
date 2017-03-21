@@ -1,8 +1,10 @@
 <Bar>
+    Bar String 1!
     <intValue>10</intValue>
     <floatValue>1.0f</floatValue>
     <Bar>
         <intValue>20</intValue>
+        Bar String 2!
         <floatValue>2.0f</floatValue>
         <Bar>
             <intValue>40</intValue>
@@ -12,6 +14,6 @@
     <Bar>
         <intValue>30</intValue>
         <floatValue>3.0f</floatValue>
-        Bar 30 Character Data!
+        Bar String 3!
     </Bar>
 </Bar>

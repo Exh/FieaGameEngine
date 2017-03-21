@@ -27,6 +27,27 @@ void BarSharedData::Initialize()
 	mCurrentBar = nullptr;
 }
 
+
+XmlParseMaster::SharedData* BarSharedData::Clone() const
+{
+	BarSharedData* clone = new BarSharedData(*this);
+
+	clone->Reset();
+
+	return clone;
+}
+
+BarSharedData::BarSharedData(const BarSharedData& rhs) :
+	mRootBar(nullptr),
+	mCurrentBar(nullptr)
+{
+	if (rhs.mRootBar != nullptr)
+	{
+		mRootBar = new Bar(*rhs.mRootBar);
+		mCurrentBar = mRootBar;
+	}
+}
+
 #pragma endregion
 
 #pragma region BarParseHelper

@@ -22,6 +22,7 @@
 #include "RTTI.h"
 #include "Attributed.h"
 #include "IXmlParseHelper.h"
+#include "XmlParseMaster.h"
 
 // Testing Headers
 #include "Foo.h"

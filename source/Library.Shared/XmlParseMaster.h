@@ -38,7 +38,9 @@ namespace FieaGameEngine
 
 			virtual void Initialize();
 
-			virtual SharedData* Clone() const;
+			virtual SharedData* Clone() const = 0;
+
+			virtual void Reset();
 
 			void SetXmlParseMaster(XmlParseMaster* parseMaster);
 
