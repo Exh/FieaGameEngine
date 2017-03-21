@@ -18,7 +18,7 @@ Bar::Bar(const Bar& rhs) :
 	mFloatValue(rhs.mFloatValue),
 	mString(rhs.mString),
 	mChildren(rhs.mChildren),
-	mParent(nullptr)
+	mParent(rhs.mParent)
 {
 
 }

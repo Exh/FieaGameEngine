@@ -93,11 +93,10 @@ bool BarParseHelper::StartElementHandler(void* userData,
 		if (parent != nullptr)
 		{
 			Bar newBar;
-			newBar.mParent = parent;
-
 			AssignAttributes(newBar, attributes);
 			
 			parent->mChildren.PushBack(newBar);
+			parent->mChildren[parent->mChildren.Size() - 1].mParent = parent;
 
 			barSharedData->mCurrentBar = &(parent->mChildren[parent->mChildren.Size() - 1]);
 		}

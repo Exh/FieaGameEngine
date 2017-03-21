@@ -37,6 +37,12 @@ barParseHelper2; \
 barSharedData1; \
 barSharedData2;
 
+#define CREATE_ROOT_BAR Bar rootBar; \
+rootBar.mIntValue = 10; \
+rootBar.mFloatValue = 1.0f; \
+rootBar.mParent = nullptr; \
+rootBar.mString = "Bar String 1!";
+
 
 namespace LibraryDesktopTest
 {
@@ -172,7 +178,65 @@ namespace LibraryDesktopTest
 
 #pragma endregion
 
-		TEST_METHOD(GenericParseTest)
+#pragma region ParseMasterTests
+
+		TEST_METHOD(XmlParseMasterConstructor)
+		{
+			XmlParseMaster parseMaster1;
+			Assert::IsTrue(parseMaster1.GetSharedData() == nullptr);
+
+			BarSharedData barSharedData;
+			XmlParseMaster parseMaster2(&barSharedData);
+			Assert::IsTrue(parseMaster2.GetSharedData() == &barSharedData);
+		}
+
+		TEST_METHOD(XmlParseMasterClone)
+		{
+			XmlParseMaster parseMaster1;
+			BarParseHelper barParseHelper1;
+			BarParseHelper barParseHelper2;
+			BarParseHelper barParseHelper3;
+			BarSharedData barSharedData;
+
+			parseMaster1.SetSharedData(&barSharedData);
+			parseMaster1.AddHelper(barParseHelper1);
+			parseMaster1.AddHelper(barParseHelper2);
+
+			parseMaster1.ParseFromFile("../../../files/BarTestAttributes.xml");
+
+			XmlParseMaster* clone = parseMaster1.Clone();
+
+			Assert::IsTrue(clone->GetFileName() == nullptr);
+			Assert::IsTrue(clone->GetSharedData() != nullptr);
+			Assert::IsTrue(clone->GetSharedData() != parseMaster1.GetSharedData());
+
+			Assert::ExpectException<std::exception>([clone, &barParseHelper2]{clone->RemoveHelper(barParseHelper2);});
+			Assert::ExpectException<std::exception>([clone, &barParseHelper3]{clone->AddHelper(barParseHelper3);});
+
+			delete clone;
+			clone = nullptr;
+		}
+
+		TEST_METHOD(XmlParseMasterAddRemoveHelper)
+		{
+			XmlParseMaster parseMaster1;
+			BarParseHelper barParseHelper1;
+			BarParseHelper barParseHelper2;
+			BarSharedData barSharedData;
+
+			parseMaster1.SetSharedData(&barSharedData);
+			parseMaster1.AddHelper(barParseHelper1);
+			parseMaster1.RemoveHelper(barParseHelper1);
+
+			parseMaster1.ParseFromFile("../../../files/BarTestAttributes.xml");
+			Assert::IsTrue(barSharedData.mRootBar == nullptr);
+
+			parseMaster1.AddHelper(barParseHelper2);
+			parseMaster1.ParseFromFile("../../../files/BarTestAttributes.xml");
+			Assert::IsTrue(barSharedData.mRootBar != nullptr);
+		}
+
+		TEST_METHOD(XmlParseMasterParseFromFile)
 		{
 			XmlParseMaster parseMaster;
 			BarSharedData sharedData1;
@@ -184,15 +248,72 @@ namespace LibraryDesktopTest
 			parseMaster.ParseFromFile("../../../files/BarTestAttributes.xml");
 			WriteParseResults(sharedData1, "BarTestAttributesResults.txt");
 
+			Assert::IsTrue(sharedData1.mRootBar->mIntValue == 10);
+			Assert::IsTrue(sharedData1.mRootBar->mFloatValue == 1.0f);
+			Assert::IsTrue(sharedData1.mRootBar->mString == "Bar String 1!");
+			Assert::IsTrue(sharedData1.mRootBar->mChildren[0].mIntValue == 20);
+			Assert::IsTrue(sharedData1.mRootBar->mChildren[0].mFloatValue == 2.0f);
+			Assert::IsTrue(sharedData1.mRootBar->mChildren[0].mString == "Bar String 2!");
+			Assert::IsTrue(sharedData1.mRootBar->mChildren[0].mChildren[0].mIntValue == 40);
+			Assert::IsTrue(sharedData1.mRootBar->mChildren[0].mChildren[0].mFloatValue == 4.0f);
+			Assert::IsTrue(sharedData1.mRootBar->mChildren[0].mChildren[0].mString == "");
+			Assert::IsTrue(sharedData1.mRootBar->mChildren[1].mIntValue == 30);
+			Assert::IsTrue(sharedData1.mRootBar->mChildren[1].mFloatValue == 3.0f);
+			Assert::IsTrue(sharedData1.mRootBar->mChildren[1].mString == "Bar String 3!");
+
 			BarSharedData sharedData2;
 			parseMaster.SetSharedData(&sharedData2);
 			parseMaster.ParseFromFile("../../../files/BarTestCharData.xml");
 			WriteParseResults(sharedData2, "BarTestCharDataResults.txt");
 
+			Assert::IsTrue(sharedData2.mRootBar->mIntValue == 10);
+			Assert::IsTrue(sharedData2.mRootBar->mFloatValue == 1.0f);
+			Assert::IsTrue(sharedData2.mRootBar->mString == "Bar String 1!");
+			Assert::IsTrue(sharedData2.mRootBar->mChildren[0].mIntValue == 20);
+			Assert::IsTrue(sharedData2.mRootBar->mChildren[0].mFloatValue == 2.0f);
+			Assert::IsTrue(sharedData2.mRootBar->mChildren[0].mString == "Bar String 2!");
+			Assert::IsTrue(sharedData2.mRootBar->mChildren[0].mChildren[0].mIntValue == 40);
+			Assert::IsTrue(sharedData2.mRootBar->mChildren[0].mChildren[0].mFloatValue == 4.0f);
+			Assert::IsTrue(sharedData2.mRootBar->mChildren[0].mChildren[0].mString == "");
+			Assert::IsTrue(sharedData2.mRootBar->mChildren[1].mIntValue == 30);
+			Assert::IsTrue(sharedData2.mRootBar->mChildren[1].mFloatValue == 3.0f);
+			Assert::IsTrue(sharedData2.mRootBar->mChildren[1].mString == "Bar String 3!");
+
 			Assert::IsTrue(*(sharedData1.mRootBar) == *(sharedData2.mRootBar));
+
+			Assert::ExpectException<std::exception>([&parseMaster]{parseMaster.ParseFromFile("What");});
 		}
 
+		TEST_METHOD(XmlParseFromString)
+		{
+			CREATE_ROOT_BAR
 
+			static const char* xmlString = "<Bar intValue=\"10\" floatValue=\"1.0f\">Bar String 1!<Bar intValue = \"20\" floatValue = \"2.0f\">Bar String 2!<Bar intValue = \"40\" floatValue = \"4.0f\" / >< / Bar><Bar intValue = \"30\" floatValue = \"3.0f\">Bar String 3!< / Bar>< / Bar>";
+			XmlParseMaster parseMaster;
+			BarSharedData sharedData1;
+			BarParseHelper barParseHelper;
+
+			parseMaster.SetSharedData(&sharedData1);
+			parseMaster.AddHelper(barParseHelper);
+
+			parseMaster.ParseFromFile("../../../files/BarTestAttributes.xml");
+			WriteParseResults(sharedData1, "StringBarTestResults.txt");
+
+			Assert::IsTrue(sharedData1.mRootBar->mIntValue == 10);
+			Assert::IsTrue(sharedData1.mRootBar->mFloatValue == 1.0f);
+			Assert::IsTrue(sharedData1.mRootBar->mString == "Bar String 1!");
+			Assert::IsTrue(sharedData1.mRootBar->mChildren[0].mIntValue == 20);
+			Assert::IsTrue(sharedData1.mRootBar->mChildren[0].mFloatValue == 2.0f);
+			Assert::IsTrue(sharedData1.mRootBar->mChildren[0].mString == "Bar String 2!");
+			Assert::IsTrue(sharedData1.mRootBar->mChildren[0].mChildren[0].mIntValue == 40);
+			Assert::IsTrue(sharedData1.mRootBar->mChildren[0].mChildren[0].mFloatValue == 4.0f);
+			Assert::IsTrue(sharedData1.mRootBar->mChildren[0].mChildren[0].mString == "");
+			Assert::IsTrue(sharedData1.mRootBar->mChildren[1].mIntValue == 30);
+			Assert::IsTrue(sharedData1.mRootBar->mChildren[1].mFloatValue == 3.0f);
+			Assert::IsTrue(sharedData1.mRootBar->mChildren[1].mString == "Bar String 3!");
+		}
+
+#pragma endregion
 
 	private:
 		static _CrtMemState sStartMemState;
