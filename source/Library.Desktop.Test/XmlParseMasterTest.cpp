@@ -43,6 +43,33 @@ rootBar.mFloatValue = 1.0f; \
 rootBar.mParent = nullptr; \
 rootBar.mString = "Bar String 1!";
 
+class BadHelper : public IXmlParseHelper
+{
+	virtual IXmlParseHelper* Clone() override
+	{
+		return this;
+	}
+
+	virtual bool StartElementHandler(void* userData,
+		const std::string& elementName,
+		const HashMap<std::string, std::string>& attributes) override
+	{
+		IXmlParseHelper::StartElementHandler(userData, elementName, attributes);
+		return false;
+	}
+
+	virtual bool EndElementHandler(void* sharedData,
+		const std::string& elementName) override
+	{
+		IXmlParseHelper::EndElementHandler(sharedData, elementName);
+		return false;
+	}
+
+private:
+
+	int mData;
+};
+
 
 namespace LibraryDesktopTest
 {
@@ -288,7 +315,7 @@ namespace LibraryDesktopTest
 		{
 			CREATE_ROOT_BAR
 
-			static const char* xmlString = "<Bar intValue=\"10\" floatValue=\"1.0f\">Bar String 1!<Bar intValue = \"20\" floatValue = \"2.0f\">Bar String 2!<Bar intValue = \"40\" floatValue = \"4.0f\" / >< / Bar><Bar intValue = \"30\" floatValue = \"3.0f\">Bar String 3!< / Bar>< / Bar>";
+			static const char* xmlString = "<Bar intValue='10' floatValue='1.0f'>Bar String 1!<Bar intValue='20' floatValue='2.0f'>Bar String 2!<Bar intValue='40' floatValue='4.0f'/></Bar><Bar intValue='30' floatValue='3.0f'>Bar String 3!</Bar></Bar>";
 			XmlParseMaster parseMaster;
 			BarSharedData sharedData1;
 			BarParseHelper barParseHelper;
@@ -296,7 +323,7 @@ namespace LibraryDesktopTest
 			parseMaster.SetSharedData(&sharedData1);
 			parseMaster.AddHelper(barParseHelper);
 
-			parseMaster.ParseFromFile("../../../files/BarTestAttributes.xml");
+			parseMaster.ParseFromString(xmlString);
 			WriteParseResults(sharedData1, "StringBarTestResults.txt");
 
 			Assert::IsTrue(sharedData1.mRootBar->mIntValue == 10);
@@ -341,6 +368,22 @@ namespace LibraryDesktopTest
 
 			const XmlParseMaster* constPointer = &parseMaster;
 			Assert::IsTrue(constPointer->GetSharedData() == &sharedData1);
+		}
+
+		TEST_METHOD(IXmlParseHelperTests)
+		{
+			BadHelper badHelper;
+
+			XmlParseMaster parseMaster;
+			BarSharedData sharedData1;
+			BarParseHelper barParseHelper;
+
+			parseMaster.SetSharedData(&sharedData1);
+			parseMaster.AddHelper(badHelper);
+			parseMaster.AddHelper(barParseHelper);
+
+			parseMaster.ParseFromFile("../../../files/BarTestAttributes.xml");
+			WriteParseResults(sharedData1, "BarTestAttributesResults.txt");
 		}
 
 #pragma endregion

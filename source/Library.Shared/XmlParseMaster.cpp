@@ -189,7 +189,7 @@ namespace FieaGameEngine
 		fseek(file, 0, SEEK_SET);
 
 		char* buffer = reinterpret_cast<char*>(malloc(length));
-		length = fread(buffer, 1, length, file);
+		length = static_cast<std::int32_t>(fread(buffer, 1, length, file));
 
 		Parse(buffer, length, true);
 
@@ -204,7 +204,9 @@ namespace FieaGameEngine
 
 	void XmlParseMaster::ParseFromString(const char* stringArray)
 	{
-		Parse(stringArray, strlen(stringArray), true);
+		mFilename = nullptr;
+
+		Parse(stringArray, static_cast<int32_t>(strlen(stringArray)), true);
 
 		RecreateXmlParser();
 	}
