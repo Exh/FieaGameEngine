@@ -313,6 +313,36 @@ namespace LibraryDesktopTest
 			Assert::IsTrue(sharedData1.mRootBar->mChildren[1].mString == "Bar String 3!");
 		}
 
+		TEST_METHOD(XmlParseMasterGetFilename)
+		{
+			XmlParseMaster parseMaster;
+			BarSharedData sharedData1;
+			BarParseHelper barParseHelper;
+
+			parseMaster.SetSharedData(&sharedData1);
+			parseMaster.AddHelper(barParseHelper);
+
+			Assert::IsTrue(parseMaster.GetFileName() == nullptr);
+
+			parseMaster.ParseFromFile("../../../files/BarTestAttributes.xml");
+
+			Assert::IsTrue(std::string(parseMaster.GetFileName()) == "../../../files/BarTestAttributes.xml");
+		}
+
+		TEST_METHOD(XmlParseMasterGetSharedData)
+		{
+			XmlParseMaster parseMaster;
+			BarSharedData sharedData1;
+			BarParseHelper barParseHelper;
+
+			Assert::IsTrue(parseMaster.GetSharedData() == nullptr);
+			parseMaster.SetSharedData(&sharedData1);
+			Assert::IsTrue(parseMaster.GetSharedData() == &sharedData1);
+
+			const XmlParseMaster* constPointer = &parseMaster;
+			Assert::IsTrue(constPointer->GetSharedData() == &sharedData1);
+		}
+
 #pragma endregion
 
 	private:
