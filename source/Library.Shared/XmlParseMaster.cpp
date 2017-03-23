@@ -133,6 +133,11 @@ namespace FieaGameEngine
 			throw std::exception("Cannot add helper to cloned XmlParseMaster");
 		}
 
+		if (mParseHelpers.Find(&helper) != mParseHelpers.end())
+		{
+			throw std::exception("Cannot add duplicate parse helper to parse master.");
+		}
+
 		mParseHelpers.PushBack(&helper);
 	}
 
@@ -150,6 +155,19 @@ namespace FieaGameEngine
 							   std::int32_t length,
 							   bool isFinal)
 	{
+		Reset();
+
+		XML_Status status = XML_Parse(mParser, buffer, length, isFinal);
+
+
+		status;
+		XML_Error error = XML_GetErrorCode(mParser);
+		const char* errorString = XML_ErrorString(error);
+		errorString;
+	}
+
+	void XmlParseMaster::Reset()
+	{
 		if (mSharedData != nullptr)
 		{
 			mSharedData->Initialize();
@@ -163,11 +181,16 @@ namespace FieaGameEngine
 			}
 		}
 
-		XML_Status status = XML_Parse(mParser, buffer, length, isFinal);
-		status;
-		XML_Error error = XML_GetErrorCode(mParser);
-		const char* errorString = XML_ErrorString(error);
-		errorString;
+		XML_ParserReset(mParser, nullptr);
+
+		XML_SetElementHandler(mParser,
+			&XmlParseMaster::StartElementHandler,
+			&XmlParseMaster::EndElementHandler);
+
+		XML_SetCharacterDataHandler(mParser,
+			&XmlParseMaster::CharDataHandler);
+
+		SetSharedData(mSharedData);
 	}
 
 	void XmlParseMaster::ParseFromFile(const char* filename)
@@ -193,8 +216,6 @@ namespace FieaGameEngine
 
 		Parse(buffer, length, true);
 
-		RecreateXmlParser();
-
 		free(buffer);
 		buffer = nullptr;
 
@@ -207,8 +228,6 @@ namespace FieaGameEngine
 		mFilename = nullptr;
 
 		Parse(stringArray, static_cast<int32_t>(strlen(stringArray)), true);
-
-		RecreateXmlParser();
 	}
 
 	const char* XmlParseMaster::GetFileName() const
@@ -228,6 +247,11 @@ namespace FieaGameEngine
 
 	void XmlParseMaster::SetSharedData(SharedData* sharedData)
 	{
+		if (mCloned)
+		{
+			throw std::exception("Cannot change shared data of cloned XmlParseMaster.");
+		}
+
 		assert(mParser != nullptr);
 		mSharedData = sharedData;
 		XML_SetUserData(mParser, mSharedData);
@@ -320,25 +344,5 @@ namespace FieaGameEngine
 		{
 			attributeMap.Insert(std::pair<std::string, std::string>(attributes[i], attributes[i+1]));
 		}
-	}
-
-	void XmlParseMaster::RecreateXmlParser()
-	{
-		assert(mParser != nullptr);
-
-		XML_ParserFree(mParser);
-		mParser = nullptr;
-
-		mParser = XML_ParserCreate(nullptr);
-		assert(mParser != nullptr);
-
-		XML_SetElementHandler(mParser,
-							  &XmlParseMaster::StartElementHandler,
-							  &XmlParseMaster::EndElementHandler);
-
-		XML_SetCharacterDataHandler(mParser,
-									&XmlParseMaster::CharDataHandler);
-
-		SetSharedData(mSharedData);
 	}
 }

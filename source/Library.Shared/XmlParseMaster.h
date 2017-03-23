@@ -158,6 +158,8 @@ namespace FieaGameEngine
 		static void GenerateAttributeMap(HashMap<std::string, std::string>& attributeMap,
 										 const char** attributes);
 
+		void Reset();
+
 		void RecreateXmlParser();
 
 	private:
