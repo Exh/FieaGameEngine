@@ -69,20 +69,14 @@ void BarParseHelper::Initialize()
 	mBarDepthStack.Clear();
 }
 
-bool BarParseHelper::StartElementHandler(void* userData,
+bool BarParseHelper::StartElementHandler(XmlParseMaster::SharedData& sharedData,
 										 const std::string& elementName,
 										 const HashMap<std::string, std::string>& attributes)
 {
-	
-	XmlParseMaster::SharedData* sharedData = reinterpret_cast<XmlParseMaster::SharedData*>(userData);
 	BarSharedData* barSharedData = nullptr;
-
 	mCharData.clear();
 
-	if (sharedData != nullptr)
-	{
-		barSharedData = sharedData->As<BarSharedData>();
-	}
+	barSharedData = sharedData.As<BarSharedData>();
 
 	if (barSharedData != nullptr &&
 		elementName == "Bar")
@@ -129,19 +123,15 @@ void BarParseHelper::AssignAttributes(Bar& bar, const HashMap<std::string, std::
 	}
 }
 
-bool BarParseHelper::EndElementHandler(void* userData,
+bool BarParseHelper::EndElementHandler(XmlParseMaster::SharedData& sharedData,
 									   const std::string& elementName)
 {
-	XmlParseMaster::SharedData* sharedData = reinterpret_cast<XmlParseMaster::SharedData*>(userData);
 	BarSharedData* barSharedData = nullptr;
-
 	std::string thisCharData = mCharData;
 	mCharData.clear();
 
-	if (sharedData != nullptr)
-	{
-		barSharedData = sharedData->As<BarSharedData>();
-	}
+	barSharedData = sharedData.As<BarSharedData>();
+
 
 	if (barSharedData != nullptr)
 	{
@@ -182,18 +172,13 @@ bool BarParseHelper::EndElementHandler(void* userData,
 	return false;
 }
 
-bool BarParseHelper::CharDataHandler(void* userData,
+bool BarParseHelper::CharDataHandler(XmlParseMaster::SharedData& sharedData,
 									 const std::string& charData)
 {
-	XmlParseMaster::SharedData* sharedData = reinterpret_cast<XmlParseMaster::SharedData*>(userData);
 	BarSharedData* barSharedData = nullptr;
-
 	mCharData.append(charData);
 
-	if (sharedData != nullptr)
-	{
-		barSharedData = sharedData->As<BarSharedData>();
-	}
+	barSharedData = sharedData.As<BarSharedData>();
 
 	if (barSharedData != nullptr &&
 		barSharedData->mCurrentBar != nullptr &&

@@ -6,6 +6,8 @@
 #include "SList.h"
 #include <string>
 
+using namespace FieaGameEngine;
+
 class BarSharedData final : public FieaGameEngine::XmlParseMaster::SharedData
 {
 public:
@@ -37,14 +39,14 @@ public:
 
 	virtual void Initialize() override;
 
-	virtual bool StartElementHandler(void* userData,
+	virtual bool StartElementHandler(XmlParseMaster::SharedData& sharedData,
 									 const std::string& elementName,
 									 const FieaGameEngine::HashMap<std::string, std::string>& attributes) override;
 
-	virtual bool EndElementHandler(void* userData,
+	virtual bool EndElementHandler(XmlParseMaster::SharedData& sharedData,
 								   const std::string& elementName) override;
 
-	virtual bool CharDataHandler(void* userData,
+	virtual bool CharDataHandler(XmlParseMaster::SharedData& sharedData,
 								 const std::string& charData) override;
 
 	virtual IXmlParseHelper* Clone() override;

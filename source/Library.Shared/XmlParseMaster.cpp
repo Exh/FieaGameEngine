@@ -280,7 +280,7 @@ namespace FieaGameEngine
 			{
 				if (helper != nullptr)
 				{
-					if (helper->StartElementHandler(sharedData, elementName, attributeMap))
+					if (helper->StartElementHandler(*sharedData, elementName, attributeMap))
 					{
 						break;
 					}
@@ -303,7 +303,7 @@ namespace FieaGameEngine
 			{
 				if (helper != nullptr)
 				{
-					if (helper->EndElementHandler(sharedData, elementName))
+					if (helper->EndElementHandler(*sharedData, elementName))
 					{
 						break;
 					}
@@ -326,7 +326,7 @@ namespace FieaGameEngine
 			{
 				if (helper != nullptr)
 				{
-					if (helper->CharDataHandler(sharedData, std::string(charString, length)))
+					if (helper->CharDataHandler(*sharedData, std::string(charString, length)))
 					{
 						break;
 					}

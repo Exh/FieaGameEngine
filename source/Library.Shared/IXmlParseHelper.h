@@ -2,6 +2,7 @@
 
 #include <string>
 #include "HashMap.h"
+#include "XmlParseMaster.h"
 
 namespace FieaGameEngine
 {
@@ -23,7 +24,7 @@ namespace FieaGameEngine
 				string is the key of the attribute, and the second string is its 
 				assigned value.
 			@bool True if the element could be handled. False otherwise.*/
-		virtual bool StartElementHandler(void* userData,
+		virtual bool StartElementHandler(XmlParseMaster::SharedData& sharedData,
 										 const std::string& elementName,
 										 const HashMap<std::string, std::string>& attributes) = 0;
 
@@ -32,7 +33,7 @@ namespace FieaGameEngine
 				to the XmlParseMaster from which this callback was invoked.
 			@param elementName The name of the XML element.
 			@bool True if the element could be handled. False otherwise.*/
-		virtual bool EndElementHandler(void* sharedData,
+		virtual bool EndElementHandler(XmlParseMaster::SharedData& sharedData,
 									   const std::string& elementName) = 0;
 		/** A callback to handle any Character data between the start and 
 			end tags of an element.
@@ -40,7 +41,7 @@ namespace FieaGameEngine
 				to the XmlParseMaster from which this callback was invoked.
 			@param charData The string of character data.
 			@bool True if the character data could be handled. False otherwise.*/
-		virtual bool CharDataHandler(void* sharedData,
+		virtual bool CharDataHandler(XmlParseMaster::SharedData& sharedData,
 									 const std::string& charData);
 
 		/** Clones the helper. Must be implemented by any derived classes.

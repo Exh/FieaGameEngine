@@ -24,6 +24,7 @@
 #include "Attributed.h"
 #include "IXmlParseHelper.h"
 #include "XmlParseMaster.h"
+#include "XmlParseHelperScope.h"
 
 // GLM
 #include "glm/glm.hpp"

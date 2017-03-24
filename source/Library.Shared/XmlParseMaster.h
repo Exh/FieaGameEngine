@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include "IXmlParseHelper.h"
 #include "RTTI.h"
 
 struct XML_ParserStruct;
@@ -22,6 +21,8 @@ typedef char XML_LChar;
 
 namespace FieaGameEngine
 {
+	class IXmlParseHelper;
+
 	class XmlParseMaster final
 	{
 		public:

@@ -50,15 +50,15 @@ class BadHelper : public IXmlParseHelper
 		return this;
 	}
 
-	virtual bool StartElementHandler(void* userData,
+	virtual bool StartElementHandler(XmlParseMaster::SharedData& sharedData,
 		const std::string& elementName,
 		const HashMap<std::string, std::string>& attributes) override
 	{
-		IXmlParseHelper::StartElementHandler(userData, elementName, attributes);
+		IXmlParseHelper::StartElementHandler(sharedData, elementName, attributes);
 		return false;
 	}
 
-	virtual bool EndElementHandler(void* sharedData,
+	virtual bool EndElementHandler(XmlParseMaster::SharedData& sharedData,
 		const std::string& elementName) override
 	{
 		IXmlParseHelper::EndElementHandler(sharedData, elementName);
