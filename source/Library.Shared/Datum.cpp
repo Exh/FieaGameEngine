@@ -640,6 +640,46 @@ namespace FieaGameEngine
 		}
 	}
 
+	void Datum::PushBackFromString(const std::string& text)
+	{
+		if (mExternal)
+		{
+			throw std::exception("Cannot push back on external datum.");
+		}
+
+		if (mType == DatumType::Unknown)
+		{
+			throw std::exception("Cannot push back on unknown datum type.");
+		}
+
+		switch (mType)
+		{
+		case DatumType::Integer:
+			PushBack(0);
+			break;
+		case DatumType::Float:
+			PushBack(0.0f);
+			break;
+		case DatumType::Vector:
+			PushBack(glm::vec4());
+			break;
+		case DatumType::Matrix:
+			PushBack(glm::mat4());
+			break;
+		case DatumType::String:
+			PushBack(std::string());
+			break;
+		case DatumType::Pointer:
+			PushBack(static_cast<RTTI*>(nullptr));
+			break;
+		case DatumType::Scope:
+			PushBack(static_cast<Scope*>(nullptr));
+			break;
+		}
+
+		SetFromString(text, mSize - 1);
+	}
+
 	void Datum::SetFromString(const std::string& text, std::uint32_t index)
 	{
 		static const std::uint32_t VEC4_ELEMENTS = 4U;
@@ -670,12 +710,12 @@ namespace FieaGameEngine
 			break;
 		case DatumType::Vector:
 			float vectorValues[VEC4_ELEMENTS];
-			sscanf_s(text.c_str(), "%f %f %f %f", &vectorValues[0], &vectorValues[1], &vectorValues[2] ,&vectorValues[3]);
+			sscanf_s(text.c_str(), "%f %*s %f %*s %f %*s %f", &vectorValues[0], &vectorValues[1], &vectorValues[2], &vectorValues[3]);
 			mData.v[index] = glm::vec4(vectorValues[0], vectorValues[1], vectorValues[2], vectorValues[3]);
 			break;
 		case DatumType::Matrix:
 			float matrixValues[MAT4_ELEMENTS];
-			sscanf_s(text.c_str(), "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f",
+			sscanf_s(text.c_str(), "%f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f",
 				&matrixValues[0], &matrixValues[1], &matrixValues[2], &matrixValues[3],
 				&matrixValues[4], &matrixValues[5], &matrixValues[6], &matrixValues[7],
 				&matrixValues[8], &matrixValues[9], &matrixValues[10], &matrixValues[11],
@@ -728,7 +768,7 @@ namespace FieaGameEngine
 			for (std::uint32_t i = 0; i < VEC4_ELEMENTS; i++)
 			{
 				returnString += std::to_string(floats[i]);
-				returnString += " ";
+				returnString += ", ";
 			}
 			break;
 		}
@@ -738,7 +778,7 @@ namespace FieaGameEngine
 			for (std::uint32_t i = 0; i < MAT4_ELEMENTS; i++)
 			{
 				returnString += std::to_string(floats[i]);
-				returnString += " ";
+				returnString += ", ";
 			}
 			break;
 		}

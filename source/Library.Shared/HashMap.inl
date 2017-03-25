@@ -71,6 +71,16 @@ namespace FieaGameEngine
 	}
 
 	template<typename TKey, typename TValue, typename THash>
+	HashMap<TKey, TValue, THash>::HashMap(std::initializer_list<PairType> list) :
+		HashMap()
+	{
+		for (PairType item : list)
+		{
+			Insert(item);
+		}
+	}
+
+	template<typename TKey, typename TValue, typename THash>
 	HashMap<TKey, TValue, THash>& HashMap<TKey, TValue, THash>::operator=(HashMap&& rhs)
 	{
 		if (this != &rhs)

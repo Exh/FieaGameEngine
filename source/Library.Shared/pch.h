@@ -8,6 +8,7 @@
 #include <vector>
 #include <cstdint>
 #include <memory>
+#include <algorithm>
 
 // C Standard Headers
 #include <assert.h>

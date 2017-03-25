@@ -41,6 +41,8 @@ namespace FieaGameEngine
 		/** Deallocates all heap data and zeroizes members. */
 		~HashMap();
 
+		HashMap(std::initializer_list<PairType> list);
+
 		/** Default copy constructor.
 			@param rhs Reference of HashMap to copy from.*/
 		HashMap(const HashMap& rhs) = default;

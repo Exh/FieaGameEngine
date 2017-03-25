@@ -1,7 +1,7 @@
 <Scope>
     <Integer name="Integer1" value="10"/>
     <Float name="Float1" value="1.0f"/>
-    <Scope name="Scope2">
+    <Scope>
         <Float name="Float2" value="2.0f"/>
         <Integer name="Integer2" value="20"/>
         <String name="String2" value="Beep2!"/>

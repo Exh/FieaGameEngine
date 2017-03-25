@@ -191,7 +191,7 @@ bool BarParseHelper::CharDataHandler(XmlParseMaster::SharedData& sharedData,
 	return false;
 }
 
-IXmlParseHelper* BarParseHelper::Clone()
+IXmlParseHelper* BarParseHelper::Clone() const
 {
 	return new BarParseHelper();
 }

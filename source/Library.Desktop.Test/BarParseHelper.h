@@ -49,7 +49,7 @@ public:
 	virtual bool CharDataHandler(XmlParseMaster::SharedData& sharedData,
 								 const std::string& charData) override;
 
-	virtual IXmlParseHelper* Clone() override;
+	virtual IXmlParseHelper* Clone() const override;
 
 private:
 

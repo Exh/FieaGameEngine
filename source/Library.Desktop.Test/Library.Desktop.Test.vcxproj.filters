@@ -14,6 +14,7 @@
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="BarParseHelper.cpp" />
     <ClCompile Include="XmlParseMasterTest.cpp" />
+    <ClCompile Include="XmlParseHelperScopeTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

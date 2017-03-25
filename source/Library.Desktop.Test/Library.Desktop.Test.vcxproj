@@ -190,6 +190,7 @@
     <ClCompile Include="ScopeTest.cpp" />
     <ClCompile Include="SListTest.cpp" />
     <ClCompile Include="VectorTest.cpp" />
+    <ClCompile Include="XmlParseHelperScopeTest.cpp" />
     <ClCompile Include="XmlParseMasterTest.cpp" />
   </ItemGroup>
   <ItemGroup>

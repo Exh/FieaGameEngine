@@ -97,6 +97,7 @@ namespace FieaGameEngine
 			}
 		}
 
+		XML_ParserReset(mParser, nullptr);
 		XML_ParserFree(mParser);
 		mParser = nullptr;
 	}
@@ -214,13 +215,22 @@ namespace FieaGameEngine
 		char* buffer = reinterpret_cast<char*>(malloc(length));
 		length = static_cast<std::int32_t>(fread(buffer, 1, length, file));
 
-		Parse(buffer, length, true);
+		fclose(file);
+		file = nullptr;
+
+		try
+		{
+			Parse(buffer, length, true);
+		}
+		catch (std::exception)
+		{
+			free(buffer);
+			buffer = nullptr;
+			throw std::exception();
+		}
 
 		free(buffer);
 		buffer = nullptr;
-
-		fclose(file);
-		file = nullptr;
 	}
 
 	void XmlParseMaster::ParseFromString(const char* stringArray)
@@ -296,7 +306,6 @@ namespace FieaGameEngine
 
 		if (sharedData != nullptr)
 		{
-			sharedData->DecrementDepth();
 			Vector<IXmlParseHelper*> parseHelpers = sharedData->GetXmlParseMaster()->mParseHelpers;
 
 			for (IXmlParseHelper* helper : parseHelpers)
@@ -309,6 +318,8 @@ namespace FieaGameEngine
 					}
 				}
 			}
+
+			sharedData->DecrementDepth();
 		}
 	}
 

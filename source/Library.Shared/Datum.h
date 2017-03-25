@@ -319,6 +319,7 @@ namespace FieaGameEngine
 		const RTTI* const& GetPointer(std::uint32_t index = 0) const;
 		const Scope* const& GetScope(std::uint32_t index = 0) const;
 
+		void PushBackFromString(const std::string& text);
 		void SetFromString(const std::string& text, std::uint32_t index = 0);
 
 		std::string ToString(std::uint32_t index = 0) const;

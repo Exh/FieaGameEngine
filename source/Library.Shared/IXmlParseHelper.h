@@ -46,7 +46,7 @@ namespace FieaGameEngine
 
 		/** Clones the helper. Must be implemented by any derived classes.
 			@return A Pointer to the new clone as an IXmlParseHelper.*/
-		virtual IXmlParseHelper* Clone() = 0;
+		virtual IXmlParseHelper* Clone() const = 0;
 
 	protected:
 

@@ -23,6 +23,7 @@
 #include "Attributed.h"
 #include "IXmlParseHelper.h"
 #include "XmlParseMaster.h"
+#include "XmlParseHelperScope.h"
 
 // Testing Headers
 #include "Foo.h"
