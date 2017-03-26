@@ -27,6 +27,7 @@
 
 // Testing Headers
 #include "Foo.h"
+#include "Beep.h"
 #include "AttributedFoo.h"
 #include "AttributedBar.h"
 #include "Bar.h"

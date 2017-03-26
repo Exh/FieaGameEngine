@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RTTI.h"
+#include "Factory.h"
 
 class Foo : public FieaGameEngine::RTTI
 {
@@ -52,6 +53,34 @@ private:
     int* mHeapData;
 };
 
+ConcreteFactory(FieaGameEngine::RTTI, Foo)
+
+//class FooFactory : public FieaGameEngine::Factory<FieaGameEngine::RTTI>
+//{
+//public:
+//
+//	FooFactory()
+//	{
+//		FieaGameEngine::Factory<FieaGameEngine::RTTI>::Add(*this);
+//	}
+//
+//	~FooFactory()
+//	{
+//		FieaGameEngine::Factory<FieaGameEngine::RTTI>::Remove(*this);
+//	}
+//
+//	virtual std::string ClassName()
+//	{
+//		return "Foo";
+//	}
+//
+//	virtual FieaGameEngine::RTTI* Create()
+//	{
+//		FieaGameEngine::RTTI* product = new Foo();
+//		assert(product != nullptr);
+//		return product;
+//	}
+//};
 
 
 namespace Microsoft

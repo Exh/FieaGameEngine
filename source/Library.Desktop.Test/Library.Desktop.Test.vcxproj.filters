@@ -15,6 +15,8 @@
     <ClCompile Include="BarParseHelper.cpp" />
     <ClCompile Include="XmlParseMasterTest.cpp" />
     <ClCompile Include="XmlParseHelperScopeTest.cpp" />
+    <ClCompile Include="FactoryTest.cpp" />
+    <ClCompile Include="Beep.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -23,5 +25,6 @@
     <ClInclude Include="AttributedBar.h" />
     <ClInclude Include="Bar.h" />
     <ClInclude Include="BarParseHelper.h" />
+    <ClInclude Include="Beep.h" />
   </ItemGroup>
 </Project>
