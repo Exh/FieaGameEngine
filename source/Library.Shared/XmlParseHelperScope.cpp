@@ -4,6 +4,13 @@ namespace FieaGameEngine
 {
 	RTTI_DEFINITIONS(ScopeSharedData)
 
+	std::string XmlParseHelperScope::sScopeTag("Scope");
+	std::string XmlParseHelperScope::sIntegerTag("Integer");
+	std::string XmlParseHelperScope::sFloatTag("Float");
+	std::string XmlParseHelperScope::sVectorTag("Vector");
+	std::string XmlParseHelperScope::sMatrixTag("Matrix");
+	std::string XmlParseHelperScope::sStringTag("String");
+
 	ScopeSharedData::ScopeSharedData() :
 		mScope(nullptr)
 	{
@@ -62,32 +69,32 @@ namespace FieaGameEngine
 
 		if (scopeSharedData != nullptr)
 		{
-			if (elementName == "Scope")
+			if (elementName == sScopeTag)
 			{
 				HandleScope(*scopeSharedData, attributes);
 				return true;
 			}
-			else if (elementName == "Integer")
+			else if (elementName == sIntegerTag)
 			{
 				HandleInteger(*scopeSharedData, attributes);
 				return true;
 			}
-			else if (elementName == "Float")
+			else if (elementName == sFloatTag)
 			{
 				HandleFloat(*scopeSharedData, attributes);
 				return true;
 			}
-			else if (elementName == "Vector")
+			else if (elementName == sVectorTag)
 			{
 				HandleVector(*scopeSharedData, attributes);
 				return true;
 			}
-			else if (elementName == "Matrix")
+			else if (elementName == sMatrixTag)
 			{
 				HandleMatrix(*scopeSharedData, attributes);
 				return true;
 			}
-			else if (elementName == "String")
+			else if (elementName == sStringTag)
 			{
 				HandleString(*scopeSharedData, attributes);
 				return true;
@@ -104,7 +111,7 @@ namespace FieaGameEngine
 		scopeSharedData = sharedData.As<ScopeSharedData>();
 
 		if (scopeSharedData != nullptr &&
-			elementName == "Scope")
+			elementName == sScopeTag)
 		{
 			if (scopeSharedData->Depth() > 1)
 			{

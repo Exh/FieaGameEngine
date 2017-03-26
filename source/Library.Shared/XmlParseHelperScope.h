@@ -98,5 +98,14 @@ namespace FieaGameEngine
 
 		void HandleString(ScopeSharedData& scopeSharedData,
 						  const HashMap<std::string, std::string>& attributes);
+
+	private:
+
+		static std::string sScopeTag;
+		static std::string sIntegerTag;
+		static std::string sFloatTag;
+		static std::string sVectorTag;
+		static std::string sMatrixTag;
+		static std::string sStringTag;
 	};
 }
