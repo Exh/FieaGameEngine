@@ -14,8 +14,6 @@ namespace LibraryDesktopTest
 	{
 	public:
 
-
-
 		TEST_METHOD_INITIALIZE(Initialize)
 		{
 #if !defined(NDEBUG)
@@ -38,10 +36,11 @@ namespace LibraryDesktopTest
 #endif
 		}
 
-		TEST_METHOD(ConstructorTest)
+		TEST_METHOD(Constructor)
 		{
 			FooFactory fooFactory;
 			BoopFactory boopFactory;
+			FooFactory secondFooFactory;
 
 			Assert::IsTrue(fooFactory.ClassName() == "Foo");
 			Assert::IsTrue(boopFactory.ClassName() == "Boop");
@@ -50,9 +49,92 @@ namespace LibraryDesktopTest
 			Assert::IsTrue(Factory<RTTI>::Find(boopFactory.ClassName()) != nullptr);
 		}
 
-		TEST_METHOD(DestructorTest)
+		TEST_METHOD(Destructor)
 		{
-		
+			FooFactory* fooFactory = new FooFactory();
+			BoopFactory* boopFactory = new BoopFactory();
+
+			std::string fooName = fooFactory->ClassName();
+			std::string boopName = boopFactory->ClassName();
+
+			Assert::IsTrue(Factory<RTTI>::Find(fooName) != nullptr);
+			Assert::IsTrue(Factory<RTTI>::Find(boopName) != nullptr);
+
+			delete fooFactory;
+			delete boopFactory;
+
+			Assert::IsTrue(Factory<RTTI>::Find(fooName) == nullptr);
+			Assert::IsTrue(Factory<RTTI>::Find(boopName) == nullptr);
+		}
+
+		TEST_METHOD(Find)
+		{
+			FooFactory* fooFactory = new FooFactory();
+			BoopFactory* boopFactory = new BoopFactory();
+
+			std::string fooName = fooFactory->ClassName();
+			std::string boopName = boopFactory->ClassName();
+
+			Assert::IsTrue(Factory<RTTI>::Find(fooName) != nullptr);
+			Assert::IsTrue(Factory<RTTI>::Find(boopName) != nullptr);
+
+			delete fooFactory;
+			delete boopFactory;
+
+			Assert::IsTrue(Factory<RTTI>::Find(fooName) == nullptr);
+			Assert::IsTrue(Factory<RTTI>::Find(boopName) == nullptr);
+		}
+
+		TEST_METHOD(Create)
+		{
+			FooFactory fooFactory;
+			BoopFactory boopFactory;
+
+			RTTI* fooInstance = Factory<RTTI>::Create("Foo");
+			RTTI* boopInstance = Factory<RTTI>::Create("Boop");
+			RTTI* nullInstance = Factory<RTTI>::Create("BadClass");
+
+			Assert::IsTrue(fooInstance->Is(Foo::TypeIdClass()));
+			Assert::IsTrue(boopInstance->Is(Boop::TypeIdClass()));
+			Assert::IsTrue(nullInstance == nullptr);
+
+			delete fooInstance;
+			delete boopInstance;
+		}
+
+		TEST_METHOD(IteratorBeginEnd)
+		{
+			Assert::IsTrue(Factory<RTTI>::begin() == Factory<RTTI>::end());
+
+			FooFactory fooFactory;
+			Assert::IsTrue((*Factory<RTTI>::begin()).second == &fooFactory);
+
+			BoopFactory boopFactory;
+			auto it = Factory<RTTI>::begin();
+			++it;
+			Assert::IsTrue((*it).second == &boopFactory);
+		}
+
+		TEST_METHOD(ClassName)
+		{
+			FooFactory fooFactory;
+			BoopFactory boopFactory;
+
+			Assert::IsTrue(fooFactory.ClassName() == "Foo");
+			Assert::IsTrue(boopFactory.ClassName() == "Boop");
+		}
+
+		TEST_METHOD(Factories)
+		{
+			FooFactory fooFactory;
+			BoopFactory boopFactory;
+			HappyBarFactory happyBarFactory;
+
+			HashMap<std::string, Factory<RTTI>*> rttiFactories = Factory<RTTI>::Factories();
+			HashMap<std::string, Factory<Bar>*> barFactories = Factory<Bar>::Factories();
+
+			Assert::IsTrue(rttiFactories.Size() == 2);
+			Assert::IsTrue(barFactories.Size() == 1);
 		}
 
 	private:

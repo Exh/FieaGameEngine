@@ -1,11 +1,12 @@
 #pragma once
 #include <cstdint>
 #include "Vector.h"
+#include "Factory.h"
 
 struct Bar
 {
 	Bar();
-	~Bar();
+	virtual ~Bar();
 	Bar(const Bar& rhs);
 
 	bool operator==(const Bar& rhs) const;
@@ -20,3 +21,11 @@ struct Bar
 	float mFloatValue;
 	std::string mString;
 };
+
+struct HappyBar : public Bar
+{
+	HappyBar() = default;
+	int mData;
+};
+
+ConcreteFactory(Bar, HappyBar)
