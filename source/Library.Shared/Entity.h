@@ -11,9 +11,15 @@ namespace FieaGameEngine
 
 	public:
 
+		static const std::string KEY_NAME;
+
+		static const std::string DEFAULT_NAME;
+
+	public:
+
 		Entity();
 
-		virtual ~Entity();
+		virtual ~Entity() = default;
 
 		void Populate();
 
@@ -25,7 +31,7 @@ namespace FieaGameEngine
 		
 		const class Sector* GetSector() const;
 
-		void Update(const class WorldState& state);
+		void Update(class WorldState& state);
 
 	protected:
 

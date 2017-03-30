@@ -10,11 +10,19 @@ namespace FieaGameEngine
 
 		RTTI_DECLARATIONS(World, Attributed)
 
+		static const std::string KEY_NAME;
+		static const std::string KEY_SECTORS;
+
+		static const std::string DEFAULT_NAME;
+
 	public:
 
 		World();
 
-		~World();
+		~World() = default;
+
+		World(const World& rhs) = delete;
+		World& operator=(const World& rhs) = delete;
 
 		void Populate();
 
@@ -26,9 +34,9 @@ namespace FieaGameEngine
 
 		const Datum& Sectors() const;
 
-		class Sector* CreateSector(const std::string& name) const;
+		class Sector* CreateSector(const std::string& name);
 
-		void Update(const class WorldState& state);
+		void Update(class WorldState& state);
 
 	private:
 

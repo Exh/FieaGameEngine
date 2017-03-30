@@ -12,9 +12,19 @@ namespace FieaGameEngine
 
 	public:
 
-		Sector();
+		static const std::string KEY_NAME;
+		static const std::string KEY_ENTITIES;
 
-		~Sector();
+		static const std::string DEFAULT_NAME;
+
+	public:
+
+		Sector();
+		
+		~Sector() = default;
+
+		Sector(const Sector& rhs) = delete;
+		Sector& operator=(const Sector& rhs) = delete;
 
 		void Populate();
 
@@ -26,13 +36,13 @@ namespace FieaGameEngine
 
 		const Datum& Entities() const;
 
-		Entity* CreateEntity(const std::string& className);
+		class Entity* CreateEntity(const std::string& className);
 
 		class World* GetWorld();
 
 		const class World* GetWorld() const;
 
-		void Update(const class WorldState& state);
+		void Update(class WorldState& state);
 
 	private:
 

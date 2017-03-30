@@ -104,7 +104,8 @@ namespace FieaGameEngine
 		void AddExternalAttribute(const std::string& key, glm::mat4* data, std::uint32_t size);
 		void AddExternalAttribute(const std::string& key, std::string* data, std::uint32_t size);
 		void AddExternalAttribute(const std::string& key, RTTI** data, std::uint32_t size);
-
+		
+		void AddEmptyNestedScopeAttribute(const std::string& key);
 		Scope& AddNestedScopeAttribute(const std::string& key);
 		void AddNestedScopeAttribute(const std::string& key, Scope& scope);
 

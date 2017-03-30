@@ -181,6 +181,11 @@ namespace FieaGameEngine
 		AppendPrescribedAttribute(key).SetStorage(data, size);
 	}
 
+	void Attributed::AddEmptyNestedScopeAttribute(const std::string& key)
+	{
+		AppendPrescribedAttribute(key).SetType(DatumType::Scope);
+	}
+
 	Scope& Attributed::AddNestedScopeAttribute(const std::string& key)
 	{
 		if (!IsPrescribedAttribute(key))
