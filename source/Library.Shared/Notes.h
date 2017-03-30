@@ -702,5 +702,51 @@ You should add an internal prescribed member to AttributedFoo.
 */
 
 /* 
-	Possibly, for TestSharedData, add 
+Assignment14
+	World and Section should be marked final.
+*/
+
+<World name="PaulzWorld">
+	<Sector name="AwesomeTown">
+		<Entity class="MonsterEntity" name="Paul">
+			<Integer value="10"/>
+			<STRING value="Beep"/>
+		</Entity>
+	</Sector>
+</World>
+
+/* 
+	Worlds are just a scope
+
+	If you are at any other besides depth besides 1 when you get a World tag... Error!
+
+	World has name, list of sectors, and this pointer as prescribed attributes.
+
+	Make a separate macro for CreateEntityFactory()
+	and CreateActionFactory()
+
+	You can change your Scope parse helpers
+
+	Update methods for World, Sector, and Entity will take WorldState references.
+	World will set the WorldState.mCurrent
+
+	Composite, Command, State(?) patterns
+
+	Possibly add a Scope::Sort() function that takes a lambda expression for the comparer.
+	Use this to optimize finding a Sector in the Sectors array, or Entities in the Entities array.
+
+	Game class should have a Run() and Initialize().
+	World state at least has pointers to world, sector, entity and a gametime.
+	Do not assume that the owner of the action is an entity. You can always ask what type of scope
+
+	Do not unit test paul's gameclock/gametime class
+
+	Safe to assume that Entity's parent is a sector (well make sure you assert).
+
+	Test typeidinstace(), is(), queryinterface(), as()? etc etc 
+
+	Infix notation
+	Postfix notation 
+	Reverse Polish Notation
+	Shunting Yard
 */
