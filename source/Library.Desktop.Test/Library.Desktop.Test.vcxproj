@@ -180,8 +180,10 @@
     <ClCompile Include="BarParseHelper.cpp" />
     <ClCompile Include="Beep.cpp" />
     <ClCompile Include="DatumTest.cpp" />
+    <ClCompile Include="EntityTest.cpp" />
     <ClCompile Include="FactoryTest.cpp" />
     <ClCompile Include="Foo.cpp" />
+    <ClCompile Include="GameTest.cpp" />
     <ClCompile Include="HashMapTest.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -190,8 +192,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="ScopeTest.cpp" />
+    <ClCompile Include="SectorTest.cpp" />
     <ClCompile Include="SListTest.cpp" />
     <ClCompile Include="VectorTest.cpp" />
+    <ClCompile Include="WorldTest.cpp" />
     <ClCompile Include="XmlParseHelperScopeTest.cpp" />
     <ClCompile Include="XmlParseMasterTest.cpp" />
   </ItemGroup>

@@ -77,8 +77,11 @@ namespace FieaGameEngine
 			{
 				assert(sectors[i] != nullptr);
 				assert(sectors[i]->Is(Sector::TypeIdClass()));
+				state.mSector = static_cast<Sector*>(sectors[i]);
 				static_cast<Sector*>(sectors[i])->Update(state);
 			}
+
+			state.mSector = nullptr;
 		}
 	}
 }

@@ -26,8 +26,6 @@ namespace FieaGameEngine
 		Sector(const Sector& rhs) = delete;
 		Sector& operator=(const Sector& rhs) = delete;
 
-		void Populate();
-
 		const std::string& Name() const;
 
 		void SetName(const std::string& name);
@@ -43,6 +41,10 @@ namespace FieaGameEngine
 		const class World* GetWorld() const;
 
 		void Update(class WorldState& state);
+
+	private:
+
+		void Populate();
 
 	private:
 

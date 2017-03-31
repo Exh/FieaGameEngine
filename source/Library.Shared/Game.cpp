@@ -52,13 +52,14 @@ namespace FieaGameEngine
 
 		if (mWorld != nullptr)
 		{
+			mWorldState.mWorld = mWorld;
 			mWorld->Update(mWorldState);
 		}
 	}
 
 	void Game::Render()
 	{
-	
+
 	}
 
 	void Game::Shutdown()

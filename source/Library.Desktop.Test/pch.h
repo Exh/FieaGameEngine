@@ -24,6 +24,15 @@
 #include "IXmlParseHelper.h"
 #include "XmlParseMaster.h"
 #include "XmlParseHelperScope.h"
+#include "XmlParseHelperWorld.h"
+#include "World.h"
+#include "Sector.h"
+#include "Entity.h"
+#include "GameTime.h"
+#include "GameClock.h"
+#include "WorldState.h"
+#include "Game.h"
+#include "Factory.h"
 
 // Testing Headers
 #include "Foo.h"

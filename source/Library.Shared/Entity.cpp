@@ -35,7 +35,11 @@ namespace FieaGameEngine
 
 	Sector* Entity::GetSector()
 	{
-		assert(mParent != nullptr);
+		if (mParent == nullptr)
+		{
+			throw std::exception("Entity's parent is nullptr. Should never happen. Do not manually call Entity constructor. Use Sector::SpawnEntity()");
+		}
+
 		assert(mParent->Is(Sector::TypeIdClass()));
 
 		return static_cast<Sector*>(mParent);
@@ -43,7 +47,11 @@ namespace FieaGameEngine
 
 	const Sector* Entity::GetSector() const
 	{
-		assert(mParent != nullptr);
+		if (mParent == nullptr)
+		{
+			throw std::exception("Entity's parent is nullptr. Should never happen. Do not manually call Entity constructor. Use Sector::SpawnEntity()");
+		}
+
 		assert(mParent->Is(Sector::TypeIdClass()));
 
 		return static_cast<Sector*>(mParent);

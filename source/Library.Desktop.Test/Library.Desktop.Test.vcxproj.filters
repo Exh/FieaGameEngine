@@ -17,6 +17,10 @@
     <ClCompile Include="XmlParseHelperScopeTest.cpp" />
     <ClCompile Include="FactoryTest.cpp" />
     <ClCompile Include="Beep.cpp" />
+    <ClCompile Include="EntityTest.cpp" />
+    <ClCompile Include="SectorTest.cpp" />
+    <ClCompile Include="WorldTest.cpp" />
+    <ClCompile Include="GameTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

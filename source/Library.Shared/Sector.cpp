@@ -58,13 +58,10 @@ namespace FieaGameEngine
 	{
 		Entity* entity = Factory<Entity>::Create(className);
 
-		if (entity)
+		if (entity == nullptr)
 		{
 			throw std::exception("Unknown Entity Class Name received.");
 		}
-
-		assert(mEntities != nullptr);
-		mEntities->PushBack(entity);
 
 		Adopt(*entity, Sector::KEY_ENTITIES);
 
@@ -99,8 +96,11 @@ namespace FieaGameEngine
 			{
 				assert(entities[i] != nullptr);
 				assert(entities[i]->Is(Entity::TypeIdClass()));
+				state.mEntity = static_cast<Entity*>(entities[i]);
 				static_cast<Entity*>(entities[i])->Update(state);
 			}
+
+			state.mEntity = nullptr;
 		}
 	}
 }

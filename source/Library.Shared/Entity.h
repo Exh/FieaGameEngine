@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Attributed.h"
+#include "Factory.h"
 
 namespace FieaGameEngine
 {
@@ -21,8 +22,6 @@ namespace FieaGameEngine
 
 		virtual ~Entity() = default;
 
-		void Populate();
-
 		const std::string& Name() const;
 
 		void SetName(const std::string& name);
@@ -37,5 +36,14 @@ namespace FieaGameEngine
 
 		std::string mName;
 
+	private:
+
+		void Populate();
+
 	};
+
+	ConcreteFactory(Entity, Entity)
+
+#define DeclareEntityFactory(ConcreteEntity) ConcreteFactory(Entity, ConcreteEntity)
 }
+
