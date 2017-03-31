@@ -59,9 +59,6 @@ namespace FieaGameEngine
 
 		Adopt(*sector, World::KEY_SECTORS);
 
-		assert(mSectors != nullptr);
-		mSectors->PushBack(sector);
-
 		return sector;
 	}
 

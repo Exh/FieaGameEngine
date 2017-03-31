@@ -104,6 +104,8 @@ namespace LibraryDesktopTest
 			Sector sector;
 			EntityFactory entityFactory;
 
+			sector.Update(state);
+
 			Entity* entity1 = sector.CreateEntity("Entity");
 			Entity* entity2 = sector.CreateEntity("Entity");
 
