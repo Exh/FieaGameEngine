@@ -32,6 +32,8 @@ namespace FieaGameEngine
 		XmlParseHelperScope scopeParseHelper;
 		ScopeSharedData scopeSharedData;
 
+		EntityFactory entityFactory;
+
 		worldParser.SetSharedData(&scopeSharedData);
 		worldParser.AddHelper(worldParseHelper);
 		worldParser.AddHelper(scopeParseHelper);

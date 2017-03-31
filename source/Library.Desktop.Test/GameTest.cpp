@@ -24,6 +24,8 @@ namespace LibraryDesktopTest
 		{
 #if !defined(NDEBUG)
 
+			Attributed::ClearPrescribedAttributeCache();
+
 			_CrtMemState endMemState, diffMemState;
 			_CrtMemCheckpoint(&endMemState);
 			if (_CrtMemDifference(&diffMemState, &sStartMemState, &endMemState))
@@ -36,7 +38,37 @@ namespace LibraryDesktopTest
 
 		TEST_METHOD(Constructor)
 		{
+			Game game;
+		}
 
+		TEST_METHOD(InitializeTest)
+		{
+			Game game;
+			game.Initialize();
+		}
+
+		TEST_METHOD(LoadWorldTest)
+		{
+			Game game;
+			game.Initialize();
+			game.LoadWorld("../../../files/WorldTest1.xml");
+			//game.LoadWorld("../../../files/WorldTest1.xml");
+		}
+
+		TEST_METHOD(UpdateTest)
+		{
+			Game game;
+			game.Initialize();
+			game.Update();
+			game.LoadWorld("../../../files/WorldTest1.xml");
+			game.Update();
+		}
+
+		TEST_METHOD(RenderTest)
+		{
+			Game game;
+			game.Initialize();
+			game.Render();
 		}
 
 	private:
