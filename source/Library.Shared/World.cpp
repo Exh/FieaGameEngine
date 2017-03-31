@@ -1,15 +1,13 @@
-#include "World.h"
-#include "Sector.h"
-#include "WorldState.h"
+#include "pch.h"
 
 namespace FieaGameEngine
 {
 	RTTI_DEFINITIONS(World)
 
-	const std::string Sector::KEY_NAME = "Name";
-	const std::string Sector::KEY_ENTITIES = "Sectors";
+	const std::string World::KEY_NAME = "name";
+	const std::string World::KEY_SECTORS = "sectors";
 
-	const std::string Sector::DEFAULT_NAME = "World";
+	const std::string World::DEFAULT_NAME = "World";
 
 	World::World() :
 		mName(DEFAULT_NAME),
@@ -34,7 +32,7 @@ namespace FieaGameEngine
 		return mName;
 	}
 
-	void World::SetName(std::string& name)
+	void World::SetName(const std::string& name)
 	{
 		mName = name;
 	}
@@ -55,7 +53,19 @@ namespace FieaGameEngine
 		return *mSectors;
 	}
 
-	Sector* World::CreateSector(const std::string name)
+	Sector* World::CreateSector()
+	{
+		Sector* sector = new Sector();
+
+		Adopt(*sector, World::KEY_SECTORS);
+
+		assert(mSectors != nullptr);
+		mSectors->PushBack(sector);
+
+		return sector;
+	}
+
+	void World::Update(class WorldState& state)
 	{
 		assert(mSectors != nullptr);
 
@@ -67,7 +77,7 @@ namespace FieaGameEngine
 			{
 				assert(sectors[i] != nullptr);
 				assert(sectors[i]->Is(Sector::TypeIdClass()));
-				static_cast<Sector*>(sectors[i]->Update(state));
+				static_cast<Sector*>(sectors[i])->Update(state);
 			}
 		}
 	}

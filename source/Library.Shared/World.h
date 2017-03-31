@@ -10,6 +10,8 @@ namespace FieaGameEngine
 
 		RTTI_DECLARATIONS(World, Attributed)
 
+	public:
+
 		static const std::string KEY_NAME;
 		static const std::string KEY_SECTORS;
 
@@ -34,7 +36,7 @@ namespace FieaGameEngine
 
 		const Datum& Sectors() const;
 
-		class Sector* CreateSector(const std::string& name);
+		class Sector* CreateSector();
 
 		void Update(class WorldState& state);
 

@@ -1,21 +1,17 @@
-#include "Sector.h"
-#include "Entity.h"
-#include "World.h"
-#include "WorldState.h"
-#include "Factory.h"
+#include "pch.h"
 
 namespace FieaGameEngine
 {
 	
 	RTTI_DEFINITIONS(Sector)
 
-	const std::string Sector::KEY_NAME = "Name";
-	const std::string Sector::KEY_ENTITIES = "Entities";
+	const std::string Sector::KEY_NAME = "name";
+	const std::string Sector::KEY_ENTITIES = "entities";
 
 	const std::string Sector::DEFAULT_NAME = "Sector";
 
 	Sector::Sector() :
-		mName(NAME_DEFAULT),
+		mName(Sector::DEFAULT_NAME),
 		mEntities(nullptr)
 	{
 		Populate();
@@ -69,6 +65,8 @@ namespace FieaGameEngine
 
 		assert(mEntities != nullptr);
 		mEntities->PushBack(entity);
+
+		Adopt(*entity, Sector::KEY_ENTITIES);
 
 		return entity;
 	}

@@ -1,13 +1,11 @@
-#include "Entity.h"
-#include "Sector.h"
-#include "WorldState.h"
+#include "pch.h"
 
 namespace FieaGameEngine
 {
 
 	RTTI_DEFINITIONS(Entity)
 
-	const std::string Entity::KEY_NAME = "Name";
+	const std::string Entity::KEY_NAME = "name";
 
 	const std::string Entity::DEFAULT_NAME = "Entity";
 
@@ -22,7 +20,7 @@ namespace FieaGameEngine
 	{
 		Attributed::Populate();
 
-		AddExternalAttribute(KEY_NAME, mName, 1);
+		AddExternalAttribute(KEY_NAME, &mName, 1);
 	}
 
 	const std::string& Entity::Name() const
@@ -32,7 +30,7 @@ namespace FieaGameEngine
 
 	void Entity::SetName(const std::string& name)
 	{
-	
+		mName = name;
 	}
 
 	Sector* Entity::GetSector()
@@ -51,9 +49,9 @@ namespace FieaGameEngine
 		return static_cast<Sector*>(mParent);
 	}
 
-	void Entity::Update(const WorldState& state)
+	void Entity::Update(WorldState& state)
 	{
-	
+		state;
 	}
 
 }

@@ -31,12 +31,11 @@ namespace FieaGameEngine
 		
 		const class Sector* GetSector() const;
 
-		void Update(class WorldState& state);
+		virtual void Update(class WorldState& state);
 
 	protected:
 
 		std::string mName;
-
 
 	};
 }

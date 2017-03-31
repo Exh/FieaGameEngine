@@ -7,11 +7,16 @@ namespace FieaGameEngine
 
 	public:
 
+		WorldState();
+		~WorldState() = default;
+
 		class GameTime& GetGameTime();
 		
 		const class GameTime& GetGameTime() const;
 
 		void SetGameTime(class GameTime& gameTime);
+
+		bool IsGameTimeSet() const;
 
 		float DeltaTime() const;
 
