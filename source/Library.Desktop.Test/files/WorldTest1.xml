@@ -1,0 +1,10 @@
+<World name="World0">
+    <Sector name="Sector0">
+        <Entity name="Entity0">
+            <Integer name="Health" value="100"/>
+            <Float name="Speed" value="3.0f"/>
+        </Entity>
+    </Sector>
+    <Sector name="Sector1">
+    </Sector>
+</World>

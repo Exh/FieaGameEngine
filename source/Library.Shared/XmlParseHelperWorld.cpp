@@ -56,10 +56,9 @@ namespace FieaGameEngine
 			elementName == sSectorTag ||
 			elementName == sEntityTag)
 		{
-			if (scopeSharedData->Depth() > 1)
-			{
-				scopeSharedData->mScope = scopeSharedData->mScope->GetParent();
-			}
+			assert(scopeSharedData->Depth() > 1);
+			scopeSharedData->mScope = scopeSharedData->mScope->GetParent();
+
 			return true;
 		}
 
@@ -157,7 +156,7 @@ namespace FieaGameEngine
 		}
 		else
 		{
-			sector->SetName((*it).second);
+			entity->SetName((*it).second);
 		}
 
 		scopeSharedData.mScope = entity;

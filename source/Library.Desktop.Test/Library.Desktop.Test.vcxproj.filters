@@ -21,6 +21,7 @@
     <ClCompile Include="SectorTest.cpp" />
     <ClCompile Include="WorldTest.cpp" />
     <ClCompile Include="GameTest.cpp" />
+    <ClCompile Include="XmlParseHelperWorldTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
