@@ -84,6 +84,10 @@ namespace LibraryDesktopTest
 			Assert::IsTrue(entity0.Name() == ENTITY0_NAME);
 			Assert::IsTrue(entity0["Health"] == ENTITY0_HEALTH);
 			Assert::IsTrue(entity0["Speed"] == ENTITY0_SPEED);
+
+			delete scopeData.mScope;
+			scopeData.mScope = nullptr;
+			parseMaster.ParseFromFile("../../../files/WorldTest2.xml");
 		}
 
 		TEST_METHOD(CloneTest)
@@ -140,6 +144,40 @@ namespace LibraryDesktopTest
 			Assert::IsTrue(entity0.Name() == ENTITY0_NAME);
 			Assert::IsTrue(entity0["Health"] == ENTITY0_HEALTH);
 			Assert::IsTrue(entity0["Speed"] == ENTITY0_SPEED);
+		}
+
+		TEST_METHOD(InvalidParseTests)
+		{
+			XmlParseMaster parseMaster;
+			ScopeSharedData scopeData;
+			XmlParseHelperWorld parseHelperWorld;
+			XmlParseHelperScope parseHelperScope;
+			EntityFactory entityFactory;
+
+			parseMaster.SetSharedData(&scopeData);
+			parseMaster.AddHelper(parseHelperWorld);
+			parseMaster.AddHelper(parseHelperScope);
+
+			Assert::ExpectException<std::exception>([&parseMaster] {parseMaster.ParseFromFile("../../../files/WorldTestInvalid1.xml"); });
+			delete scopeData.mScope;
+			scopeData.mScope = nullptr;
+
+			Assert::ExpectException<std::exception>([&parseMaster] {parseMaster.ParseFromFile("../../../files/WorldTestInvalid2.xml"); });
+			delete scopeData.mScope;
+			scopeData.mScope = nullptr;
+
+			Assert::ExpectException<std::exception>([&parseMaster] {parseMaster.ParseFromFile("../../../files/WorldTestInvalid3.xml"); });
+			delete scopeData.mScope;
+			scopeData.mScope = nullptr;
+
+			Assert::ExpectException<std::exception>([&parseMaster] {parseMaster.ParseFromFile("../../../files/WorldTestInvalid4.xml"); });
+			delete scopeData.mScope;
+			scopeData.mScope = nullptr;
+
+			Assert::ExpectException<std::exception>([&parseMaster] {parseMaster.ParseFromFile("../../../files/WorldTestInvalid5.xml"); });
+			delete scopeData.mScope;
+			scopeData.mScope = nullptr;
+
 		}
 
 	private:

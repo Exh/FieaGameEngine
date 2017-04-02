@@ -37,7 +37,7 @@ namespace FieaGameEngine
 		virtual ~XmlParseHelperWorld() = default;
 
 		/** Override of IXmlParseHelper interface's StartElementHandler method. This method will
-		handle World/Sector/Entity tags as well as tags relating to DatumTypes like Integer and Float.
+		handle World/Sector/Entity tags.
 		@param sharedData A reference to the currently used shared data by the parse master.
 		@param elementName A string containing the name of the current element being processed.
 		@param attributes A map of name, value pairs mapping to the received XML element's attributes.
@@ -49,7 +49,7 @@ namespace FieaGameEngine
 										 const HashMap<std::string, std::string>& attributes) override;
 
 		/** Override of IXmlParseHelper interface's EndElementHandler method. This method will
-		handle Scope tags as well as tags relating to DatumTypes like Integer and Float.
+		handle World/Sector/Entity tags.
 		@param sharedData A reference to the currently used shared data by the parse master.
 		@param elementName A string containing the name of the current element being processed.
 		@return true if the element was handled by this method. */

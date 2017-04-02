@@ -52,7 +52,10 @@ namespace LibraryDesktopTest
 			Game game;
 			game.Initialize();
 			game.LoadWorld("../../../files/WorldTest1.xml");
-			//game.LoadWorld("../../../files/WorldTest1.xml");
+			game.LoadWorld("../../../files/WorldTest1.xml");
+
+			Assert::ExpectException<std::exception>([&game]{game.LoadWorld("../../../files/WorldTestInvalid6.xml");});
+
 		}
 
 		TEST_METHOD(UpdateTest)
@@ -69,6 +72,36 @@ namespace LibraryDesktopTest
 			Game game;
 			game.Initialize();
 			game.Render();
+		}
+
+		TEST_METHOD(ShutdownTest)
+		{
+			Game game;
+			game.Shutdown();
+		}
+
+		TEST_METHOD(WorldStateTest)
+		{
+			WorldState state;
+			const WorldState* constState = &state;
+			Assert::IsTrue(state.mWorld == nullptr);
+			Assert::IsTrue(state.mSector == nullptr);
+			Assert::IsTrue(state.mEntity == nullptr);
+
+			Assert::ExpectException<std::exception>([&state]{state.GetGameTime();});
+			Assert::ExpectException<std::exception>([&constState]{constState->GetGameTime();});
+
+			Assert::IsFalse(state.IsGameTimeSet());
+
+			GameTime gameTime;
+
+			state.SetGameTime(gameTime);
+
+			Assert::IsTrue(&(state.GetGameTime()) == &gameTime);
+			Assert::IsTrue(&(constState->GetGameTime()) == &gameTime);
+
+			float DeltaTime = state.DeltaTime();
+			Assert::IsTrue(DeltaTime == 0.0f);
 		}
 
 	private:

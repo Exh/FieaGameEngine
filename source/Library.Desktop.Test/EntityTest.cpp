@@ -38,9 +38,14 @@ namespace LibraryDesktopTest
 		TEST_METHOD(ConstructorTest)
 		{
 			Entity entity;
+			const Entity* constEntity = &entity;
 			Assert::IsTrue(entity.IsPrescribedAttribute("this"));
 			Assert::IsTrue(entity.IsPrescribedAttribute(Entity::KEY_NAME));
 			Assert::IsTrue(entity[Entity::KEY_NAME].GetString() == Entity::DEFAULT_NAME);
+
+			Assert::ExpectException<std::exception>([&entity]{entity.GetSector();});
+			Assert::ExpectException<std::exception>([&constEntity] {constEntity->GetSector(); });
+
 		}
 
 		TEST_METHOD(NameTest)

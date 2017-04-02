@@ -73,10 +73,7 @@ namespace FieaGameEngine
 			throw std::exception("World element found at non-root level.");
 		}
 
-		if (scopeSharedData.mScope != nullptr)
-		{
-			throw std::exception("Scope shared data already has a scope.");
-		}
+		assert(scopeSharedData.mScope == nullptr);
 
 		scopeSharedData.mScope = new World();
 
