@@ -49,6 +49,12 @@ namespace FieaGameEngine
 		@param World state reference to be used by entity. */
 		virtual void Update(class WorldState& state);
 
+		Datum& Actions();
+
+		const Datum& Actions() const;
+
+		void CreateAction(const std::string& className, const std::string& instanceName);
+
 	protected:
 
 		std::string mName;

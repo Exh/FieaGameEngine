@@ -33,6 +33,10 @@
 #include "WorldState.h"
 #include "Game.h"
 #include "Factory.h"
+#include "Action.h"
+#include "ActionList.h"
+#include "ActionCreateAction.h"
+#include "ActionIncrement.h"
 
 // Testing Headers
 #include "Foo.h"

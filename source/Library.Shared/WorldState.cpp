@@ -7,6 +7,7 @@ namespace FieaGameEngine
 		mWorld(nullptr),
 		mSector(nullptr),
 		mEntity(nullptr),
+		mAction(nullptr),
 		mGameTime(nullptr)
 	{
 	

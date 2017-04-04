@@ -45,6 +45,8 @@ namespace FieaGameEngine
 
 		class Entity* mEntity;
 
+		class Action* mAction;
+
 		// TODO: class Action* mAction;
 
 	private:

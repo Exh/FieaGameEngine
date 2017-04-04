@@ -749,4 +749,26 @@ Assignment14
 	Postfix notation 
 	Reverse Polish Notation
 	Shunting Yard
+
+	Have an actions prescribed attribute inside your actionlist class. 
+	Actionlist also has a name 
+	CreateAction is similar to AppendScope(). What its job really is, is to invoke the Factory<Action>::Create() function
+	the action create
+	Actionlist has no function itself besides going through the list of actions and invoking them.
+	Entity has pointers to actions, not action lists (but they are probably lists. treated the same as an action)
+	Actions are stored as prescribed attributes whose name is "actions" and type is table. 
+	CreateAction and DestroyAction are required to implement.
+
+	Should DestroyAction be able to destroy itself? yes? Create a queue of actions to delete and then
+	after all of the updates. Delete them all.
+
+	Maybe start by making an ActionAdd first to understand. Or ActionArithmetic "type" = "Add").
+
+	Make ActionList::Update virtual.
+	ActionIf will have to override Update to handle the execution differently.
+
+	<Action class="IncrementAction" name="IncreaseX" target="x">
+		<Integer name="x" value="10"/>
+	</Action>
+	^ BUT X COULD BE IN PARENT SCOPE INSTEAD
 */

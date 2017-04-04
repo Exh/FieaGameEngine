@@ -22,6 +22,8 @@
     <ClCompile Include="WorldTest.cpp" />
     <ClCompile Include="GameTest.cpp" />
     <ClCompile Include="XmlParseHelperWorldTest.cpp" />
+    <ClCompile Include="ActionTest.cpp" />
+    <ClCompile Include="ActionIncrementTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

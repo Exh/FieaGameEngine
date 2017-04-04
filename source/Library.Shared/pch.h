@@ -35,6 +35,10 @@
 #include "WorldState.h"
 #include "Game.h"
 #include "Factory.h"
+#include "Action.h"
+#include "ActionList.h"
+#include "ActionCreateAction.h"
+#include "ActionIncrement.h"
 
 // GLM
 #include "glm/glm.hpp"
