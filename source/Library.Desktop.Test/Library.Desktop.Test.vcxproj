@@ -175,6 +175,7 @@
   <ItemGroup>
     <ClCompile Include="ActionCreateActionTest.cpp" />
     <ClCompile Include="ActionDestroyActionTest.cpp" />
+    <ClCompile Include="ActionIfTest.cpp" />
     <ClCompile Include="ActionIncrementTest.cpp" />
     <ClCompile Include="ActionTest.cpp" />
     <ClCompile Include="AttributedBar.cpp" />

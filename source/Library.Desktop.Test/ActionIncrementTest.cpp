@@ -37,12 +37,10 @@ namespace LibraryDesktopTest
 
 		TEST_METHOD(ConstructorTest)
 		{
-			ActionList actionList;
+			ActionIncrement actionList;
 			Assert::IsTrue(actionList.IsPrescribedAttribute(Action::KEY_NAME));
-			Assert::IsTrue(actionList.IsPrescribedAttribute(ActionList::KEY_ACTIONS));
 			Assert::IsTrue(actionList.Is(Action::TypeIdClass()));
-
-			Assert::IsTrue(actionList[ActionList::KEY_ACTIONS].Size() == 0);
+			Assert::IsTrue(actionList.Is(ActionIncrement::TypeIdClass()));
 		}
 
 		TEST_METHOD(UpdateTest)

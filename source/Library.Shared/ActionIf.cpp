@@ -32,7 +32,7 @@ namespace FieaGameEngine
 		}
 		else if (elseAction != 0)
 		{
-			Scope* els = thenAction->GetScope();
+			Scope* els = elseAction->GetScope();
 			assert(els->Is(Action::TypeIdClass()));
 			static_cast<Action*>(els)->Update(state);
 		}

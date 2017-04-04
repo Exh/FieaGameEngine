@@ -34,4 +34,13 @@ namespace FieaGameEngine
 			static_cast<Action*>(actions[i])->Update(state);
 		}
 	}
+
+	Action* ActionList::CreateAction(const std::string& className, const std::string& instanceName)
+	{
+		Action* newAction = Factory<Action>::Create(className);
+		newAction->SetName(instanceName);
+		Adopt(*newAction, KEY_ACTIONS);
+
+		return newAction;
+	}
 }

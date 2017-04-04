@@ -20,6 +20,8 @@ namespace FieaGameEngine
 
 		virtual void Update(class WorldState& state) override;
 
+		Action* CreateAction(const std::string& className, const std::string& instanceName);
+
 	protected:
 
 		void Populate();
