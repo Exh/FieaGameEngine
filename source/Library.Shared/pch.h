@@ -40,6 +40,7 @@
 #include "ActionCreateAction.h"
 #include "ActionDestroyAction.h"
 #include "ActionIncrement.h"
+#include "ActionIf.h"
 
 // GLM
 #include "glm/glm.hpp"
