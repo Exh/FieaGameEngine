@@ -38,6 +38,7 @@
 #include "Action.h"
 #include "ActionList.h"
 #include "ActionCreateAction.h"
+#include "ActionDestroyAction.h"
 #include "ActionIncrement.h"
 
 // GLM

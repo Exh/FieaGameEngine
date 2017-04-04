@@ -25,6 +25,7 @@
     <ClCompile Include="ActionTest.cpp" />
     <ClCompile Include="ActionIncrementTest.cpp" />
     <ClCompile Include="ActionCreateActionTest.cpp" />
+    <ClCompile Include="ActionDestroyActionTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

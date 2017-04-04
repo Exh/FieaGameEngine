@@ -15,7 +15,7 @@ namespace FieaGameEngine
 	}
 	void Action::Update(class WorldState& state)
 	{
-		state.mAction = this;
+		state;
 	}
 
 	const std::string& Action::Name() const

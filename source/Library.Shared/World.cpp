@@ -80,5 +80,23 @@ namespace FieaGameEngine
 
 			state.mSector = nullptr;
 		}
+
+		DestroyQueuedActions();
+	}
+
+	void World::DestroyQueuedActions()
+	{
+		for (Action*& action : mActionDestroyQueue)
+		{
+			delete action;
+			action = nullptr;
+		}
+
+		mActionDestroyQueue.Clear();
+	}
+
+	void World::DestroyAction(class Action& action)
+	{
+		mActionDestroyQueue.PushBack(&action);
 	}
 }

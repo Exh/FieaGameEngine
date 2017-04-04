@@ -54,11 +54,13 @@ namespace FieaGameEngine
 
 		const Datum& Actions() const;
 
-		void CreateAction(const std::string& className, const std::string& instanceName);
+		Action& CreateAction(const std::string& className, const std::string& instanceName);
 
 	protected:
 
 		std::string mName;
+
+		Datum* mActions;
 
 	private:
 

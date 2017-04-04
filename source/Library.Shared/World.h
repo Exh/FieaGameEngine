@@ -51,13 +51,19 @@ namespace FieaGameEngine
 		@param state World state for world to use in update. */
 		void Update(class WorldState& state);
 
+		void DestroyAction(class Action& action);
+
 	private:
 
 		void Populate();
 
 	private:
 
+		void DestroyQueuedActions();
+
 		std::string mName;
+
+		Vector<class Action*> mActionDestroyQueue;
 
 		Datum* mSectors;
 
