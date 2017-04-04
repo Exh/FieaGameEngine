@@ -68,13 +68,16 @@ namespace FieaGameEngine
 
 		assert(mActions != nullptr);
 		
-		Scope** actions = &(mActions->GetScope(0));
-		for (std::uint32_t i = 0; i < mActions->Size(); i++)
+		if (mActions->Size() > 0)
 		{
-			assert(actions[i] != nullptr);
-			assert(actions[i]->Is(Action::TypeIdClass()));
-			state.mAction = static_cast<Action*>(actions[i]);
-			static_cast<Action*>(actions[i])->Update(state);
+			Scope** actions = &(mActions->GetScope(0));
+			for (std::uint32_t i = 0; i < mActions->Size(); i++)
+			{
+				assert(actions[i] != nullptr);
+				assert(actions[i]->Is(Action::TypeIdClass()));
+				state.mAction = static_cast<Action*>(actions[i]);
+				static_cast<Action*>(actions[i])->Update(state);
+			}
 		}
 
 		state.mAction = nullptr;
@@ -94,13 +97,13 @@ namespace FieaGameEngine
 		return *mActions;
 	}
 
-	Action& Entity::CreateAction(const std::string& className,
+	Action* Entity::CreateAction(const std::string& className,
 								 const std::string& instanceName)
 	{
 		Action* newAction = Factory<Action>::Create(className);
 		newAction->SetName(instanceName);
 		Adopt(*newAction, KEY_ACTIONS);
 
-		return *newAction;
+		return newAction;
 	}
 }

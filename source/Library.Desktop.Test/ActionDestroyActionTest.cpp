@@ -56,8 +56,8 @@ namespace LibraryDesktopTest
 			entity->SetName("Chips");
 			entity->CreateAction("ActionIncrement", "Incy");
 
-			Action& destroyer = entity->CreateAction("ActionDestroyAction", "Destroyer");
-			destroyer["target"] = "Incy";
+			Action* destroyer = entity->CreateAction("ActionDestroyAction", "Destroyer");
+			(*destroyer)["target"] = "Incy";
 
 			Assert::IsTrue(entity->Actions().Size() == 2);
 			world.Update(state);
