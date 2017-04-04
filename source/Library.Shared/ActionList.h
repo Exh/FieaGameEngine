@@ -25,4 +25,6 @@ namespace FieaGameEngine
 		void Populate();
 
 	};
+
+	DeclareActionFactory(ActionList)
 }

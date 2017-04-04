@@ -13,6 +13,7 @@ namespace FieaGameEngine
 	public:
 
 		static const std::string KEY_NAME;
+		static const std::string KEY_ACTIONS;
 
 		static const std::string DEFAULT_NAME;
 

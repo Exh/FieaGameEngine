@@ -12,6 +12,7 @@ namespace FieaGameEngine
 
 		static const std::string KEY_PROTOTYPE_CLASS;
 		static const std::string KEY_INSTANCE_NAME;
+		static const std::string KEY_ACTIONS;
 
 		static const std::string DEFAULT_PROTOTYPE_CLASS;
 		static const std::string DEFAULT_INSTANCE_NAME;
@@ -25,4 +26,6 @@ namespace FieaGameEngine
 		void Populate();
 
 	};
+
+	DeclareActionFactory(ActionCreateAction)
 }

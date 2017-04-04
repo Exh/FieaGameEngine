@@ -5,12 +5,12 @@ namespace FieaGameEngine
 
 	RTTI_DEFINITIONS(ActionCreateAction)
 
-	const std::string KEY_PROTOTYPE_CLASS = "prototypeClass";
-	const std::string KEY_INSTANCE_NAME = "instanceName";
-	const std::string KEY_ACTIONS = "actions";
+	const std::string ActionCreateAction::KEY_PROTOTYPE_CLASS = "prototypeClass";
+	const std::string ActionCreateAction::KEY_INSTANCE_NAME = "instanceName";
+	const std::string ActionCreateAction::KEY_ACTIONS = "actions";
 
-	const std::string DEFAULT_PROTOTYPE_CLASS = "Action";
-	const std::string DEFAULT_INSTANCE_NAME = "Action";
+	const std::string ActionCreateAction::DEFAULT_PROTOTYPE_CLASS = "";
+	const std::string ActionCreateAction::DEFAULT_INSTANCE_NAME = "Action";
 
 	ActionCreateAction::ActionCreateAction()
 	{
@@ -30,7 +30,7 @@ namespace FieaGameEngine
 		{
 			Action* newAction = Factory<Action>::Create(prototypeClass);
 			newAction->SetName(instanceName);
-			Adopt(*newAction, KEY_ACTIONS);
+			parent->Adopt(*newAction, KEY_ACTIONS);
 		}
 	}
 
