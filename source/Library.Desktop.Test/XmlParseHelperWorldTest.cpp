@@ -223,6 +223,11 @@ namespace LibraryDesktopTest
 			scopeData.mScope = nullptr;
 			Assert::ExpectException<std::exception>([&parseMaster] {parseMaster.ParseFromFile("../../../files/WorldTestAction2.xml");});
 			
+			while (scopeData.mScope->GetParent() != nullptr)
+			{
+				scopeData.mScope = scopeData.mScope->GetParent();
+			}
+
 			delete scopeData.mScope;
 			scopeData.mScope = nullptr;
 		}
