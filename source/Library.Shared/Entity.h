@@ -50,10 +50,19 @@ namespace FieaGameEngine
 		@param World state reference to be used by entity. */
 		virtual void Update(class WorldState& state);
 
+		/** Returns datum containing all actions contained by this entity.
+		@return Datum containing array of Action pointers. */
 		Datum& Actions();
 
+		/** Returns datum containing all actions contained by this entity.
+		@return Datum containing array of Action pointers. */
 		const Datum& Actions() const;
 
+		/** Creates an entity from a class name string using Factory<Action>.
+		@param className The name of the class to instantiate. 
+		@param instanceName The name of the action.
+		@return Pointer to the newly allocated action. Caller is responsible
+			for deleting the data.*/
 		Action* CreateAction(const std::string& className, const std::string& instanceName);
 
 	protected:

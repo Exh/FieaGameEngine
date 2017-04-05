@@ -6,27 +6,6 @@
 
 namespace FieaGameEngine
 {
-
-	//class WorldSharedData : public XmlParseMaster::SharedData
-	//{
-	//	RTTI_DECLARATIONS(WorldSharedData, XmlParseMaster::SharedData)
-
-	//public:
-
-	//	WorldSharedData();
-
-	//	virtual WorldSharedData() = default;
-
-	//	virtual SharedData* Clone() const override;
-
-	//	virtual void Initialize() override;
-
-	//public:
-
-	//	World* mWorld;
-
-	//};
-
 	class XmlParseHelperWorld : public IXmlParseHelper
 	{
 	
@@ -73,9 +52,6 @@ namespace FieaGameEngine
 
 		void HandleAction(ScopeSharedData& scopeSharedData,
 						  const HashMap<std::string, std::string>& attributes);
-
-		//void HandleActionIf(ScopeSharedData& scopeSharedData,
-		//					const HashMap<std::string, std::string>& attributes);
 	
 	private:
 

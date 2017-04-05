@@ -13,6 +13,7 @@ namespace FieaGameEngine
 	{
 		Populate();
 	}
+
 	void Action::Update(class WorldState& state)
 	{
 		state;

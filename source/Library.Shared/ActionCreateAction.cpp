@@ -2,7 +2,6 @@
 
 namespace FieaGameEngine
 {
-
 	RTTI_DEFINITIONS(ActionCreateAction)
 
 	const std::string ActionCreateAction::KEY_PROTOTYPE_CLASS = "prototypeClass";
