@@ -1,0 +1,20 @@
+<World name="World0">
+    <Sector name="Sector0">
+        <Entity name="Entity0">
+            <Integer name="Health" value="100"/>
+            <Integer name="Mana" value="20"/>
+            <Float name="Speed" value="3.0f"/>
+            <Action class="ActionIncrement">
+                <String name="target" value="Health"/>
+            </Action>
+            <Action name="Iffy">
+                <Integer name="condition" value="0"/>
+                <Action class="ActionIncrement" name="then">
+                    <String name="target" value="Mana"/>
+                </Action>
+            </Action>
+        </Entity>
+    </Sector>
+    <Sector name="Sector1">
+    </Sector>
+</World>

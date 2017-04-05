@@ -28,7 +28,6 @@ namespace FieaGameEngine
 
 		void Populate();
 
-		std::int32_t mCondition;
 	};
 
 	DeclareActionFactory(ActionIf)

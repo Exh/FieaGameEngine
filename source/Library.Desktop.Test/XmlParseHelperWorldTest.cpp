@@ -180,6 +180,53 @@ namespace LibraryDesktopTest
 
 		}
 
+		TEST_METHOD(ValidActionParseTest)
+		{
+			XmlParseMaster parseMaster;
+			ScopeSharedData scopeData;
+			XmlParseHelperWorld parseHelperWorld;
+			XmlParseHelperScope parseHelperScope;
+			EntityFactory entityFactory;
+			ActionIncrementFactory actionIncrementFactory;
+			ActionIfFactory actionIfFactory;
+
+			parseMaster.SetSharedData(&scopeData);
+			parseMaster.AddHelper(parseHelperWorld);
+			parseMaster.AddHelper(parseHelperScope);
+
+			parseMaster.ParseFromFile("../../../files/WorldTestAction1.xml");
+
+			World* world = static_cast<World*>(scopeData.mScope);
+
+			Assert::IsTrue(world->Sectors()[0].Is(Sector::TypeIdClass()));
+			Assert::IsTrue(world->Sectors()[1].Is(Sector::TypeIdClass()));
+
+
+			Sector& sector0 = static_cast<Sector&>(world->Sectors()[0]);
+			Sector& sector1 = static_cast<Sector&>(world->Sectors()[1]);
+
+			Assert::IsTrue(world->Sectors().Size() == 2);
+
+			Assert::IsTrue(sector0.Name() == SECTOR0_NAME);
+			Assert::IsTrue(sector1.Name() == SECTOR1_NAME);
+			Assert::IsTrue(sector0.Entities().Size() == 1);
+			Assert::IsTrue(sector1.Entities().Size() == 0);
+
+			Assert::IsTrue(sector0.Entities()[0].Is(Entity::TypeIdClass()));
+
+			Entity& entity0 = static_cast<Entity&>(sector0.Entities()[0]);
+			Assert::IsTrue(entity0.Name() == ENTITY0_NAME);
+			Assert::IsTrue(entity0["Health"] == ENTITY0_HEALTH);
+			Assert::IsTrue(entity0["Speed"] == ENTITY0_SPEED);
+
+			delete scopeData.mScope;
+			scopeData.mScope = nullptr;
+			Assert::ExpectException<std::exception>([&parseMaster] {parseMaster.ParseFromFile("../../../files/WorldTestAction2.xml");});
+			
+			delete scopeData.mScope;
+			scopeData.mScope = nullptr;
+		}
+
 	private:
 		static _CrtMemState sStartMemState;
 	};

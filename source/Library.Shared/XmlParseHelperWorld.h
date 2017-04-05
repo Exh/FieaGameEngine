@@ -70,11 +70,18 @@ namespace FieaGameEngine
 
 		void HandleEntity(ScopeSharedData& scopeSharedData,
 						  const HashMap<std::string, std::string>& attributes);
+
+		void HandleAction(ScopeSharedData& scopeSharedData,
+						  const HashMap<std::string, std::string>& attributes);
+
+		//void HandleActionIf(ScopeSharedData& scopeSharedData,
+		//					const HashMap<std::string, std::string>& attributes);
 	
 	private:
 
 		const static std::string sWorldTag;
 		const static std::string sSectorTag;
 		const static std::string sEntityTag;
+		const static std::string sActionTag;
 	};
 }

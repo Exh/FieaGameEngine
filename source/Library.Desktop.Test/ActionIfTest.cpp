@@ -39,7 +39,6 @@ namespace LibraryDesktopTest
 		{
 			ActionIf action;
 			Assert::IsTrue(action.IsPrescribedAttribute(Action::KEY_NAME));
-			Assert::IsTrue(action.IsPrescribedAttribute(ActionIf::KEY_CONDITION));
 			Assert::IsTrue(action.Is(Action::TypeIdClass()));
 			Assert::IsTrue(action.Is(ActionIf::TypeIdClass()));
 		}

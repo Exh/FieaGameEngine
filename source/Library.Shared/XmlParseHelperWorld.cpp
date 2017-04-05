@@ -6,6 +6,7 @@ namespace FieaGameEngine
 	const std::string XmlParseHelperWorld::sWorldTag = "World";
 	const std::string XmlParseHelperWorld::sSectorTag = "Sector";
 	const std::string XmlParseHelperWorld::sEntityTag = "Entity";
+	const std::string XmlParseHelperWorld::sActionTag = "Action";
 
 	XmlParseHelperWorld::XmlParseHelperWorld()
 	{
@@ -41,6 +42,11 @@ namespace FieaGameEngine
 				HandleEntity(*scopeSharedData, attributes);
 				return true;
 			}
+			else if (elementName == sActionTag)
+			{
+				HandleAction(*scopeSharedData, attributes);
+				return true;
+			}
 		}
 
 		return false;
@@ -54,7 +60,8 @@ namespace FieaGameEngine
 
 		if (scopeSharedData != nullptr &&
 			elementName == sSectorTag ||
-			elementName == sEntityTag)
+			elementName == sEntityTag ||
+			elementName == sActionTag)
 		{
 			assert(scopeSharedData->Depth() > 1);
 			scopeSharedData->mScope = scopeSharedData->mScope->GetParent();
@@ -149,7 +156,7 @@ namespace FieaGameEngine
 
 		if (it == attributes.end())
 		{
-			// LOG INFO: No Sector name specified in xml file. Using default Sector name.
+			// LOG INFO: No Entity name specified in xml file. Using default Entity name.
 		}
 		else
 		{
@@ -157,5 +164,43 @@ namespace FieaGameEngine
 		}
 
 		scopeSharedData.mScope = entity;
+	}
+
+	void XmlParseHelperWorld::HandleAction(ScopeSharedData& scopeSharedData,
+										   const HashMap<std::string, std::string>& attributes)
+	{
+		Action* action = nullptr;
+		const std::string* className = nullptr;
+		const std::string* instanceName = nullptr;
+
+		auto it = attributes.Find("class");
+		if (it != attributes.end())
+		{
+			className = &((*it).second);
+		}
+		else
+		{
+			throw std::exception("No class attribute specified on Action element.");
+		}
+
+		it = attributes.Find("name");
+		if (it != attributes.end())
+		{
+			instanceName = &((*it).second); 
+		}
+		else
+		{
+			instanceName = &Action::DEFAULT_NAME;
+		}
+
+		assert(className != nullptr);
+		assert(instanceName != nullptr);
+
+
+		action = Factory<Action>::Create(*className);
+		action->SetName(*instanceName);
+		scopeSharedData.mScope->Adopt(*action, ActionList::KEY_ACTIONS);
+
+		scopeSharedData.mScope = action;
 	}
 }

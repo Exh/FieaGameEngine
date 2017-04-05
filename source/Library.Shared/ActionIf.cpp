@@ -21,8 +21,9 @@ namespace FieaGameEngine
 
 		Datum* thenAction = Find(KEY_THEN);
 		Datum* elseAction = Find(KEY_ELSE);
+		std::int32_t condition = (*this)[KEY_CONDITION].GetInteger();
 
-		if (mCondition != 0 &&
+		if (condition != 0 &&
 			thenAction != 0)
 		{
 			Scope* then = thenAction->GetScope();
@@ -41,9 +42,5 @@ namespace FieaGameEngine
 	void ActionIf::Populate()
 	{
 		Action::Populate();
-
-		AddExternalAttribute(KEY_CONDITION, &mCondition, 1);
-
-		mCondition = DEFAULT_CONDITION;
 	}
 }
