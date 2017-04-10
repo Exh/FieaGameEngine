@@ -12,7 +12,7 @@ namespace FieaGameEngine
 
 		void Enqueue(class EventPublisher& publisher,
 					 class GameTime& gameTime,
-					 float delay = 0.0f);
+					 std::chrono::milliseconds delay = std::chrono::milliseconds(0));
 
 		void Send(class EventPublisher& publisher);
 

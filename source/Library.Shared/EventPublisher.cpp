@@ -4,7 +4,10 @@ using namespace std::chrono;
 
 namespace FieaGameEngine
 {
-	EventPublisher::EventPublisher(Vector<EventSubscriber>& subscribers, bool destroyEvent) :
+
+	RTTI_DEFINITIONS(EventPublisher)
+
+	EventPublisher::EventPublisher(Vector<EventSubscriber*>& subscribers, bool destroyEvent) :
 		mSubscribers(&subscribers),
 		mDestroyEvent(destroyEvent),
 		mTimeEnqueued(),
@@ -40,9 +43,10 @@ namespace FieaGameEngine
 	{
 		if (mSubscribers != nullptr)
 		{
-			for (EventSubscriber& subscriber : *mSubscribers)
+			for (EventSubscriber* subscriber : *mSubscribers)
 			{
-				subscriber.Notify(*this);
+				assert(subscriber != nullptr);
+				subscriber->Notify(*this);
 			}
 		}
 	}

@@ -11,7 +11,7 @@ namespace FieaGameEngine
 
 	public:
 
-		Event(const T&, bool destroy);
+		Event(const T&, bool destroy = true);
 
 		static void Subscribe(const class EventSubscriber& subscriber);
 
@@ -19,15 +19,17 @@ namespace FieaGameEngine
 
 		static void UnsubscribeAll();
 
-		T& Message();
+		const T& Message() const;
 
-		Event(const Event& rhs);
-		Event& operator=(const Event& rhs);
+		Event(const Event& rhs) = default;
+		Event& operator=(const Event& rhs) = default;
 
-		Event(const Event&& rhs);
-		Event& operator=(const Event&& rhs);
+		Event(Event&& rhs);
+		Event& operator=(Event&& rhs);
 
 	private:
+
+		static Vector<EventSubscriber*> sSubscribers;
 
 		T mMessage;
 	};

@@ -9,7 +9,11 @@ namespace FieaGameEngine
 {
 	class EventPublisher : public RTTI
 	{
-		EventPublisher(Vector<EventSubscriber>& subscribers, bool destroyEvent);
+		RTTI_DECLARATIONS(EventPublisher, RTTI)
+
+	public:
+
+		EventPublisher(Vector<EventSubscriber*>& subscribers, bool destroyEvent);
 
 		~EventPublisher() = default;
 
@@ -34,7 +38,7 @@ namespace FieaGameEngine
 
 	protected:
 
-		Vector<EventSubscriber>* mSubscribers;
+		Vector<EventSubscriber*>* mSubscribers;
 
 		bool mDestroyEvent;
 
