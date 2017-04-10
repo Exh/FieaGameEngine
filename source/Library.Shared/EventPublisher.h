@@ -11,6 +11,8 @@ namespace FieaGameEngine
 	{
 		EventPublisher(Vector<EventSubscriber>& subscribers, bool destroyEvent);
 
+		~EventPublisher() = default;
+
 		void SetTime(std::chrono::high_resolution_clock::time_point currentTime,
 					 std::chrono::milliseconds delay);
 
@@ -18,16 +20,26 @@ namespace FieaGameEngine
 
 		std::chrono::milliseconds Delay() const;
 	
-		bool IsExpired() const;
+		bool IsExpired(std::chrono::high_resolution_clock::time_point currentTime) const;
 
 		void Deliver();
 
 		bool DeleteAfterPublishing() const;
 
-		EventPublisher(const EventPublisher& rhs);
-		EventPublisher& operator=(const EventPublisher& rhs);
+		EventPublisher(const EventPublisher& rhs) = default;
+		EventPublisher& operator=(const EventPublisher& rhs) = default;
 
-		EventPublisher(const EventPublisher&& rhs);
-		EventPublisher& operator=(const EventPublisher&& rhs);
+		EventPublisher(EventPublisher&& rhs);
+		EventPublisher& operator=(EventPublisher&& rhs);
+
+	protected:
+
+		Vector<EventSubscriber>* mSubscribers;
+
+		bool mDestroyEvent;
+
+		std::chrono::high_resolution_clock::time_point mTimeEnqueued;
+
+		std::chrono::milliseconds mDelay;
 	};
 }

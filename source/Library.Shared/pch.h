@@ -41,6 +41,10 @@
 #include "ActionDestroyAction.h"
 #include "ActionIncrement.h"
 #include "ActionIf.h"
+#include "EventSubscriber.h"
+#include "EventPublisher.h"
+#include "Event.h"
+#include "EventQueue.h"
 
 // GLM
 #include "glm/glm.hpp"

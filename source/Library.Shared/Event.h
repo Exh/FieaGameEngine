@@ -32,3 +32,5 @@ namespace FieaGameEngine
 		T mMessage;
 	};
 }
+
+#include "Event.inl"

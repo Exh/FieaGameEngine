@@ -10,9 +10,9 @@ namespace FieaGameEngine
 
 		EventQueue() = default;
 
-		Enqueue(class EventPublisher& publisher,
-				class GameTime& gameTime,
-				float delay = 0.0f);
+		void Enqueue(class EventPublisher& publisher,
+					 class GameTime& gameTime,
+					 float delay = 0.0f);
 
 		void Send(class EventPublisher& publisher);
 
