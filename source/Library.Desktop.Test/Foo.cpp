@@ -93,6 +93,11 @@ bool Foo::Equals(const RTTI* rhs) const
 	return false;
 }
 
+bool Foo::operator!=(const Foo& rhs) const
+{
+	return !operator==(rhs);
+}
+
 #pragma endregion 
 
 #pragma region FooHashFunctorMethods

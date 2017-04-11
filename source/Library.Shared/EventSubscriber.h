@@ -6,7 +6,7 @@ namespace FieaGameEngine
 	{
 	public:
 
-		virtual void Notify(class EventPublisher& publisher) = 0;
+		virtual void Notify(const class EventPublisher& publisher) = 0;
 
 	};
 }

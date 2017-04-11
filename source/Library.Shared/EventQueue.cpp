@@ -8,8 +8,11 @@ namespace FieaGameEngine
 							 GameTime& gameTime,
 							 milliseconds delay)
 	{
-		publisher.SetTime(gameTime.CurrentTime(), delay);
-		mEvents.PushBack(&publisher);
+		if (mEvents.Find(&publisher) == mEvents.end())
+		{
+			publisher.SetTime(gameTime.CurrentTime(), delay);
+			mEvents.PushBack(&publisher);
+		}
 	}
 
 	void EventQueue::Send(EventPublisher& publisher)
@@ -45,7 +48,21 @@ namespace FieaGameEngine
 
 	void EventQueue::Clear()
 	{
-		mEvents.Clear();
+		for (SList<EventPublisher*>::Iterator it = mEvents.begin(); it != mEvents.end();)
+		{
+			EventPublisher* subscriber = *it;
+			mEvents.PopFront();
+			it = mEvents.begin();
+
+			assert(subscriber != nullptr);
+
+			if (subscriber->DeleteAfterPublishing())
+			{
+				delete subscriber;
+			}
+
+			subscriber = nullptr;
+		}
 	}
 
 	bool EventQueue::IsEmpty() const

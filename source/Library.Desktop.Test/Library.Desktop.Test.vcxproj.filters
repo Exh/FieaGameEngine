@@ -27,6 +27,9 @@
     <ClCompile Include="ActionCreateActionTest.cpp" />
     <ClCompile Include="ActionDestroyActionTest.cpp" />
     <ClCompile Include="ActionIfTest.cpp" />
+    <ClCompile Include="EventTest.cpp" />
+    <ClCompile Include="BasicSubscriber.cpp" />
+    <ClCompile Include="EventQueueTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -36,5 +39,6 @@
     <ClInclude Include="Bar.h" />
     <ClInclude Include="BarParseHelper.h" />
     <ClInclude Include="Beep.h" />
+    <ClInclude Include="BasicSubscriber.h" />
   </ItemGroup>
 </Project>

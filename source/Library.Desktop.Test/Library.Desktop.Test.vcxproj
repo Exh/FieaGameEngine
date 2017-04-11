@@ -183,9 +183,12 @@
     <ClCompile Include="AttributedTest.cpp" />
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="BarParseHelper.cpp" />
+    <ClCompile Include="BasicSubscriber.cpp" />
     <ClCompile Include="Beep.cpp" />
     <ClCompile Include="DatumTest.cpp" />
     <ClCompile Include="EntityTest.cpp" />
+    <ClCompile Include="EventQueueTest.cpp" />
+    <ClCompile Include="EventTest.cpp" />
     <ClCompile Include="FactoryTest.cpp" />
     <ClCompile Include="Foo.cpp" />
     <ClCompile Include="GameTest.cpp" />
@@ -215,6 +218,7 @@
     <ClInclude Include="AttributedFoo.h" />
     <ClInclude Include="Bar.h" />
     <ClInclude Include="BarParseHelper.h" />
+    <ClInclude Include="BasicSubscriber.h" />
     <ClInclude Include="Beep.h" />
     <ClInclude Include="Foo.h" />
     <ClInclude Include="pch.h" />

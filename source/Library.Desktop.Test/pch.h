@@ -51,6 +51,7 @@
 #include "AttributedBar.h"
 #include "Bar.h"
 #include "BarParseHelper.h"
+#include "BasicSubscriber.h"
 
 // Glm headers
 #include "glm/glm.hpp"

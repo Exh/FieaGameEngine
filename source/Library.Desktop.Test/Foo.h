@@ -22,6 +22,8 @@ public:
 
     bool operator==(const Foo& rhs) const;
 
+	bool operator!=(const Foo& rhs) const;
+
     int GetData() const;
 
     int GetHeapData() const;

@@ -11,21 +11,21 @@ namespace FieaGameEngine
 	Vector<EventSubscriber*> Event<T>::sSubscribers;
 
 	template<typename T>
-	Event<T>::Event(const T&, bool destroy) :
+	Event<T>::Event(const T& message, bool destroy) :
 		EventPublisher(sSubscribers, destroy),
-		mMessage(T)
+		mMessage(message)
 	{
 	
 	}
 
 	template<typename T>
-	void Event<T>::Subscribe(const EventSubscriber& subscriber)
+	void Event<T>::Subscribe(EventSubscriber& subscriber)
 	{
 		sSubscribers.PushBack(&subscriber);
-	}
+	} 
 
 	template<typename T>
-	void Event<T>::Unsubscribe(const EventSubscriber& subscriber)
+	void Event<T>::Unsubscribe(EventSubscriber& subscriber)
 	{
 		sSubscribers.Remove(sSubscribers.Find(&subscriber));
 	}
@@ -33,7 +33,7 @@ namespace FieaGameEngine
 	template<typename T>
 	void Event<T>::UnsubscribeAll()
 	{
-		sSubscribers.Clear();
+		sSubscribers.Destroy();
 	}
 
 	template<typename T>
@@ -44,8 +44,8 @@ namespace FieaGameEngine
 
 	template<typename T>
 	Event<T>::Event(Event&& rhs) :
-		EventPublisher(rhs),
-		mMessage(rhs.mMessage)
+		EventPublisher(std::move(rhs)),
+		mMessage(std::move(rhs.mMessage))
 	{
 
 	}
@@ -55,7 +55,10 @@ namespace FieaGameEngine
 	{
 		if (this != &rhs)
 		{
-			EventPublisher::operator=(rhs);
+			EventPublisher::operator=(std::move(rhs));
+			mMessage = std::move(rhs.mMessage);
 		}
+
+		return *this;
 	}
 }

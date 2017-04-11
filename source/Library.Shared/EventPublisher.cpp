@@ -11,7 +11,12 @@ namespace FieaGameEngine
 		mSubscribers(&subscribers),
 		mDestroyEvent(destroyEvent),
 		mTimeEnqueued(),
-		mDelay()
+		mDelay(0)
+	{
+	
+	}
+
+	EventPublisher::~EventPublisher()
 	{
 	
 	}
@@ -35,8 +40,7 @@ namespace FieaGameEngine
 
 	bool EventPublisher::IsExpired(high_resolution_clock::time_point currentTime) const
 	{
-		//return duration_cast<milliseconds>(mTimeEnqueued) > milliseconds(0);
-		return (mTimeEnqueued + mDelay) > (currentTime);
+		return (mTimeEnqueued + mDelay) < (currentTime);
 	}
 
 	void EventPublisher::Deliver()
@@ -46,7 +50,8 @@ namespace FieaGameEngine
 			for (EventSubscriber* subscriber : *mSubscribers)
 			{
 				assert(subscriber != nullptr);
-				subscriber->Notify(*this);
+				const EventPublisher& pub = *this;
+				subscriber->Notify(const_cast<const EventPublisher&>(pub));
 			}
 		}
 	}
@@ -63,7 +68,7 @@ namespace FieaGameEngine
 		mDelay(rhs.mDelay)
 	{
 		rhs.mSubscribers = nullptr;
-		mDestroyEvent = false;
+		rhs.mDestroyEvent = false;
 	}
 
 	EventPublisher& EventPublisher::operator=(EventPublisher&& rhs)
