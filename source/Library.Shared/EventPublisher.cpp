@@ -40,7 +40,7 @@ namespace FieaGameEngine
 
 	bool EventPublisher::IsExpired(high_resolution_clock::time_point currentTime) const
 	{
-		return (mTimeEnqueued + mDelay) < (currentTime);
+		return (mTimeEnqueued + mDelay) <= (currentTime);
 	}
 
 	void EventPublisher::Deliver()
