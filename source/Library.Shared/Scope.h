@@ -152,6 +152,8 @@ namespace FieaGameEngine
 
 	protected:
 
+		void CopyScopeData(const Scope& source);
+
 		void DeepCopy(const Scope& rhs);
 
 		HashMap<std::string, Datum> mMap;

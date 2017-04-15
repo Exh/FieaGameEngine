@@ -7,7 +7,6 @@ namespace FieaGameEngine
 	HashMap<std::uint64_t, Vector<std::string>> Attributed::sPrescribedAttributeCache;
 	HashMap<std::uint64_t, Vector<std::uint32_t>> Attributed::sNativeMemberOffsets;
 
-
 	Attributed::Attributed()
 	{
 		Populate();

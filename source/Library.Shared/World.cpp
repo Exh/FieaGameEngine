@@ -99,4 +99,11 @@ namespace FieaGameEngine
 	{
 		mActionDestroyQueue.PushBack(&action);
 	}
+
+	void World::RaiseEvent(EventPublisher& publisher,
+						   GameTime& gameTime,
+						   std::chrono::milliseconds delay)
+	{
+		mEventQueue.Enqueue(publisher, gameTime, delay);
+	}
 }

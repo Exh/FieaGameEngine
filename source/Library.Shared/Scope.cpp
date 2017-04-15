@@ -351,4 +351,12 @@ namespace FieaGameEngine
 			mParent = nullptr;
 		}
 	}
+
+	void Scope::CopyScopeData(const Scope& source)
+	{
+		for (EntryType* entry : source.mVector)
+		{
+			Append(entry->first) = entry->second;
+		}
+	}
 }

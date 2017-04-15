@@ -772,3 +772,12 @@ Assignment14
 	</Action>
 	^ BUT X COULD BE IN PARENT SCOPE INSTEAD
 */
+
+
+/*
+
+	Don't need to make World pointer prescribed because EventMessage is only used in C++, not script.
+	ActionEvent's subtype needs to be prescribed. ActionReaction subtype needs to be prescribed. Possibly
+	make EventMessage a scope instead of Attributed.
+
+*/

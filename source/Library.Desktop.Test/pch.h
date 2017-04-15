@@ -43,6 +43,7 @@
 #include "EventPublisher.h"
 #include "Event.h"
 #include "EventQueue.h"
+#include "Reaction.h"
 
 // Testing Headers
 #include "Foo.h"

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SList.h"
+#include <chrono>
 
 namespace FieaGameEngine
 {

@@ -2,6 +2,7 @@
 
 #include "Attributed.h"
 #include "Vector.h"
+#include "EventQueue.h"
 
 namespace FieaGameEngine
 {
@@ -53,6 +54,10 @@ namespace FieaGameEngine
 
 		void DestroyAction(class Action& action);
 
+		void RaiseEvent(EventPublisher& publisher,
+						GameTime& gameTime,
+						std::chrono::milliseconds delay);
+
 	private:
 
 		void Populate();
@@ -67,5 +72,6 @@ namespace FieaGameEngine
 
 		Datum* mSectors;
 
+		EventQueue	mEventQueue;
 	};
 }

@@ -45,6 +45,10 @@
 #include "EventPublisher.h"
 #include "Event.h"
 #include "EventQueue.h"
+#include "Reaction.h"
+#include "EventMessage.h"
+#include "ReactionAttributed.h"
+#include "ActionEvent.h"
 
 // GLM
 #include "glm/glm.hpp"
