@@ -18,7 +18,7 @@ namespace FieaGameEngine
 		static const std::string DEFAULT_SUBTYPE;
 
 		ReactionAttributed();
-		~ReactionAttributed() = default;
+		virtual ~ReactionAttributed() = default;
 
 		virtual void Notify(const class EventPublisher& publisher) override;
 

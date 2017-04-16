@@ -106,4 +106,14 @@ namespace FieaGameEngine
 	{
 		mEventQueue.Enqueue(publisher, gameTime, delay);
 	}
+
+	EventQueue& World::GetEventQueue()
+	{
+		return mEventQueue;
+	}
+
+	const EventQueue& World::GetEventQueue() const
+	{
+		return mEventQueue;
+	}
 }

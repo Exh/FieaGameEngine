@@ -2,6 +2,8 @@
 
 namespace FieaGameEngine
 {
+	RTTI_DEFINITIONS(ActionEvent)
+
 	const std::string ActionEvent::KEY_DELAY = "delay";
 	const std::string ActionEvent::KEY_SUBTYPE = "subtype";
 
@@ -9,7 +11,8 @@ namespace FieaGameEngine
 	const std::string ActionEvent::DEFAULT_SUBTYPE = "null";
 
 	ActionEvent::ActionEvent() :
-		mDelay(0)
+		mSubtype(ActionEvent::DEFAULT_SUBTYPE),
+		mDelay(ActionEvent::DEFAULT_DELAY)
 	{
 		Populate();
 	}

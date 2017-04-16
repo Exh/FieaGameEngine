@@ -8,7 +8,8 @@ namespace FieaGameEngine
 
 	const std::string ReactionAttributed::DEFAULT_SUBTYPE = "null";
 
-	ReactionAttributed::ReactionAttributed()
+	ReactionAttributed::ReactionAttributed() :
+		mSubtype(DEFAULT_SUBTYPE)
 	{
 		Populate();
 

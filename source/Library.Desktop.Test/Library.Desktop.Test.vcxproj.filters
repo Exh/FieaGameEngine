@@ -30,6 +30,9 @@
     <ClCompile Include="EventTest.cpp" />
     <ClCompile Include="BasicSubscriber.cpp" />
     <ClCompile Include="EventQueueTest.cpp" />
+    <ClCompile Include="ActionEventTest.cpp" />
+    <ClCompile Include="EventMessageTest.cpp" />
+    <ClCompile Include="ReactionAttributedTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

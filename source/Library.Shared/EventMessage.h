@@ -11,6 +11,7 @@ namespace FieaGameEngine
 	public:
 
 		EventMessage();
+
 		virtual ~EventMessage() = default;
 
 		const std::string& GetSubtype() const;

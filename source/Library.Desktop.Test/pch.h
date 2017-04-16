@@ -44,6 +44,9 @@
 #include "Event.h"
 #include "EventQueue.h"
 #include "Reaction.h"
+#include "ActionEvent.h"
+#include "EventMessage.h"
+#include "ReactionAttributed.h"
 
 // Testing Headers
 #include "Foo.h"

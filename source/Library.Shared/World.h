@@ -52,11 +52,26 @@ namespace FieaGameEngine
 		@param state World state for world to use in update. */
 		void Update(class WorldState& state);
 
+		/** Enqueues an action to be deleted after processing
+		the world's update.
+		@param action Action to eventually destroy. */
 		void DestroyAction(class Action& action);
 
+		/** Enqueues an event to be processed after the world's update.
+		@param publisher Event publisher that will be delivered.
+		@param gameTime Current GameTime object
+		@param delay Delay in milliseconds from current GameTime to deliver. */
 		void RaiseEvent(EventPublisher& publisher,
 						GameTime& gameTime,
 						std::chrono::milliseconds delay);
+
+		/** Returns this world's event queue.
+		@return This world's EventQueue. */
+		EventQueue& GetEventQueue();
+
+		/** Returns this world's event queue.
+		@return This world's EventQueue. */
+		const EventQueue& GetEventQueue() const;
 
 	private:
 
