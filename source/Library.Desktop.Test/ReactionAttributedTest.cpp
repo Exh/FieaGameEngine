@@ -4,6 +4,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace FieaGameEngine;
+using namespace std::chrono;
 
 namespace LibraryDesktopTest
 {
@@ -49,6 +50,53 @@ namespace LibraryDesktopTest
 			reaction.SetSubtype("Beep");
 
 			Assert::IsTrue(reaction[ReactionAttributed::KEY_SUBTYPE] == "Beep");
+		}
+
+		TEST_METHOD(NotifyTest)
+		{
+			XmlParseMaster parseMaster;
+			ScopeSharedData scopeData;
+			XmlParseHelperWorld parseHelperWorld;
+			XmlParseHelperScope parseHelperScope;
+			EntityFactory entityFactory;
+			ReactionAttributedFactory reactionAttributedFactory;
+			ActionIncrementFactory actionIncrementFactory;
+
+			parseMaster.SetSharedData(&scopeData);
+			parseMaster.AddHelper(parseHelperWorld);
+			parseMaster.AddHelper(parseHelperScope);
+
+			parseMaster.ParseFromFile("../../../files/ReactionTest.xml");
+
+			World* world = static_cast<World*>(scopeData.mScope);
+			WorldState state;
+			GameTime gameTime;
+			gameTime.SetCurrentTime(high_resolution_clock::time_point(milliseconds(0)));
+			state.mWorld = world;
+			state.SetGameTime(gameTime);
+
+			// Ensure that whenever an ActionEvent of type "type1" is raised,
+			// the player's health increases by 1.
+			Sector& sector0 = static_cast<Sector&>(world->Sectors()[0]);
+			Entity& player = static_cast<Entity&>(sector0.Entities()[0]);
+
+			Assert::IsTrue(player["Health"] == 100);
+			Assert::IsTrue(player["Speed"] == 3.0f);
+
+			ActionEvent healthTick;
+			healthTick[ActionEvent::KEY_SUBTYPE] = "type1";
+			healthTick["Extra"] = 10;
+			healthTick.Update(state);
+
+			world->GetEventQueue().Update(gameTime);
+			Assert::IsTrue(player["Health"] == 101);
+			Assert::IsTrue(player["Speed"] == 3.0f);
+
+			healthTick[ActionEvent::KEY_SUBTYPE] = "something";
+			healthTick.Update(state);
+			world->GetEventQueue().Update(gameTime);
+			Assert::IsTrue(player["Health"] == 101);
+			Assert::IsTrue(player["Speed"] == 3.0f);
 		}
 
 	private:

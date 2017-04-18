@@ -1,0 +1,14 @@
+<World name="World0">
+    <Sector name="Sector0">
+        <Entity name="Player">
+            <Integer name="Health" value="100"/>
+            <Float name="Speed" value="3.0f"/>
+            <Action class="ReactionAttributed">
+                <String name="subtype" value="type1"/>
+                <Action class="ActionIncrement">
+                    <String name="target" value="Health"/>
+                </Action>
+            </Action>
+        </Entity>
+    </Sector>
+</World>

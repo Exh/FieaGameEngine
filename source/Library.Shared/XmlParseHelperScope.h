@@ -84,20 +84,9 @@ namespace FieaGameEngine
 		void HandleScope(ScopeSharedData& scopeSharedData,
 						 const HashMap<std::string, std::string>& attributes);
 
-		void HandleInteger(ScopeSharedData& scopeSharedData,
-						   const HashMap<std::string, std::string>& attributes);
-
-		void HandleFloat(ScopeSharedData& scopeSharedData,
-						 const HashMap<std::string, std::string>& attributes);
-
-		void HandleVector(ScopeSharedData& scopeSharedData,
-						  const HashMap<std::string, std::string>& attributes);
-
-		void HandleMatrix(ScopeSharedData& scopeSharedData,
-						  const HashMap<std::string, std::string>& attributes);
-
-		void HandleString(ScopeSharedData& scopeSharedData,
-						  const HashMap<std::string, std::string>& attributes);
+		void HandleValue(ScopeSharedData& ScopeSharedData,
+						 const HashMap<std::string, std::string>& attributes,
+						 DatumType type);
 
 	private:
 

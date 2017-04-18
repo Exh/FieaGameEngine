@@ -781,3 +781,27 @@ Assignment14
 	make EventMessage a scope instead of Attributed.
 
 */
+
+/*
+	Two main methods that you will have to modify.
+	EventQueue::Update()
+	EventPublisher::Deliver()
+	Make sure EventPublisher& in Notify() is const and the T* in GetMessage() 
+	is a const T*.
+
+	Call future.get() on all of the futures for update and deliver.
+	Deliver does not exit until all threads are finished or throw an exception.
+
+	You can use std::vector for emplace_back()!
+	launch options can let your launch a thread on a separate thread
+
+	EventQueue::Clear(), Enqueue() must lock the mutex.
+	Make sure to use a recursive mutex on the
+	Before you do the move for double buffer, lock the mutex, 
+	and then before iterating through subscribers, release the mutex.
+
+	Critical block, 
+
+	lock_guard has adopt_lock to not lock the mutex on construction.
+	still unlocks it on destruction.
+	/

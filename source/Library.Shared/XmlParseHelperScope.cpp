@@ -76,27 +76,27 @@ namespace FieaGameEngine
 			}
 			else if (elementName == sIntegerTag)
 			{
-				HandleInteger(*scopeSharedData, attributes);
+				HandleValue(*scopeSharedData, attributes, DatumType::Integer);
 				return true;
 			}
 			else if (elementName == sFloatTag)
 			{
-				HandleFloat(*scopeSharedData, attributes);
+				HandleValue(*scopeSharedData, attributes, DatumType::Float);
 				return true;
 			}
 			else if (elementName == sVectorTag)
 			{
-				HandleVector(*scopeSharedData, attributes);
+				HandleValue(*scopeSharedData, attributes, DatumType::Vector);
 				return true;
 			}
 			else if (elementName == sMatrixTag)
 			{
-				HandleMatrix(*scopeSharedData, attributes);
+				HandleValue(*scopeSharedData, attributes, DatumType::Matrix);
 				return true;
 			}
 			else if (elementName == sStringTag)
 			{
-				HandleString(*scopeSharedData, attributes);
+				HandleValue(*scopeSharedData, attributes, DatumType::String);
 				return true;
 			}
 		}
@@ -164,44 +164,23 @@ namespace FieaGameEngine
 		}
 	}
 
-	void XmlParseHelperScope::HandleInteger(ScopeSharedData& scopeSharedData,
-		const HashMap<std::string, std::string>& attributes)
+	void XmlParseHelperScope::HandleValue(ScopeSharedData& scopeSharedData,
+										  const HashMap<std::string, std::string>& attributes,
+										  DatumType type)
 	{
 		Datum& TargetDatum = FetchDatum(scopeSharedData, attributes);
-		TargetDatum.SetType(DatumType::Integer);
-		TargetDatum.PushBackFromString(attributes["value"]);
-	}
-
-	void XmlParseHelperScope::HandleFloat(ScopeSharedData& scopeSharedData,
-		const HashMap<std::string, std::string>& attributes)
-	{
-		Datum& TargetDatum = FetchDatum(scopeSharedData, attributes);
-		TargetDatum.SetType(DatumType::Float);
-		TargetDatum.PushBackFromString(attributes["value"]);
-	}
-
-	void XmlParseHelperScope::HandleVector(ScopeSharedData& scopeSharedData,
-		const HashMap<std::string, std::string>& attributes)
-	{
-		Datum& TargetDatum = FetchDatum(scopeSharedData, attributes);
-		TargetDatum.SetType(DatumType::Vector);
-		TargetDatum.PushBackFromString(attributes["value"]);
-	}
-
-	void XmlParseHelperScope::HandleMatrix(ScopeSharedData& scopeSharedData,
-		const HashMap<std::string, std::string>& attributes)
-	{
-		Datum& TargetDatum = FetchDatum(scopeSharedData, attributes);
-		TargetDatum.SetType(DatumType::Matrix);
-		TargetDatum.PushBackFromString(attributes["value"]);
-	}
-
-	void XmlParseHelperScope::HandleString(ScopeSharedData& scopeSharedData,
-		const HashMap<std::string, std::string>& attributes)
-	{
-		Datum& TargetDatum = FetchDatum(scopeSharedData, attributes);
-		TargetDatum.SetType(DatumType::String);
-		TargetDatum.PushBackFromString(attributes["value"]);
+		TargetDatum.SetType(type);
+		if (TargetDatum.IsExternal())
+		{
+			if (TargetDatum.Size() > 0)
+			{
+				TargetDatum.SetFromString(attributes["value"]);
+			}
+		}
+		else
+		{
+			TargetDatum.PushBackFromString(attributes["value"]);
+		}
 	}
 
 	IXmlParseHelper* XmlParseHelperScope::Clone() const

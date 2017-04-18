@@ -690,11 +690,6 @@ namespace FieaGameEngine
 			throw std::exception("Cannot SetFromString() on a datum with no associated type.");
 		}
 
-		if (mExternal)
-		{
-			throw std::exception("Cannot SetFromString() on an external storage datum.");
-		}
-
 		if (index >= mSize)
 		{
 			throw std::exception("Index out of bounds.");

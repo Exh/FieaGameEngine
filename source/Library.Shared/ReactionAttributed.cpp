@@ -28,11 +28,9 @@ namespace FieaGameEngine
 			{
 				CopyScopeData(message);
 
-				if (message.GetWorldState() != nullptr)
-				{
-					WorldState worldState = *message.GetWorldState();
-					Update(worldState);
-				}
+				assert(message.GetWorldState() != nullptr);
+				WorldState worldState = *message.GetWorldState();
+				Update(worldState);
 			}
 		}
 	}
