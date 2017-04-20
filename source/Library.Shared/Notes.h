@@ -804,4 +804,12 @@ Assignment14
 
 	lock_guard has adopt_lock to not lock the mutex on construction.
 	still unlocks it on destruction.
+
+
+	1. Must have a subscriber that modifies the EventQueue such as clear it
+	2. Must have a subscriber that instantiates a new subscription and attempts to subscribe to the same event.
+	
+	Two ways of handling iterating through thye lists of events/subscribers.
+	(1) By making a local copy of the expired events, unlock the mutex, then run through the copy.
+	(2) launch all the threads, and then before calling get on all the futures, unlock the mutex. no copy required.
 	/

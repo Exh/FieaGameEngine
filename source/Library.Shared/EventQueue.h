@@ -2,6 +2,7 @@
 
 #include "SList.h"
 #include <chrono>
+#include <mutex>
 
 namespace FieaGameEngine
 {
@@ -43,6 +44,8 @@ namespace FieaGameEngine
 		std::uint32_t Size() const;
 
 	private:
+
+		mutable std::recursive_mutex mMutex;
 
 		SList<EventPublisher*> mEvents;
 

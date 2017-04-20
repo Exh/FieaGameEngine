@@ -33,6 +33,8 @@
     <ClCompile Include="ActionEventTest.cpp" />
     <ClCompile Include="EventMessageTest.cpp" />
     <ClCompile Include="ReactionAttributedTest.cpp" />
+    <ClCompile Include="QueueClearer.cpp" />
+    <ClCompile Include="SubscriberAdder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -43,5 +45,9 @@
     <ClInclude Include="BarParseHelper.h" />
     <ClInclude Include="Beep.h" />
     <ClInclude Include="BasicSubscriber.h" />
+    <ClInclude Include="QueueClearer.h" />
+    <ClInclude Include="MessageClearQueue.h" />
+    <ClInclude Include="SubscriberAdder.h" />
+    <ClInclude Include="MessageAddSubscriber.h" />
   </ItemGroup>
 </Project>

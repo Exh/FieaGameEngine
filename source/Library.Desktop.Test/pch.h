@@ -56,6 +56,10 @@
 #include "Bar.h"
 #include "BarParseHelper.h"
 #include "BasicSubscriber.h"
+#include "QueueClearer.h"
+#include "MessageClearQueue.h"
+#include "SubscriberAdder.h"
+#include "MessageAddSubscriber.h"
 
 // Glm headers
 #include "glm/glm.hpp"

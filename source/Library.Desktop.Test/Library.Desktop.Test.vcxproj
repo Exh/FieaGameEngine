@@ -201,10 +201,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="QueueClearer.cpp" />
     <ClCompile Include="ReactionAttributedTest.cpp" />
     <ClCompile Include="ScopeTest.cpp" />
     <ClCompile Include="SectorTest.cpp" />
     <ClCompile Include="SListTest.cpp" />
+    <ClCompile Include="SubscriberAdder.cpp" />
     <ClCompile Include="VectorTest.cpp" />
     <ClCompile Include="WorldTest.cpp" />
     <ClCompile Include="XmlParseHelperScopeTest.cpp" />
@@ -223,8 +225,12 @@
     <ClInclude Include="BarParseHelper.h" />
     <ClInclude Include="BasicSubscriber.h" />
     <ClInclude Include="Beep.h" />
+    <ClInclude Include="MessageAddSubscriber.h" />
+    <ClInclude Include="MessageClearQueue.h" />
+    <ClInclude Include="QueueClearer.h" />
     <ClInclude Include="Foo.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="SubscriberAdder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

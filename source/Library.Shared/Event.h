@@ -1,6 +1,7 @@
 #pragma once
 
 #include "EventPublisher.h"
+#include <mutex>
 
 namespace FieaGameEngine
 {
@@ -56,6 +57,8 @@ namespace FieaGameEngine
 	private:
 
 		static Vector<EventSubscriber*> sSubscribers;
+
+		static std::recursive_mutex sMutex;
 
 		T mMessage;
 	};

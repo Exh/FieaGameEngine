@@ -9,6 +9,10 @@
 #include <cstdint>
 #include <memory>
 #include <algorithm>
+#include <thread>
+#include <mutex>
+#include <future>
+#include <vector>
 
 // C Standard Headers
 #include <assert.h>

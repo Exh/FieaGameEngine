@@ -1,5 +1,6 @@
 #include "pch.h"
 
+using namespace std;
 using namespace std::chrono;
 
 namespace FieaGameEngine
@@ -8,6 +9,8 @@ namespace FieaGameEngine
 							 GameTime& gameTime,
 							 milliseconds delay)
 	{
+		lock_guard<recursive_mutex> lock(mMutex);
+
 		if (mEvents.Find(&publisher) == mEvents.end())
 		{
 			publisher.SetTime(gameTime.CurrentTime(), delay);
@@ -24,7 +27,36 @@ namespace FieaGameEngine
 
 	void EventQueue::Update(GameTime& gameTime)
 	{
-		for (SList<EventPublisher*>::Iterator it = mEvents.begin(); it != mEvents.end();)
+		// Remove all expired events into a separate list for delivery.
+		// The remaining events in mEvents will be unexpired.
+		SList<EventPublisher*> expiredEvents;
+
+		{
+			lock_guard<recursive_mutex> lock(mMutex);
+
+			for (SList<EventPublisher*>::Iterator it = mEvents.begin(); it != mEvents.end(); ++it)
+			{
+				SList<EventPublisher*>::Iterator currentIt = it++;
+
+				// it is pointer to next item
+				if (it != mEvents.begin())
+				{
+					if ((*it)->IsExpired(gameTime.CurrentTime()))
+					{
+						EventPublisher* publisher = (*it);
+						mEvents.Remove(publisher);
+
+						expiredEvents.PushBack(publisher);
+					}
+				}
+
+				it = currentIt;
+			}
+		}
+
+		vector<future<void>> futures;
+
+		for (SList<EventPublisher*>::Iterator it = expiredEvents.begin(); it != mEvents.end();)
 		{
 			EventPublisher* publisher = (*it);
 			assert(publisher != nullptr);
@@ -32,22 +64,44 @@ namespace FieaGameEngine
 
 			if (publisher->IsExpired(gameTime.CurrentTime()))
 			{
-				publisher->Deliver();
+				futures.emplace_back(async(launch::async, [&publisher]{publisher->Deliver();}));
+				
+				//publisher->Deliver();
 
-				mEvents.Remove(publisher);
+				//mEvents.Remove(publisher);
 
 				// Only delete heap memory if flagged.
-				if (publisher->DeleteAfterPublishing())
-				{
-					delete publisher;
-					publisher = nullptr;
-				}
+				//if (publisher->DeleteAfterPublishing())
+				//{
+				//	delete publisher;
+				//	publisher = nullptr;
+				//}
+			}
+		}
+
+		// Join with delivery threads
+		for (future<void>& future : futures)
+		{
+			future.get();
+		}
+
+		// Delete publishers after delivering
+		for (SList<EventPublisher*>::Iterator it = expiredEvents.begin(); it != expiredEvents.end(); ++it)
+		{
+			EventPublisher* publisher (*it);
+			
+			if (publisher->DeleteAfterPublishing())
+			{
+				delete publisher;
+				publisher = nullptr;
 			}
 		}
 	}
 
 	void EventQueue::Clear()
 	{
+		lock_guard<recursive_mutex> lock(mMutex);
+
 		for (SList<EventPublisher*>::Iterator it = mEvents.begin(); it != mEvents.end();)
 		{
 			EventPublisher* subscriber = *it;
@@ -67,11 +121,15 @@ namespace FieaGameEngine
 
 	bool EventQueue::IsEmpty() const
 	{
+		lock_guard<recursive_mutex> lock(mMutex);
+
 		return mEvents.IsEmpty();
 	}
 
 	std::uint32_t EventQueue::Size() const
 	{
+		lock_guard<recursive_mutex> lock(mMutex);
+
 		return mEvents.Size();
 	}
 }

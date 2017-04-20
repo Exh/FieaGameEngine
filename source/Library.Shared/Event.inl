@@ -1,6 +1,7 @@
 
 #include "EventSubscriber.h"
 #include "Vector.h"
+#include <mutex>
 
 namespace FieaGameEngine
 {
@@ -11,8 +12,11 @@ namespace FieaGameEngine
 	Vector<EventSubscriber*> Event<T>::sSubscribers;
 
 	template<typename T>
+	std::recursive_mutex Event<T>::sMutex;
+
+	template<typename T>
 	Event<T>::Event(const T& message, bool destroy) :
-		EventPublisher(sSubscribers, destroy),
+		EventPublisher(sSubscribers, sMutex, destroy),
 		mMessage(message)
 	{
 	
@@ -21,18 +25,21 @@ namespace FieaGameEngine
 	template<typename T>
 	void Event<T>::Subscribe(EventSubscriber& subscriber)
 	{
+		std::lock_guard<std::recursive_mutex> guard(sMutex);
 		sSubscribers.PushBack(&subscriber);
 	} 
 
 	template<typename T>
 	void Event<T>::Unsubscribe(EventSubscriber& subscriber)
 	{
+		std::lock_guard<std::recursive_mutex> guard(sMutex);
 		sSubscribers.Remove(sSubscribers.Find(&subscriber));
 	}
 
 	template<typename T>
 	void Event<T>::UnsubscribeAll()
 	{
+		std::lock_guard<std::recursive_mutex> guard(sMutex);
 		sSubscribers.Destroy();
 	}
 

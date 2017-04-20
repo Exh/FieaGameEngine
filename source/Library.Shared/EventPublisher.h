@@ -4,6 +4,7 @@
 #include "EventSubscriber.h"
 #include "Vector.h"
 #include <chrono>
+#include <mutex>
 
 namespace FieaGameEngine
 {
@@ -18,7 +19,7 @@ namespace FieaGameEngine
 		bool that lets the event queue know whether or not to delete it after processing.
 		@param subscribers Reference to a vector of subscribers from the derived class.
 		@param destroyElement Flag to let EventQueue know whether to delete it or not. */
-		EventPublisher(Vector<EventSubscriber*>& subscribers, bool destroyEvent);
+		EventPublisher(Vector<EventSubscriber*>& subscribers, std::recursive_mutex& classMutex, bool destroyEvent);
 
 		virtual ~EventPublisher() = 0;
 
@@ -67,6 +68,8 @@ namespace FieaGameEngine
 	protected:
 
 		Vector<EventSubscriber*>* mSubscribers;
+
+		mutable std::recursive_mutex* mMutex;
 
 		bool mDestroyEvent;
 

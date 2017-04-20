@@ -1,14 +1,16 @@
 #include "pch.h"
 
 using namespace std::chrono;
+using namespace std;
 
 namespace FieaGameEngine
 {
 
 	RTTI_DEFINITIONS(EventPublisher)
 
-	EventPublisher::EventPublisher(Vector<EventSubscriber*>& subscribers, bool destroyEvent) :
+	EventPublisher::EventPublisher(Vector<EventSubscriber*>& subscribers, std::recursive_mutex& classMutex, bool destroyEvent) :
 		mSubscribers(&subscribers),
+		mMutex(&classMutex),
 		mDestroyEvent(destroyEvent),
 		mTimeEnqueued(),
 		mDelay(0)
@@ -45,14 +47,28 @@ namespace FieaGameEngine
 
 	void EventPublisher::Deliver()
 	{
-		if (mSubscribers != nullptr)
+		vector<future<void>> futures;
+
 		{
+			lock_guard<recursive_mutex> lock(*mMutex);
+
+			if (mSubscribers != nullptr)
+			{
+				return;
+			}
+
 			for (EventSubscriber* subscriber : *mSubscribers)
 			{
 				assert(subscriber != nullptr);
 				const EventPublisher& pub = *this;
-				subscriber->Notify(const_cast<const EventPublisher&>(pub));
+				//subscriber->Notify(const_cast<const EventPublisher&>(pub));
+				futures.emplace_back(async(launch::async, [subscriber, &pub] {subscriber->Notify(const_cast<const EventPublisher&>(pub)); }));
 			}
+		}
+
+		for (future<void>& future : futures)
+		{
+			future.get();
 		}
 	}
 
@@ -63,11 +79,13 @@ namespace FieaGameEngine
 
 	EventPublisher::EventPublisher(EventPublisher&& rhs) :
 		mSubscribers(rhs.mSubscribers),
+		mMutex(rhs.mMutex),
 		mDestroyEvent(rhs.mDestroyEvent),
 		mTimeEnqueued(rhs.mTimeEnqueued),
 		mDelay(rhs.mDelay)
 	{
 		rhs.mSubscribers = nullptr;
+		rhs.mMutex = nullptr;
 		rhs.mDestroyEvent = false;
 	}
 
@@ -81,6 +99,7 @@ namespace FieaGameEngine
 			mDelay = rhs.mDelay;
 
 			rhs.mSubscribers = nullptr;
+			rhs.mMutex = nullptr;
 			rhs.mDestroyEvent = false;
 		}
 
