@@ -4,10 +4,10 @@ namespace FieaGameEngine
 {
 	struct MessageClearQueue
 	{
-		class World* mWorld;
+		class EventQueue* mEventQueue;
 
 		MessageClearQueue() :
-			mWorld(nullptr)
+			mEventQueue(nullptr)
 		{
 
 		}

@@ -10,10 +10,14 @@ namespace FieaGameEngine
 
 		SubscriberAdder();
 
+		~SubscriberAdder();
+
 		virtual void Notify(const EventPublisher& publisher) override;
+
+		int TotalSubscribers() const;
 
 	public:
 
-		EventSubscriber* mSpawnedSubscriber;
+		SubscriberAdder* mSpawnedSubscriber;
 	};
 }

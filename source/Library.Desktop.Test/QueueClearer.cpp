@@ -10,9 +10,9 @@ namespace FieaGameEngine
 		{
 			const MessageClearQueue& message = clearEvent->Message();
 
-			if (message.mWorld != nullptr)
+			if (message.mEventQueue != nullptr)
 			{
-				message.mWorld->GetEventQueue().Clear();
+				message.mEventQueue->Clear();
 			}
 		}
 	}

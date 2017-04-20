@@ -35,6 +35,7 @@
     <ClCompile Include="ReactionAttributedTest.cpp" />
     <ClCompile Include="QueueClearer.cpp" />
     <ClCompile Include="SubscriberAdder.cpp" />
+    <ClCompile Include="AsyncEventTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

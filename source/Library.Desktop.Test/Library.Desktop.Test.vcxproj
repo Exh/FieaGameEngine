@@ -179,6 +179,7 @@
     <ClCompile Include="ActionIfTest.cpp" />
     <ClCompile Include="ActionIncrementTest.cpp" />
     <ClCompile Include="ActionTest.cpp" />
+    <ClCompile Include="AsyncEventTest.cpp" />
     <ClCompile Include="AttributedBar.cpp" />
     <ClCompile Include="AttributedFoo.cpp" />
     <ClCompile Include="AttributedTest.cpp" />

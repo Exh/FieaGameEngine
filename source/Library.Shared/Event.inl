@@ -44,6 +44,13 @@ namespace FieaGameEngine
 	}
 
 	template<typename T>
+	std::uint32_t Event<T>::SubscriberCount()
+	{
+		std::lock_guard<std::recursive_mutex> guard(sMutex);
+		return sSubscribers.Size();
+	}
+
+	template<typename T>
 	const T& Event<T>::Message() const
 	{
 		return mMessage;

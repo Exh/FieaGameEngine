@@ -37,6 +37,11 @@ namespace FieaGameEngine
 		/** Removes any subscribers that this event class might have.*/
 		static void UnsubscribeAll();
 
+		/** Returns the total number of subscribers that are currently 
+		subscribed to this event.
+		@return The number of subscribers */
+		static std::uint32_t SubscriberCount();
+
 		/** Returns a reference to the message that this event instance contains.
 		@return Message reference. */
 		const T& Message() const;

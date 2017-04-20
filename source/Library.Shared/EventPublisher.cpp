@@ -52,7 +52,7 @@ namespace FieaGameEngine
 		{
 			lock_guard<recursive_mutex> lock(*mMutex);
 
-			if (mSubscribers != nullptr)
+			if (mSubscribers == nullptr)
 			{
 				return;
 			}
